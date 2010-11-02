@@ -1,0 +1,22 @@
+<div xmlns:lift="http://www.w3.org/1999/xhtml">
+    <div id="theyvebopdit">
+        <lift:comet type="BopditComet"/>
+    </div>
+    <div id="welcome_msg">
+        <lift:embed what="template/welcome/_welcome"/>
+    </div>
+    <div id="realtime">
+        realtime with tabs (special offers, restaurant finder, last minute, most popular)
+    </div>
+    <div id="bop">
+        Where do you fancy eating?
+        <lift:WhereDoYouFancyEating form="post">
+            <homepage:geo/>
+        </lift:WhereDoYouFancyEating>
+
+        <lift:TestSnippet.add form="post">
+            <form:name /> <br /> <form:submit />
+        </lift:TestSnippet.add>
+
+    </div>
+</div>

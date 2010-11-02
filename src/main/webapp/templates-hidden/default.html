@@ -1,0 +1,59 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
+
+    <title>Bopango</title>
+
+    <lift:CSS.blueprint/>
+    <lift:CSS.fancyType/>
+    <link rel="stylesheet" type="text/css" href="/style/grid-1240.css"/>
+    <link rel="stylesheet" type="text/css" href="/style/bopango.css"/>
+    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
+    <script id="json" src="/classpath/json.js" type="text/javascript"></script>
+
+</head>
+<body>
+<div class="container">
+
+    <div class="span-24 last">
+        <h1>Bopango</h1>
+    </div>
+
+    <div class="span-24 last">
+        <lift:bind name="content"/>
+    </div>
+
+    <div class="span-24 last">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>error</lift:error_class>
+            <lift:warning_msg></lift:warning_msg>
+            <lift:warning_class>notice</lift:warning_class>
+            <lift:notice_msg></lift:notice_msg>
+            <lift:notice_class>success</lift:notice_class>
+        </lift:snippet>
+    </div>
+
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        $(document).ready(function() {
+            $(".notice").click(function() {
+                $(this).fadeOut("slow");
+            });
+            $(".success").click(function() {
+                $(this).fadeOut("slow");
+            });
+            $(".error").click(function() {
+                $(this).fadeOut("slow");
+            });
+            $(".warning").click(function() {
+                $(this).fadeOut("slow");
+            });
+        });
+        /* ]]> */
+    </script>
+</div>
+</body>
+</html>

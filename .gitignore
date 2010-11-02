@@ -1,0 +1,14 @@
+.classpath
+.manager
+.project
+target
+*.log
+.idea
+.trash
+*.iml
+*.ipr
+*.iws
+.DS_Store
+.scala_dependencies
+lib_managed
+project/boot/

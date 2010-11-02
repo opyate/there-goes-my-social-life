@@ -1,0 +1,16 @@
+/*
+Overriding the stuff in blueprint.css (if any)
+*/
+body {
+    color: #222;
+}
+
+#ajax-loader {
+    color:#a9a9a9;
+    display:none;
+}
+
+#geo {
+    background-color: #884499;
+    color: white;
+}
