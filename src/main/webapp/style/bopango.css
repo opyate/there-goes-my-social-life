@@ -14,3 +14,7 @@ body {
     background-color: #884499;
     color: white;
 }
+
+.section {
+    border: 3px #444 solid;
+}

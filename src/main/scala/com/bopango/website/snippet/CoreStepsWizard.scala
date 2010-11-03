@@ -53,7 +53,7 @@ class CoreStepsWizard extends StatefulSnippet {
       bind("form", xhtml,
         "geo" -> SHtml.hidden({g => geo = g}, geo, ("id", "address")),
         "restaurant" -> SHtml.text(restaurant, restaurant = _),
-        "submit" -> SHtml.submit("Continue", doSubmit))
+        "submit" -> SHtml.submit("Bop it!", doSubmit))
     ) openOr NodeSeq.Empty
   }
 

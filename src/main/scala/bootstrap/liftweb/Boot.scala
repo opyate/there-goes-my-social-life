@@ -1,6 +1,7 @@
 package bootstrap.liftweb
 
 import net.liftweb._
+import ext_api.facebook.FacebookConnect
 import util._
 import Helpers._
 
@@ -19,7 +20,7 @@ class Boot {
   def boot {
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
-	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+	      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
 			     Props.get("db.url") openOr 
 			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
 			     Props.get("db.user"), Props.get("db.password"))
@@ -89,14 +90,32 @@ class Boot {
     // What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
+
+    //this is optional. Provides SSO for users already logged in to facebook.com
+    S.addAround(List(new LoanWrapper{
+      def apply[N](f: => N):N = {
+        if (!User.loggedIn_?){
+          for (c <- FacebookConnect.client; user <- User.findByFbId(c.session.uid)){
+            User.logUserIn(user)
+          }
+        }
+        f
+      }
+    }))
+
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)
 
-    // Google Maps to work:
-    //LiftRules.determineContentType (can specify HTML for a specific request path) or
-    LiftRules.useXhtmlMimeType = false //global override
+    // Google Maps and FaceBook to work
+    // (Ps this is the global override -- find a local override)
+    LiftRules.useXhtmlMimeType = false
 
     // set the time that notices should be displayed and then fadeout
     LiftRules.noticesAutoFadeOut.default.set((notices: NoticeType.Value) => Full(2 seconds, 2 seconds))
+
+    // FaceBook
+    LiftRules.liftRequest.append {
+      case Req("xd_receiver" :: Nil, _, _) => false
+    }
   }
 }
