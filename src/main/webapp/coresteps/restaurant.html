@@ -7,33 +7,29 @@
     </lift:form.post>
     -->
 
-    <div id="restaurant_blurb" class="span-12">
+    <div id="restaurant_blurb" class="span-7">
         <p>Based at the heart of Soho, Costa Vista @ Piccadily Circus is the original restaurant of this very successful
             franchise. We proud ourselves of only using locally produced, organic ingredients and pay the uttermost
             attention to service quality &amp; friendliness.</p>
     </div>
 
-    <div id="restaurant_address" class="span-12 last">
-        <strong>Address:</strong><br/>
-        21 Jump Street<br/>
-        London<br/>
-        W12 7GF<br/>
-        Phone: 0207 555 1234<br/>
-        Email: <a href="#">contact@costa-vista.com</a>
- 
+
+    <div class="span-7 last">
         <lift:form.post>
             <form:geo/><br/>
-            <!--<form:restaurant/><br/>-->
+            <div id="restaurant_address">
+                Select a restaurant from the map...
+            </div>
             <form:submit/>
         </lift:form.post>
     </div>
 
-    <div id="restaurant_info" class="span-12">
+    <div id="restaurant_info" class="span-7">
         Key info<br/>
         Menus<br/>
         Reviews<br/>
     </div>
-    <div id="map" class="span-12 last">
+    <div id="map" class="span-7 last">
         <lift:GoogleMaps/>
     </div>
 </xml:group>

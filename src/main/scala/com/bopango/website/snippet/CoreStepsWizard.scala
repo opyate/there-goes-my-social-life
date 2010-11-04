@@ -5,6 +5,7 @@ import net.liftweb.util.BindHelpers._
 import net.liftweb.http.SHtml._
 import xml.{Text, NodeSeq}
 import net.liftweb.http.js.JsCmds
+import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.{S, TemplateFinder, StatefulSnippet, SHtml}
 
 /**
@@ -16,7 +17,7 @@ class CoreStepsWizard extends StatefulSnippet {
   val fromWhence = S.referer openOr "/"
   var dispatch: DispatchIt = {case _ => xhtml => select_geo}
 
-  var geo = "wizard.default.geo"
+  var geo = ""
   var restaurant = "wizard.default.restaurant"
   var booking_details = "wizard.default.booking"
   var order_details = "wizard.default.order"
@@ -31,7 +32,7 @@ class CoreStepsWizard extends StatefulSnippet {
 
     TemplateFinder.findAnyTemplate(List("coresteps", "geo")).map(xhtml =>
       bind("form", xhtml,
-        "geo" -> SHtml.text(geo, geo = _),
+        "geo" -> FocusOnLoad(SHtml.text(geo, geo = _)),
         "submit" -> SHtml.submit("Go now!", doSubmit))
     ) openOr NodeSeq.Empty
   }

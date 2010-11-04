@@ -1,29 +1,41 @@
 <xml:group>
 
-    <div id="realtime" class="span-12">
-        Special offers<br/>
-        Restaurant finder<br/>
-        Last minute<br/>
-        Most popular<br/>
+    <div class="prepend-1 span-14 colborder">
+        <lift:Special/>
     </div>
 
-    <div id="geo" class="span-12 last">
-        <lift:form.post>
-            Where do you fancy eating?<br/>
-            <form:geo/><br/>
-            <form:submit/>
-        </lift:form.post>
+    <div class="span-7 last">
+        <div id="geo" class="rounded">
+            <lift:form.post>
+                <span style="color:white;">Where do you fancy eating?</span>
+                <form:geo/><br/>
+                <form:submit/>
+            </lift:form.post>
+
+            <div align="right">
+                <a href="/">
+                    <img src="/images/social/facebook_16.png" alt="Follow us on Facebook"/>
+                </a>
+                <a href="/">
+                    <img src="/images/social/twitter_16.png" alt="Follow us on Twitter"/>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <div id="theyvebopdit" class="span-12">
-        <h2>They've BOD'p it!</h2>
-        <span>xxxxxx and x other guests @ Some venue Somewhere, London</span><br/>
-        <span>xxxxxx and x other guests @ Some venue Somewhere, London</span><br/>
-        <span>xxxxxx and x other guests @ Some venue Somewhere, London</span><br/>
-        <span>xxxxxx and x other guests @ Some venue Somewhere, London</span><br/>
-        <span>xxxxxx and x other guests @ Some venue Somewhere, London</span>
+    <hr class="space"/>
+    <hr/>
+    <hr class="space"/>
+
+    <div class="prepend-1 span-14 colborder">
+        <div id="bopd" class="rounded">
+            <h2>They've BOD'p it!</h2>
+            <div id="blanco" class="rounded">
+                <lift:comet type="BopditComet"/>
+            </div>
+        </div>
     </div>
-    <div id="welcome_msg" class="span-12 last">
+    <div class="span-6 prepend-1 append-1 last">
         <h2>New to Bopango?</h2>
 
         <p>Tired of the waiting game? Fed up with waiting to get seated, get the menu, place the order, get the food...
@@ -32,4 +44,6 @@
 
         <a href="#">Register today for free!</a>
     </div>
+
+    <hr class="space"/>
 </xml:group>

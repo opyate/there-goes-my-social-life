@@ -12,7 +12,9 @@
                 London<br/>
                 NW5 3XG<br/>
                 Phone: 0207 555 1234<br/>
-                Email: <a href="#">contact@costa-vista.com</a>
+                Email: <a href="#">contact@costa-vista.com</a><br/>
+                <br/>
+                <img src="/images/restaurants/costa.png"/>
             ]]></description>
             <Style><IconStyle><Icon><href>/images/restaurants/costa.png</href></Icon></IconStyle></Style>
             <Point>
@@ -30,9 +32,11 @@
                 London<br/>
                 NW5 6HH<br/>
                 Phone: 0207 998 5544<br/>
-                Email: <a href="#">contact@wagamama.com</a>
+                Email: <a href="#">contact@wagamama.com</a><br/>
+                <br/>
+                <img src="/images/restaurants/wagamama.png"/>
             ]]></description>
-            <Style><IconStyle><Icon><href>/images/restaurants/costa.png</href></Icon></IconStyle></Style>
+            <Style><IconStyle><Icon><href>/images/restaurants/wagamama.png</href></Icon></IconStyle></Style>
             <Point>
                 <extrude>1</extrude>
 		        <altitudeMode>relativeToGround</altitudeMode>
@@ -48,7 +52,9 @@
                 London<br/>
                 NW5 3XG<br/>
                 Phone: 0207 555 1234<br/>
-                Email: <a href="#">contact@costa-vista.com</a>
+                Email: <a href="#">contact@costa-vista.com</a><br/>
+                <br/>
+                <img src="/images/restaurants/costa.png"/>
             ]]></description>
             <Style><IconStyle><Icon><href>/images/restaurants/costa.png</href></Icon></IconStyle></Style>
             <Point>
@@ -66,9 +72,11 @@
                 London<br/>
                 NW5 6HH<br/>
                 Phone: 0207 998 5544<br/>
-                Email: <a href="#">contact@wagamama.com</a>
+                Email: <a href="#">contact@wagamama.com</a><br/>
+                <br/>
+                <img src="/images/restaurants/wagamama.png"/>
             ]]></description>
-            <Style><IconStyle><Icon><href>/images/restaurants/costa.png</href></Icon></IconStyle></Style>
+            <Style><IconStyle><Icon><href>/images/restaurants/wagamama.png</href></Icon></IconStyle></Style>
             <Point>
                 <extrude>1</extrude>
 		        <altitudeMode>relativeToGround</altitudeMode>

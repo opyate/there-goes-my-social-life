@@ -11,6 +11,7 @@ import sitemap._
 import Loc._
 import mapper._
 import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
+import com.bopango.website.comet.BopditServer
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -117,5 +118,8 @@ class Boot {
     LiftRules.liftRequest.append {
       case Req("xd_receiver" :: Nil, _, _) => false
     }
+
+    // start actor
+    ActorPing.schedule(BopditServer, <div></div>, 3 seconds)
   }
 }

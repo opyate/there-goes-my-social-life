@@ -75,10 +75,10 @@ function codeAddress() {
     geocoder.geocode({ 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             map.setCenter(results[0].geometry.location);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
+//            var marker = new google.maps.Marker({
+//                map: map,
+//                position: results[0].geometry.location
+//            });
         } else {
             alert("Geocode was not successful for the following reason: " + status);
         }
@@ -87,17 +87,22 @@ function codeAddress() {
     setMarkers(map, test_restaurants);
 }
 
+function showInContentWindow(text) {
+    var sidediv = document.getElementById('restaurant_address');
+    sidediv.innerHTML = text;
+}
+
 /**
  * Data for the markers consisting of a name, a LatLng and a zIndex for
  * the order in which these markers should display on top of each
  * other.
  */
 var test_restaurants = [
-  ['Costa', 51.548982, -0.148573, 4],
-  ['Wagamama', 51.549873, -0.147573, 5],
-  ['Jamie Italian', 51.547874, -0.146573, 3],
-  ['Puzza', 51.550875, -0.145573, 2],
-  ['Meat and Wine Co', 51.551876, -0.145873, 1]
+  ['Costa', 51.548982, -0.148573, 4, "<strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/><img src=\"images/restaurants/costa.png\"/>"],
+  ['Wagamama', 51.549873, -0.147573, 5, "<strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/><img src=\"images/restaurants/wagamama.png\"/>"],
+  ['Costa', 51.547874, -0.146573, 3, "<strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/><img src=\"images/restaurants/costa.png\"/>"],
+  ['Wagamama', 51.550875, -0.145573, 2, "<strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/><img src=\"images/restaurants/wagamama.png\"/>"],
+  ['Costa', 51.551876, -0.145873, 1, "<strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/><img src=\"images/restaurants/costa.png\"/>"]
 ];
 
 function setMarkers(map, locations) {
@@ -144,5 +149,8 @@ function setMarkers(map, locations) {
         title: restaurant[0],
         zIndex: restaurant[3]
     });
+
+    google.maps.event.addListener(marker, 'click', function() {showInContentWindow(restaurant[4]);});
+
   }
 }
