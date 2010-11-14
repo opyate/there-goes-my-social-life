@@ -31,7 +31,7 @@ object Venue extends Venue with LongKeyedMetaMapper[Venue]
 /**
  * An O-R mapped wiki entry
  */
-class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK {//with OneToMany[Long, Review] {
+class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK with OneToMany[Long, Venue] {
   def getSingleton = Venue
 
   object name extends MappedString(this, 32) {
@@ -58,6 +58,12 @@ class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK {//with
         case s: Chain => Full(s.id.is -> s.name.is)
       })
   }
+
+  object bopango_menus extends MappedOneToMany(Menu, Menu.venue,
+    OrderBy(Menu.id, Descending))
+          with Owned[Menu]
+          with Cascade[Menu]
+
 //
 //  object cuisine extends LongMappedMapper(this, Cuisine) {
 //    override def dbColumnName = "cuisine_id"

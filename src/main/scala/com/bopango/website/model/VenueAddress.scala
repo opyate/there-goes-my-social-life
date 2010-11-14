@@ -61,12 +61,12 @@ class VenueAddress extends LongKeyedMapper[VenueAddress] with CreatedUpdated wit
   object latitude extends MappedDouble(this)
 
   // TODO relationships
-//  object venue extends LongMappedMapper(this, Venue) {
-//    override def dbColumnName = "venue_id"
-//
-//    override def validSelectValues =
-//      Full(Venue.findMap(OrderBy(Venue.name, Ascending)) {
-//        case s: Venue => Full(s.id.is -> s.name.is)
-//      })
-//  }
+  object venue extends LongMappedMapper(this, Venue) {
+    override def dbColumnName = "venue_id"
+
+    override def validSelectValues =
+      Full(Venue.findMap(OrderBy(Venue.name, Ascending)) {
+        case s: Venue => Full(s.id.is -> s.name.is)
+      })
+  }
 }

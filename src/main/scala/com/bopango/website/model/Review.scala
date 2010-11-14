@@ -53,21 +53,21 @@ class Review extends LongKeyedMapper[Review] with CreatedUpdated with IdPK {
   object score_total extends MappedInt(this)
 
   // TODO relationships
-//  object venue extends LongMappedMapper(this, Venue) {
-//    override def dbColumnName = "venue_id"
-//
-//    override def validSelectValues =
-//      Full(Venue.findMap(OrderBy(Venue.name, Ascending)) {
-//        case s: Venue => Full(s.id.is -> s.name.is)
-//      })
-//  }
-//
-//  object reviewer extends LongMappedMapper(this, User) {
-//    override def dbColumnName = "user_id"
-//
-//    override def validSelectValues =
-//      Full(User.findMap(OrderBy(User.name, Ascending)) {
-//        case s: User => Full(s.id.is -> s.name.is)
-//      })
-//  }
+  object venue extends LongMappedMapper(this, Venue) {
+    override def dbColumnName = "venue_id"
+
+    override def validSelectValues =
+      Full(Venue.findMap(OrderBy(Venue.name, Ascending)) {
+        case s: Venue => Full(s.id.is -> s.name.is)
+      })
+  }
+
+  object reviewer extends LongMappedMapper(this, User) {
+    override def dbColumnName = "user_id"
+
+    override def validSelectValues =
+      Full(User.findMap(OrderBy(User.email, Ascending)) {
+        case s: User => Full(s.id.is -> s.email.is)
+      })
+  }
 }

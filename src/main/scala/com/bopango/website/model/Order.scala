@@ -3,9 +3,14 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
+import net.liftweb.common.Full
 
 /**
- * TODO Reservation order -- ask Ben about this.
+ * Reservation order.
+ *
+ * A reservation comprises many orders. An order is a wrapper around a dish, but adds extras:
+ * * how many of said dish?
+ * * any dish special requirements?
  *
  * @author Juan Uys
  */
@@ -27,5 +32,30 @@ object Order extends Order with LongKeyedMetaMapper[Order]
 class Order extends LongKeyedMapper[Order] with CreatedUpdated with IdPK {
   def getSingleton = Order
 
-  // TODO bridge table 'dish_order' so an order can have many dishes (and quantities of dishes?)
+  object quantity extends MappedInt(this)
+
+  object comments extends MappedTextarea(this, 2048) {
+    override def textareaRows  = 10
+    override def textareaCols = 50
+    override def displayName = "Comments"
+  }
+
+  // TODO relationships
+  object dish extends LongMappedMapper(this, Dish) {
+    override def dbColumnName = "venue_id"
+
+    override def validSelectValues =
+      Full(Dish.findMap(OrderBy(Dish.name, Ascending)) {
+        case s: Dish => Full(s.id.is -> s.name.is)
+      })
+  }
+
+  object reservation extends LongMappedMapper(this, Reservation) {
+    override def dbColumnName = "reservation_id"
+
+    override def validSelectValues =
+      Full(Reservation.findMap(OrderBy(Reservation.id, Ascending)) {
+        case s: Reservation => Full(s.id.is -> s.id.is.toString)
+      })
+  }
 }

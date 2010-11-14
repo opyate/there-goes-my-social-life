@@ -26,9 +26,26 @@ object User extends User with MetaMegaProtoUser[User] {
 //    If(notLoggedIn_? _, S.??("already.logged.in")) ::
 //    Template(() => {wrapIt(login) ::
 //    Nil
+
+  override def loginXhtml = {
+    <div id="loginpage">
+      <div class="span-18">
+        {super.loginXhtml}
+      </div>
+      <div class="span-4 last">
+        <a href='/auth/facebook/signin'>
+          <img src="/images/signin/fb-login-button.png" alt="Login with Facebook"/>
+        </a>
+      </div>
+    </div>
+  }
 }
 
-class User extends MegaProtoUser[User] {// with OneToMany[Long, Review] {
+
+/**
+ * Does MegaProtoUser already include OneToMany ? Seems not -- it would probably not compile.
+ */
+class User extends MegaProtoUser[User] with OneToMany[Long, User] {
   def getSingleton = User // what's the "meta" server
 
   def validateUnique(field: MappedLong[User], msg: => String)(value:Long): List[FieldError] = value match {

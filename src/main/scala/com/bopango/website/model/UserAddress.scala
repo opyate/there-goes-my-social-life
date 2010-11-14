@@ -63,12 +63,12 @@ class UserAddress extends LongKeyedMapper[UserAddress] with CreatedUpdated with 
   object is_billing extends MappedBoolean(this)
 
   // TODO relationships
-//  object user extends LongMappedMapper(this, User) {
-//    override def dbColumnName = "user_id"
-//
-//    override def validSelectValues =
-//      Full(User.findMap(OrderBy(User.name, Ascending)) {
-//        case s: User => Full(s.id.is -> s.name.is)
-//      })
-//  }
+  object user extends LongMappedMapper(this, User) {
+    override def dbColumnName = "user_id"
+
+    override def validSelectValues =
+      Full(User.findMap(OrderBy(User.email, Ascending)) {
+        case s: User => Full(s.id.is -> s.email.is)
+      })
+  }
 }

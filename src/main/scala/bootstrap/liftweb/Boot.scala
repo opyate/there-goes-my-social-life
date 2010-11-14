@@ -10,14 +10,14 @@ import http._
 import sitemap._
 import Loc._
 import mapper._
-import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
 import com.bopango.website.comet.BopditServer
+import com.bopango.website.model.{ChainChecklist, VenueChecklist, User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
 
 /**
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
-class Boot {
+class Boot extends Loggable {
   def boot {
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
@@ -35,7 +35,7 @@ class Boot {
     // you don't need to use Mapper to use Lift... use
     // any ORM you want
     Schemifier.schemify(true, Schemifier.infoF _, User, UserAddress, VenueAddress, Chain, Cuisine, Dish, BopangoMenu,
-      MenuSection, Order, Payment, Reservation, Review, Venue)
+      MenuSection, Order, Payment, Reservation, Review, Venue, ChainChecklist, VenueChecklist)
 
     // where to search snippet
     LiftRules.addToPackages("com.bopango.website")
@@ -59,6 +59,7 @@ class Boot {
       Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),
       Menu("Venue Address") / "admin" / "venue_address" >> LocGroup("admin") submenus(VenueAddress.menus : _*),
       Menu("Chain") / "admin" / "chain" >> LocGroup("admin") submenus(Chain.menus : _*),
+      Menu("Chain Checklist") / "admin" / "chain_checklist" >> LocGroup("admin") submenus(ChainChecklist.menus : _*),
       Menu("Cuisine") / "admin" / "cuisine" >> LocGroup("admin") submenus(Cuisine.menus : _*),
       Menu("Dish") / "admin" / "dish" >> LocGroup("admin") submenus(Dish.menus : _*),
       Menu("Menu") / "admin" / "menu" >> LocGroup("admin") submenus(BopangoMenu.menus : _*),
@@ -67,7 +68,12 @@ class Boot {
       Menu("Payment") / "admin" / "payment" >> LocGroup("admin") submenus(Payment.menus : _*),
       Menu("Reservation") / "admin" / "reservation" >> LocGroup("admin") submenus(Reservation.menus : _*),
       Menu("Review") / "admin" / "review" >> LocGroup("admin") submenus(Review.menus : _*),
-      Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*)
+      Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*),
+      Menu("Venue Checklist") / "admin" / "venue_checklist" >> LocGroup("admin") submenus(VenueChecklist.menus : _*),
+
+      //Omniauth site menu items
+      Menu(Loc("AuthCallback", List("omniauth","callback"), "AuthCallback", Hidden)),
+      Menu(Loc("AuthSignin", List("omniauth", "signin"), "AuthSignin", Hidden))
     ) :::
     // the User management menu items
     User.sitemap
@@ -119,7 +125,16 @@ class Boot {
       case Req("xd_receiver" :: Nil, _, _) => false
     }
 
-    // start actor
-    ActorPing.schedule(BopditServer, <div></div>, 3 seconds)
+    //Omniauth request rewrites
+    LiftRules.statelessRewrite.prepend {
+      case RewriteRequest(ParsePath(List("auth", providerName, "signin"), _, _, _), _, _) =>
+        RewriteResponse("omniauth"::"signin" :: Nil, Map("provider" -> providerName))
+    }
+    LiftRules.statelessRewrite.prepend {
+      case RewriteRequest(ParsePath(List("auth", providerName, "callback"), _, _, _), _, _) =>
+        RewriteResponse("omniauth"::"callback":: Nil, Map("provider" -> providerName))
+    }
+
+    logger.info("Loaded properties for mode " + Props.modeName + ": " + Props.props)
   }
 }

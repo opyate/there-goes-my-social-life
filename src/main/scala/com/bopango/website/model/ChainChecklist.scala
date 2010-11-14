@@ -6,18 +6,18 @@ import xml.NodeSeq
 import net.liftweb.common.Full
 
 /**
- * A venue belongs to a chain.
+ * A chain checklist.
  *
  * @author Juan Uys
  */
 
-object Chain extends Chain with LongKeyedMetaMapper[Chain]
-  with CRUDify[Long,Chain]{
+object ChainChecklist extends ChainChecklist with LongKeyedMetaMapper[ChainChecklist]
+  with CRUDify[Long,ChainChecklist]{
       //override def fieldOrder = name :: email :: address :: telephone :: opening_hours :: Nil
       override def pageWrapper(body: NodeSeq) =
         <lift:surround with="admin" at="content">{body}</lift:surround>
       override def calcPrefix = List("admin",_dbTableNameLC)
-      override def displayName = "Chain"
+      override def displayName = "Chain Checklist"
       override def showAllMenuLocParams = LocGroup("admin") :: Nil
       override def createMenuLocParams = LocGroup("admin") :: Nil
       override def viewMenuLocParams = LocGroup("admin") :: Nil
@@ -25,33 +25,27 @@ object Chain extends Chain with LongKeyedMetaMapper[Chain]
       override def deleteMenuLocParams = LocGroup("admin") :: Nil
     }
 
-class Chain extends LongKeyedMapper[Chain] with CreatedUpdated with IdPK with OneToMany[Long, Chain] {
-  def getSingleton = Chain
+class ChainChecklist extends LongKeyedMapper[ChainChecklist] with CreatedUpdated with IdPK {
+  def getSingleton = ChainChecklist
 
-  object name extends MappedString(this, 32) {
-    override def dbIndexed_? = true
-  }
+  object vegetarian extends MappedBoolean(this)
 
-  object description extends MappedTextarea(this, 8192) {
-    override def textareaRows  = 10
-    override def textareaCols = 50
-  }
+  object family extends MappedBoolean(this)
 
-  object url extends MappedString(this, 64)
+  object groups extends MappedBoolean(this)
 
-  object phone extends MappedString(this, 16)
+  object pets extends MappedBoolean(this)
 
   // relationships
-  object venues extends MappedOneToMany(Venue, Venue.chain,
-    OrderBy(Venue.id, Descending))
-          with Owned[Venue]
-          with Cascade[Venue]
+  object chain extends LongMappedMapper(this, Chain) {
+    override def dbColumnName = "chain_id"
 
-  object bopango_menus extends MappedOneToMany(Menu, Menu.chain,
-    OrderBy(Menu.id, Descending))
-          with Owned[Menu]
-          with Cascade[Menu]
-
+    override def validSelectValues =
+      Full(Chain.findMap(OrderBy(Chain.name, Ascending)) {
+        case s: Chain => Full(s.id.is -> s.name.is)
+      })
+  }
+  
 //  object cuisine extends LongMappedMapper(this, Cuisine) {
 //    override def dbColumnName = "cuisine_id"
 //

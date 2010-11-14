@@ -3,6 +3,7 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
+import net.liftweb.common.Full
 
 /**
  * A menu.
@@ -24,7 +25,7 @@ object Menu extends Menu with LongKeyedMetaMapper[Menu]
       override def deleteMenuLocParams = LocGroup("admin") :: Nil
     }
 
-class Menu extends LongKeyedMapper[Menu] with CreatedUpdated with IdPK {
+class Menu extends LongKeyedMapper[Menu] with CreatedUpdated with IdPK with OneToMany[Long, Menu] {
   def getSingleton = Menu
 
   object name extends MappedString(this, 32) {
@@ -58,7 +59,32 @@ class Menu extends LongKeyedMapper[Menu] with CreatedUpdated with IdPK {
   object position extends MappedInt(this)
 
   // TODO relationships
-  //object venue extends MappedLongForeignKey(this, Venue)
 
-  //object chain extends MappedLongForeignKey(this, Chain)
+  object chain extends LongMappedMapper(this, Chain) {
+    override def dbColumnName = "chain_id"
+
+    override def validSelectValues =
+      Full(Chain.findMap(OrderBy(Chain.name, Ascending)) {
+        case s: Chain => Full(s.id.is -> s.name.is)
+      })
+  }
+
+  object venue extends LongMappedMapper(this, Venue) {
+    override def dbColumnName = "venue_id"
+
+    override def validSelectValues =
+      Full(Venue.findMap(OrderBy(Venue.name, Ascending)) {
+        case s: Venue => Full(s.id.is -> s.name.is)
+      })
+  }
+
+  object dishes extends MappedOneToMany(Dish, Dish.menu,
+    OrderBy(Dish.id, Descending))
+          with Owned[Dish]
+          with Cascade[Dish]
+
+  object menusections extends MappedOneToMany(MenuSection, MenuSection.menu,
+    OrderBy(MenuSection.id, Descending))
+          with Owned[MenuSection]
+          with Cascade[MenuSection]
 }

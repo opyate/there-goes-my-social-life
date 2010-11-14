@@ -1,0 +1,4 @@
+* NullRefs
+
+http://groups.google.com/group/liftweb/browse_thread/thread/98eb33f05a09d594/e4374b26b27712be?lnk=gst&q=onetomany#
+

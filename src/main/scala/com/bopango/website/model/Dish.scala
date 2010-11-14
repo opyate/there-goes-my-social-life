@@ -3,6 +3,7 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
+import net.liftweb.common.Full
 
 /**
  * A dish.
@@ -58,7 +59,21 @@ class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with IdPK {
   object position extends MappedInt(this)
 
   // TODO relationships
-  //object menu extends MappedLongForeignKey(this, Dish)
+  object menu extends LongMappedMapper(this, Menu) {
+    override def dbColumnName = "menu_id"
 
-  //object menu_section extends MappedLongForeignKey(this, MenuSection)
+    override def validSelectValues =
+      Full(Menu.findMap(OrderBy(Menu.name, Ascending)) {
+        case s: Menu => Full(s.id.is -> s.name.is)
+      })
+  }
+
+  object menu_section extends LongMappedMapper(this, MenuSection) {
+    override def dbColumnName = "menusection_id"
+
+    override def validSelectValues =
+      Full(MenuSection.findMap(OrderBy(MenuSection.name, Ascending)) {
+        case s: MenuSection => Full(s.id.is -> s.name.is)
+      })
+  }
 }

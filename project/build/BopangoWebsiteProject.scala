@@ -16,6 +16,9 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   val liftVersion = "2.1"
 
+  val databinder_net = "databinder.net repository" at "http://databinder.net/repo"
+  val dispatch = "net.databinder" %% "dispatch-twitter" % "0.7.7"
+
   override def libraryDependencies = Set(
     "net.liftweb" % "lift-mapper_2.8.0" % liftVersion % "compile->default",
     "net.liftweb" % "lift-wizard_2.8.0" % liftVersion % "compile->default",

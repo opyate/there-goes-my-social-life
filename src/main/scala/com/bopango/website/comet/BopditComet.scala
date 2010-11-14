@@ -6,6 +6,7 @@ import Helpers._
 import net.liftweb.http.{SHtml, CometListener, ListenerManager, CometActor}
 import net.liftweb.util.ActorPing
 import xml.NodeSeq
+import java.util.Random
 
 /**
  * "They've Bod' It!" section that feeds recent bops.
@@ -37,6 +38,11 @@ object BopditServer extends LiftActor with ListenerManager {
 
   def createUpdate = messages
 
+  val rand = new Random(System.currentTimeMillis())
+
+  // start the actor
+  ActorPing.schedule(this, <div></div>, 3 seconds)
+
   override def lowPriority = {
     case s: NodeSeq => {
       messages = messages ++ s
@@ -45,8 +51,8 @@ object BopditServer extends LiftActor with ListenerManager {
 
       val msg =
         <div>
-          <span style="color:#884499;">{randomString(6)} &amp; 2 other guests are on their way to</span>
-          <span style="color:#8888FF;">Costa Vista @ Piccadily Circus, London</span>
+          <span style="color:#884499;">{randomString(rand.nextInt(3)+5)} &amp; {rand.nextInt(3)+1} other guests are on their way to</span>
+          <span style="color:#8888FF;">{randomString(rand.nextInt(3)+4)} @ Piccadily Circus, London</span>
         </div>
       ActorPing.schedule(BopditServer, msg, 3 seconds)
     }

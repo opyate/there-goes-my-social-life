@@ -1,0 +1,7 @@
+callback.twitter=http://bopango.net:8080/bopango/auth/twitter/callback
+callback.facebook=http://bopango.net:8080/bopango/auth/facebook/callback
+
+facebook.appid=146050128774062
+facebook.secret=ebf1a03722235dfca81333ca96334ace
+
+gmaps.api=ABQIAAAAFbe0T0dzcuVJrktJ3Um1wRQiaxsaJr2m8bC9uzhRb-69XhVihTOUEyWCMxkzKAEsckTCx3JdersKw

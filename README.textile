@@ -29,3 +29,18 @@ h1. TODO:
 ** does ProtoUser have a MappedLocale?
 
 * Roles: http://groups.google.com/group/liftweb/browse_thread/thread/6e6caddac5589fcf
+* Date fields can come with "built in" date picker:
+** http://groups.google.com/group/liftweb/browse_thread/thread/c729a4e21c6120da/6de0b874f20dd20e?lnk=gst&q=date+picker#
+
+h1. Server info
+
+* http://wavded.tumblr.com/post/258713913/installing-tomcat-6-on-centos-5
+* rpm -ql tomcat6.noarch
+
+/var/lib/tomcat6/webapps
+/var/www/vhosts/bopango.net/conf
+
+h2. Stopping/starting
+
+service httpd stop
+service tomcat6 stop

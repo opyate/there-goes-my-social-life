@@ -7,6 +7,7 @@ import xml.{Text, NodeSeq}
 import net.liftweb.http.js.JsCmds
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.{S, TemplateFinder, StatefulSnippet, SHtml}
+import net.liftweb.util.Mailer
 
 /**
  * Wizard for main flow.
@@ -111,6 +112,12 @@ class CoreStepsWizard extends StatefulSnippet {
 
   def confirmation = {
     println("confirmation")
+
+//    Mailer.sendMail(
+//      From("Bopango <confirmation@bopango.net>"),
+//      Subject("Confirmation of your reservation")
+//      )
+
     TemplateFinder.findAnyTemplate(List("coresteps", "confirmation")).map(xhtml =>
       bind("form", xhtml,
         "geo" -> Text(geo),

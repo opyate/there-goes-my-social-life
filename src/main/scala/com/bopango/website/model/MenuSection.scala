@@ -3,6 +3,7 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
+import net.liftweb.common.Full
 
 /**
  * A menu section.
@@ -42,4 +43,14 @@ class MenuSection extends LongKeyedMapper[MenuSection] with CreatedUpdated with 
   }
 
   object position extends MappedInt(this)
+
+  // relationships
+  object menu extends LongMappedMapper(this, Menu) {
+    override def dbColumnName = "menu_id"
+
+    override def validSelectValues =
+      Full(Menu.findMap(OrderBy(Menu.name, Ascending)) {
+        case s: Menu => Full(s.id.is -> s.name.is)
+      })
+  }
 }

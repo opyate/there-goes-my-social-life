@@ -98,11 +98,11 @@ function showInContentWindow(text) {
  * other.
  */
 var test_restaurants = [
-  ['Costa', 51.548982, -0.148573, 4, "<strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/><img src=\"images/restaurants/costa.png\"/>"],
-  ['Wagamama', 51.549873, -0.147573, 5, "<strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/><img src=\"images/restaurants/wagamama.png\"/>"],
-  ['Costa', 51.547874, -0.146573, 3, "<strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/><img src=\"images/restaurants/costa.png\"/>"],
-  ['Wagamama', 51.550875, -0.145573, 2, "<strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/><img src=\"images/restaurants/wagamama.png\"/>"],
-  ['Costa', 51.551876, -0.145873, 1, "<strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/><img src=\"images/restaurants/costa.png\"/>"]
+  ['Costa', 51.548982, -0.148573, 4, "<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"],
+  ['Wagamama', 51.549873, -0.147573, 5, "<img src=\"images/restaurants/wagamama.png\"/><br/><br/><strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/>"],
+  ['Costa', 51.547874, -0.146573, 3, "<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"],
+  ['Wagamama', 51.550875, -0.145573, 2, "<img src=\"images/restaurants/wagamama.png\"/><br/><br/><strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/>"],
+  ['Costa', 51.551876, -0.145873, 1, "<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"]
 ];
 
 function setMarkers(map, locations) {

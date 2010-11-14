@@ -1,10 +1,96 @@
 <xml:group>
-    <lift:form.post>
-        <form:geo/><br/>
-        <form:restaurant/><br/>
-        <form:booking/><br/>
-        <form:order/><br/>
-        <form:payment/><br/>
-        <form:submit/>
-    </lift:form.post>
+    <div class="prepend-1 span-11 colborder">
+        <div class="greybob">
+            Use a card previously used<br/><br/>
+
+            Select a card <select><option>Ben's VISA - xx12</option></select>
+
+            <br/><br/>
+
+            <lift:form.post>
+            <form:submit/>
+            </lift:form.post>
+        </div>
+    </div>
+
+    <div class=" span-10 last">
+        <div class="greybob">
+            OR pay with a new card
+            <br/>
+            <br/>
+
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Card type</td>
+                        <td><select><option>Visa</option></select></td>
+                    </tr>
+                    <tr>
+                        <td>Name on card</td>
+                        <td><input type="text" size="40"/> </td>
+                    </tr>
+                    <tr>
+                        <td>Card number</td>
+                        <td><input type="text" size="40"/> </td>
+                    </tr>
+                    <tr>
+                        <td>Expiry date</td>
+                        <td><input type="text" size="5"/> <input type="text" size="5"/></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br/>
+            <lift:form.post>
+            <form:submit/>
+            </lift:form.post>
+        </div>
+    </div>
+
+    <hr class="space"/>
+
+    <div class="prepend-1 span-22 last append-1">
+
+        <div class="greybob">
+            Alternatively, use an existing account with one of the services listed below to pay
+
+            <br/><br/>
+            <img src="/images/payment/bnr_shopNowUsing_150x40.gif" alt=""/>
+
+        </div>
+    </div>
+
+    <hr class="space"/>
+
+    <div class=" prepend-1 span-22 last append-1">
+        <div class="greybob">
+            Order summary
+
+            <br/>
+            <br/>
+            <table bgcolor="white">
+                <thead>
+                    <tr>
+                        <th>Guest</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ben Morris</td>
+                        <td>34.95</td>
+                    </tr>
+                    <tr>
+                        <td>David Coverdale</td>
+                        <td>23.80</td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><strong>58.75</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </xml:group>
