@@ -3,6 +3,7 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
+import net.liftweb.common.Full
 
 /**
  * A payment for a reservation.
@@ -40,4 +41,23 @@ class Payment extends LongKeyedMapper[Payment] with CreatedUpdated with IdPK {
   object card_4digits extends MappedString(this, 4)
 
   object auth extends MappedString(this, 128)
+
+  // relationships
+  object user extends LongMappedMapper(this, User) {
+    override def dbColumnName = "user_id"
+
+    override def validSelectValues =
+      Full(User.findMap(OrderBy(User.email, Ascending)) {
+        case s: User => Full(s.id.is -> s.email.is)
+      })
+  }
+
+  object reservation extends LongMappedMapper(this, Reservation) {
+    override def dbColumnName = "reservation_id"
+
+    override def validSelectValues =
+      Full(Reservation.findMap(OrderBy(Reservation.id, Ascending)) {
+        case s: Reservation => Full(s.id.is -> s.id.is.toString)
+      })
+  }
 }

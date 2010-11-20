@@ -4,6 +4,8 @@ Overriding the stuff in blueprint.css (if any)
 body {
     color: #222;
     background-color:#f5f5f5;
+    /*font-size: small;*/
+    /*font-family: Verdana, Geneva, sans-serif;*/
 }
 
 #ajax-loader {

@@ -6,7 +6,23 @@ import xml.NodeSeq
 import net.liftweb.common.Full
 
 /**
- * A venue's address
+ * A venue's address.
+ * 
+ * Display on Google Maps with:
+ * 
+
+
+set @lat=51.546949;
+set @long=-0.143895;
+SELECT
+ va.id,
+ ( 6371 * acos( cos( radians(@lat) ) * cos( radians( va.latitude ) ) * cos( radians( va.longitude ) - radians(@long) ) + sin( radians(@lat) ) * sin( radians( va.latitude ) ) ) ) AS distance
+FROM
+ venueaddress va HAVING distance < 25 ORDER BY distance LIMIT 0 , 20;
+
+set @lat=50.958427;
+set @long=-1.491394;
+
  *
  * @author Juan Uys
  */

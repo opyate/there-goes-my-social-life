@@ -68,7 +68,7 @@ class User extends MegaProtoUser[User] with OneToMany[Long, User] {
   object textArea extends MappedTextarea(this, 2048) {
     override def textareaRows  = 10
     override def textareaCols = 50
-    override def displayName = "Personal Essay"
+    override def displayName = "About Me"
   }
 
   object birthday extends MappedBirthYear(this, 18)
@@ -80,18 +80,23 @@ class User extends MegaProtoUser[User] with OneToMany[Long, User] {
   object security_answer extends MappedString(this, 128)
 
   // TODO relationships
-//  object reviews extends MappedOneToMany(Review, Review.reviewer,
-//    OrderBy(Review.id, Descending))
-//          with Owned[Review]
-//          with Cascade[Review]
-//
-//  object addresses extends MappedOneToMany(UserAddress, UserAddress.user,
-//    OrderBy(UserAddress.createdAt, Descending))
-//          with Owned[UserAddress]
-//          with Cascade[UserAddress]
-//
-//  object reservations extends MappedOneToMany(Reservation, Reservation.user,
-//    OrderBy(Reservation.createdAt, Descending))
-//          with Owned[Reservation]
-//          with Cascade[Reservation]
+  object reviews extends MappedOneToMany(Review, Review.reviewer,
+    OrderBy(Review.id, Descending))
+          with Owned[Review]
+          with Cascade[Review]
+
+  object addresses extends MappedOneToMany(UserAddress, UserAddress.user,
+    OrderBy(UserAddress.createdAt, Descending))
+          with Owned[UserAddress]
+          with Cascade[UserAddress]
+
+  object reservations extends MappedOneToMany(Reservation, Reservation.user,
+    OrderBy(Reservation.createdAt, Descending))
+          with Owned[Reservation]
+          with Cascade[Reservation]
+
+  object payments extends MappedOneToMany(Payment, Payment.user,
+    OrderBy(Payment.createdAt, Descending))
+          with Owned[Payment]
+          with Cascade[Payment]
 }

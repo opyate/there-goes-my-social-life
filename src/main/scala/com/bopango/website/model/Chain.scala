@@ -41,6 +41,14 @@ class Chain extends LongKeyedMapper[Chain] with CreatedUpdated with IdPK with On
 
   object phone extends MappedString(this, 16)
 
+  object checklist_vegetarian extends MappedBoolean(this)
+
+  object checklist_families extends MappedBoolean(this)
+
+  object checklist_groups extends MappedBoolean(this)
+
+  object checklist_animals extends MappedBoolean(this)
+
   // relationships
   object venues extends MappedOneToMany(Venue, Venue.chain,
     OrderBy(Venue.id, Descending))
@@ -52,12 +60,12 @@ class Chain extends LongKeyedMapper[Chain] with CreatedUpdated with IdPK with On
           with Owned[Menu]
           with Cascade[Menu]
 
-//  object cuisine extends LongMappedMapper(this, Cuisine) {
-//    override def dbColumnName = "cuisine_id"
-//
-//    override def validSelectValues =
-//      Full(Cuisine.findMap(OrderBy(Cuisine.name, Ascending)) {
-//        case s: Cuisine => Full(s.id.is -> s.name.is)
-//      })
-//  }
+  object cuisine extends LongMappedMapper(this, Cuisine) {
+    override def dbColumnName = "cuisine_id"
+
+    override def validSelectValues =
+      Full(Cuisine.findMap(OrderBy(Cuisine.name, Ascending)) {
+        case s: Cuisine => Full(s.id.is -> s.name.is)
+      })
+  }
 }

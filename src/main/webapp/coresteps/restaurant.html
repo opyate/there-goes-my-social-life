@@ -4,8 +4,10 @@
     <div class="prepend-1 span-8 colborder">
 
         <lift:form.post>
-            <form:geo/>
+
             <br/>
+            <form:js/>
+            <form:x/>
 
             <div id="restaurant_address">
                 Select a restaurant from the map...
@@ -14,6 +16,7 @@
         </lift:form.post>
     </div>
     <div class="span-12 prepend-1 append-1 last">
+        Not what you're looking for? Try somewhere else: <form:geo/>
         <lift:GoogleMaps/>
     </div>
 

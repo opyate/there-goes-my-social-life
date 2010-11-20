@@ -3,18 +3,20 @@ package com.bopango.website.snippet
 import net.liftweb.http.js.JsCmds.RedirectTo
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.SHtml._
-import xml.{Text, NodeSeq}
-import net.liftweb.http.js.JsCmds
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.{S, TemplateFinder, StatefulSnippet, SHtml}
 import net.liftweb.util.Mailer
+import net.liftweb.common.Loggable
+import net.liftweb.http.js.{JsCmd, JsCmds}
+import xml.{NodeSeq, Text}
+import net.liftweb.http.js.JE._
 
 /**
  * Wizard for main flow.
  *
  * @author Juan Uys
  */
-class CoreStepsWizard extends StatefulSnippet {
+class CoreStepsWizard extends StatefulSnippet with Loggable {
   val fromWhence = S.referer openOr "/"
   var dispatch: DispatchIt = {case _ => xhtml => select_geo}
 
@@ -27,7 +29,7 @@ class CoreStepsWizard extends StatefulSnippet {
   def select_geo = {
     def doSubmit () {
       registerThisSnippet
-      println("Geo = " + geo)
+      logger.debug("Geo = " + geo)
       dispatch = {case _ => xhtml => select_restaurant}
     }
 
@@ -38,22 +40,41 @@ class CoreStepsWizard extends StatefulSnippet {
     ) openOr NodeSeq.Empty
   }
 
-//  def select_geo2(xhtml: NodeSeq): NodeSeq = {
-//    bind("form", xhtml,
-//      "geo" -> ajaxText("Enter a postcode, area, city...", {g => println(g); geo = g; S.fmapFunc(() => registerThisSnippet)(binding => JsCmds.RedirectTo("/coresteps/restaurant?" + binding + "=_"))
-//    }))
-//  }
-
   def select_restaurant = {
     def doSubmit () {
       registerThisSnippet
-      println("Restaurant = " + restaurant)
+      logger.debug("Restaurant = " + restaurant)
       dispatch = {case _ => xhtml => book}
     }
 
+    def render_restaurant_data(lat: String, lng: String) = {
+      logger.debug("render_restaurant_data("+lat+", "+lng+")")
+      Script(JsCrVar("restaurant_data",
+        JsArray(
+          JsArray(Str("Costa"), Num(51.548982), Num(-0.148573), Num(4), Str("<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>")),
+          JsArray(Str("Wagamama"), Num(51.551876), Num(-0.145873), Num(1), Str("<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"))
+          )
+        ))
+    }
+
+    def q = {
+      val query = "SELECT  va.id,  ( 6371 * acos( cos( radians(@lat) ) * cos( radians( va.latitude ) ) * cos( radians( va.longitude ) - radians(@long) ) + sin( radians(@lat) ) * sin( radians( va.latitude ) ) ) ) AS distance FROM  venueaddress va HAVING distance < 25 ORDER BY distance LIMIT 0 , 20";
+      //xDB.runQuery(query, List(n.itemN))
+    }
+
+    def ajaxFunc2(str: String) : JsCmd = {
+      //println("Received " + str)
+      JsRaw("codeAddress(null);")
+    }
+
+    //render_restaurant_data("", "")
+
     TemplateFinder.findAnyTemplate(List("coresteps", "restaurant")).map(xhtml =>
       bind("form", xhtml,
-        "geo" -> SHtml.hidden({g => geo = g}, geo, ("id", "address")),
+        //"geo" -> SHtml.hidden({g => geo = g}, geo, ("id", "address")),
+        "geo" -> FocusOnLoad(ajaxText(geo, false, { v:String => println("submitting from Ajax: " + v); Run("codeAddress('"+v+"');"); }, ("id", "address"))),
+        "js" -> render_restaurant_data("", ""),
+        "x" -> Script(OnLoad(SHtml.ajaxCall(Str("Rendering map from initial submission."), ajaxFunc2 _)._2)),
         "restaurant" -> SHtml.text(restaurant, restaurant = _),
         "submit" -> SHtml.submit("Bop it!", doSubmit))
     ) openOr NodeSeq.Empty
@@ -62,7 +83,7 @@ class CoreStepsWizard extends StatefulSnippet {
   def book = {
     def doSubmit () {
       registerThisSnippet
-      println("Booking = " + booking_details)
+      logger.debug("Booking = " + booking_details)
       dispatch = {case _ => xhtml => order}
     }
 
@@ -78,7 +99,7 @@ class CoreStepsWizard extends StatefulSnippet {
   def order = {
     def doSubmit () {
       registerThisSnippet
-      println("Order = " + order_details)
+      logger.debug("Order = " + order_details)
       dispatch = {case _ => xhtml => pay}
     }
 
@@ -95,7 +116,7 @@ class CoreStepsWizard extends StatefulSnippet {
   def pay = {
     def doSubmit () {
       registerThisSnippet
-      println("Payment = " + payment_details)
+      logger.debug("Payment = " + payment_details)
       dispatch = {case _ => xhtml => confirmation}
     }
 
@@ -111,7 +132,7 @@ class CoreStepsWizard extends StatefulSnippet {
   }
 
   def confirmation = {
-    println("confirmation")
+    logger.debug("confirmation")
 
 //    Mailer.sendMail(
 //      From("Bopango <confirmation@bopango.net>"),

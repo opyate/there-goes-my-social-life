@@ -49,6 +49,14 @@ class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK with On
 
   object vat_rate extends MappedDouble(this)
 
+  object checklist_vegetarian extends MappedBoolean(this)
+
+  object checklist_families extends MappedBoolean(this)
+
+  object checklist_groups extends MappedBoolean(this)
+
+  object checklist_animals extends MappedBoolean(this)
+
   // TODO relationships
   object chain extends LongMappedMapper(this, Chain) {
     override def dbColumnName = "chain_id"
@@ -64,23 +72,24 @@ class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK with On
           with Owned[Menu]
           with Cascade[Menu]
 
-//
-//  object cuisine extends LongMappedMapper(this, Cuisine) {
-//    override def dbColumnName = "cuisine_id"
-//
-//    override def validSelectValues =
-//      Full(Cuisine.findMap(OrderBy(Cuisine.name, Ascending)) {
-//        case s: Cuisine => Full(s.id.is -> s.name.is)
-//      })
-//  }
-//
-//  object addresses extends MappedOneToMany(VenueAddress, VenueAddress.venue,
-//    OrderBy(VenueAddress.createdAt, Descending))
-//          with Owned[VenueAddress]
-//          with Cascade[VenueAddress]
-//
-//  object reviews extends MappedOneToMany(Review, Review.venue,
-//    OrderBy(Review.id, Descending))
-//          with Owned[Review]
-//          with Cascade[Review]
+  object cuisine extends LongMappedMapper(this, Cuisine) {
+    override def dbColumnName = "cuisine_id"
+
+    override def validSelectValues =
+      Full(Cuisine.findMap(OrderBy(Cuisine.name, Ascending)) {
+        case s: Cuisine => Full(s.id.is -> s.name.is)
+      })
+  }
+
+  object addresses extends MappedOneToMany(VenueAddress, VenueAddress.venue,
+    OrderBy(VenueAddress.createdAt, Descending))
+          with Owned[VenueAddress]
+          with Cascade[VenueAddress]
+
+  object reviews extends MappedOneToMany(Review, Review.venue,
+    OrderBy(Review.id, Descending))
+          with Owned[Review]
+          with Cascade[Review]
+
+
 }

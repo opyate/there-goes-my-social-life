@@ -55,7 +55,7 @@ function google_maps_init() {
         zoom: 15,
         center: latlng,
         mapTypeControlOptions: {
-            mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'bopango']
+            mapTypeIds: ['bopango']
         }
     };
     map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
@@ -69,9 +69,15 @@ function google_maps_init() {
     map.setMapTypeId('bopango')
 }
 
-function codeAddress() {
+function codeAddress(address) {
     geocoder = new google.maps.Geocoder();
-    var address = document.getElementById("address").value;
+    if (address) {
+        //alert("address arg: " + address);
+    } else {
+        //alert("no address arg, using id");
+        address = document.getElementById("address").value;
+    }
+    
     geocoder.geocode({ 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             map.setCenter(results[0].geometry.location);
@@ -79,31 +85,35 @@ function codeAddress() {
 //                map: map,
 //                position: results[0].geometry.location
 //            });
+            
+            // yields something like (51.5498766, -0.1485683)
+            //alert(results[0].geometry.location);
+
+
+            // If I want to be able to post a location from the same page, Ajax-style:
+            // TODO
+            // - post 'results[0].geometry.location' back to the server
+            // - render a postback call here which
+            // -- takes the location
+            // -- finds restaurants close-by
+            // -- calls 'setMarkers' once all the data's obtained
+
+            setMarkers(map, restaurant_data);
+
         } else {
-            alert("Geocode was not successful for the following reason: " + status);
+            //alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
+
+            // TODO let the server know that there was a problem
         }
     });
 
-    setMarkers(map, test_restaurants);
+
 }
 
 function showInContentWindow(text) {
     var sidediv = document.getElementById('restaurant_address');
     sidediv.innerHTML = text;
 }
-
-/**
- * Data for the markers consisting of a name, a LatLng and a zIndex for
- * the order in which these markers should display on top of each
- * other.
- */
-var test_restaurants = [
-  ['Costa', 51.548982, -0.148573, 4, "<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"],
-  ['Wagamama', 51.549873, -0.147573, 5, "<img src=\"images/restaurants/wagamama.png\"/><br/><br/><strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/>"],
-  ['Costa', 51.547874, -0.146573, 3, "<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"],
-  ['Wagamama', 51.550875, -0.145573, 2, "<img src=\"images/restaurants/wagamama.png\"/><br/><br/><strong>Address:</strong><br/>66 Elm Street<br/>London<br/>NW5 6HH<br/>Phone: 0207 998 5544<br/>Email: <a href=\"#\">contact@wagamama.com</a><br/><br/>"],
-  ['Costa', 51.551876, -0.145873, 1, "<img src=\"images/restaurants/costa.png\"/><br/><br/><strong>Address:</strong><br/>21 Jump Street<br/>London<br/>NW5 3XG<br/>Phone: 0207 555 1234<br/>Email: <a href=\"#\">contact@costa-vista.com</a><br/><br/>"]
-];
 
 function setMarkers(map, locations) {
   // Add markers to the map

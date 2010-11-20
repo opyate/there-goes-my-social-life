@@ -25,12 +25,14 @@ object Reservation extends Reservation with LongKeyedMetaMapper[Reservation]
       override def deleteMenuLocParams = LocGroup("admin") :: Nil
     }
 
-class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with IdPK {
+class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with IdPK with OneToMany[Long, Reservation] {
   def getSingleton = Reservation
 
   object status extends MappedString(this, 32)
 
   object when extends MappedDateTime(this)
+
+  object how_much_time extends MappedDouble(this)
 
   object number_of_guests extends MappedInt(this)
 
@@ -69,4 +71,9 @@ class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with 
         case s: Payment => Full(s.id.is -> s.name.is)
       })
   }
+
+  object orders extends MappedOneToMany(Order, Order.reservation,
+    OrderBy(Order.createdAt, Descending))
+          with Owned[Order]
+          with Cascade[Order]
 }
