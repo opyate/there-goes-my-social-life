@@ -1,6 +1,36 @@
 var geocoder;
 var map;
 
+// Marker sizes are expressed as a Size of X,Y
+// where the origin of the image (0,0) is located
+// in the top left of the image.
+
+// Origins, anchor positions and coordinates of the marker
+// increase in the X direction to the right and in
+// the Y direction down.
+var image = new google.maps.MarkerImage('images/bopango_flag.png',
+  // This marker is 20 pixels wide by 32 pixels tall.
+  new google.maps.Size(20, 32),
+  // The origin for this image is 0,0.
+  new google.maps.Point(0,0),
+  // The anchor for this image is the base of the flagpole at 0,32.
+  new google.maps.Point(0, 32));
+var shadow = new google.maps.MarkerImage('images/bopango_flag_shadow.png',
+  // The shadow image is larger in the horizontal dimension
+  // while the position and offset are the same as for the main image.
+  new google.maps.Size(37, 32),
+  new google.maps.Point(0,0),
+  new google.maps.Point(0, 32));
+  // Shapes define the clickable region of the icon.
+  // The type defines an HTML &lt;area&gt; element 'poly' which
+  // traces out a polygon as a series of X,Y points. The final
+  // coordinate closes the poly by connecting to the first
+  // coordinate.
+var shape = {
+  coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+  type: 'poly'
+};
+
 // Map Style Wizard: http://gmaps-samples-v3.googlecode.com/svn/trunk/styledmaps/wizard/index.html
 // pink map JSON:
 var bopango_map_style = [
@@ -72,9 +102,9 @@ function google_maps_init() {
 function codeAddress(address) {
     geocoder = new google.maps.Geocoder();
     if (address) {
-        //alert("address arg: " + address);
+//        alert("address arg: " + address);
     } else {
-        //alert("no address arg, using id");
+//        alert("no address arg, using id");
         address = document.getElementById("address").value;
     }
     
@@ -98,7 +128,8 @@ function codeAddress(address) {
             // -- finds restaurants close-by
             // -- calls 'setMarkers' once all the data's obtained
 
-            setMarkers(map, restaurant_data);
+            //setMarkers(map, restaurant_data);
+            searchLocationsNear(results[0].geometry.location);
 
         } else {
             //alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
@@ -106,12 +137,116 @@ function codeAddress(address) {
             // TODO let the server know that there was a problem
         }
     });
-
-
 }
 
+function searchLocationsNear(center) {
+//    alert("you submitted: " + center);
+    // TODO either get radius from user, and base it on the GMap current zoom level
+    //var radius = document.getElementById('radiusSelect').value;
+
+    //var searchUrl = 'phpsqlsearch_genxml.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+    var searchUrl = 'api/venues/'+center.lat()+'/'+center.lng()+'/25';
+
+    downloadUrl(searchUrl, function(data) {
+        var xml = data; //GXml.parse(data);
+        var markers = xml.documentElement.getElementsByTagName('marker');
+        //map.clearOverlays();
+
+        var sidebar = document.getElementById('sidebar');
+        sidebar.innerHTML = '';
+
+        if (markers.length == 0) {
+            sidebar.innerHTML = 'No results found.';
+            //map.setCenter(new google.maps.LatLng(40, -100), 4);
+            return;
+        }
+
+        var bounds = new google.maps.LatLngBounds();
+//        for (var i = 0; i < markers.length; i++) {
+//            var name = markers[i].getAttribute('name');
+//            var address = markers[i].getAttribute('address');
+//            var distance = parseFloat(markers[i].getAttribute('distance'));
+//            var point = new google.maps.LatLng(parseFloat(markers[i].getAttribute('lat')),
+//                    parseFloat(markers[i].getAttribute('lng')));
+//
+//            var marker = createMarker(point, name, address);
+//            map.addOverlay(marker); // TODO  <---
+//            var sidebarEntry = createSidebarEntry(marker, name, address, distance);
+//            sidebar.appendChild(sidebarEntry);
+//            bounds.extend(point);
+//        }
+
+        for (var i = 0; i < markers.length; i++) {
+            var point = new google.maps.LatLng(parseFloat(markers[i].getAttribute('lat')),
+                    parseFloat(markers[i].getAttribute('lng')));
+            var distance = parseFloat(markers[i].getAttribute('distance'));
+            var name = markers[i].getAttribute('name');
+            var address = markers[i].getAttribute('address');
+            var marker = new google.maps.Marker({
+                position: point,
+                map: map,
+                shadow: shadow,
+                icon: image,
+                shape: shape,
+                title: markers[i].getAttribute('name')
+            });
+
+//            google.maps.event.addListener(marker, 'click', function() {
+//                showInContentWindow(markers[i].getAttribute('address'));
+//            });
+            var html = '<b>' + name + '</b> <br/>' + address;
+
+            var infoWindow = new google.maps.InfoWindow({
+                content: html,
+                position: point
+            });
+            google.maps.event.addListener(marker, 'click', function () {
+                infoWindow.open(map, marker);
+            });
+
+            var sidebarEntry = createSidebarEntry(marker, name, address, distance);
+            sidebar.appendChild(sidebarEntry);
+            bounds.extend(point);
+
+        }
+
+
+        //map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
+        map.fitBounds(bounds);
+    });
+}
+
+function createMarker(point, name, address) {
+    var marker = new google.maps.Marker(point);
+    var html = '<b>' + name + '</b> <br/>' + address;
+    google.maps.event.addListener(marker, 'click', function() {
+        marker.openInfoWindowHtml(html);
+    });
+    return marker;
+}
+
+function createSidebarEntry(marker, name, address, distance) {
+    var div = document.createElement('div');
+    var html = '' + name + ' (' + distance.toFixed(1) + ') ' + address;
+    div.innerHTML = html;
+    div.style.cursor = 'pointer';
+    div.style.marginBottom = '5px';
+    google.maps.event.addDomListener(div, 'click', function() {
+        google.maps.event.trigger(marker, 'click');
+    });
+    google.maps.event.addDomListener(div, 'mouseover', function() {
+        div.style.backgroundColor = '#eee';
+    });
+    google.maps.event.addDomListener(div, 'mouseout', function() {
+        div.style.backgroundColor = '#fff';
+    });
+    return div;
+}
+
+// http://localhost.local:8080/bopango/api/venues/lat/long/radius
+
 function showInContentWindow(text) {
-    var sidediv = document.getElementById('restaurant_address');
+    var sidediv = document.getElementById('sidebar');
     sidediv.innerHTML = text;
 }
 

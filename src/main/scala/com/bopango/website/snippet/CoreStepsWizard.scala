@@ -71,9 +71,9 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
     TemplateFinder.findAnyTemplate(List("coresteps", "restaurant")).map(xhtml =>
       bind("form", xhtml,
-        //"geo" -> SHtml.hidden({g => geo = g}, geo, ("id", "address")),
-        "geo" -> FocusOnLoad(ajaxText(geo, false, { v:String => println("submitting from Ajax: " + v); Run("codeAddress('"+v+"');"); }, ("id", "address"))),
-        "js" -> render_restaurant_data("", ""),
+        "geo" -> SHtml.hidden({g => geo = g}, geo, ("id", "address")),
+//        "geo" -> FocusOnLoad(ajaxText(geo, false, { v:String => println("submitting from Ajax: " + v); Run("codeAddress('"+v+"');"); }, ("id", "address"))),
+//        "js" -> render_restaurant_data("", ""),
         "x" -> Script(OnLoad(SHtml.ajaxCall(Str("Rendering map from initial submission."), ajaxFunc2 _)._2)),
         "restaurant" -> SHtml.text(restaurant, restaurant = _),
         "submit" -> SHtml.submit("Bop it!", doSubmit))

@@ -30,6 +30,7 @@ class GoogleMaps extends Loggable {
         type="text/javascript"
         src={"/scripts/bopango_googlemaps.js?uniq=" + System.currentTimeMillis.toString}>
       </script>
+      <script src="/scripts/util.js"/>
     </head>
     <div id="map_canvas" style="width: 460px; height: 345px"></div> ++=
     {

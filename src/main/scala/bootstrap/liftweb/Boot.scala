@@ -12,6 +12,7 @@ import Loc._
 import mapper._
 import com.bopango.website.comet.BopditServer
 import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
+import com.bopango.website.lib.{VenueLocatorAPI, WsEndpoint}
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -20,9 +21,9 @@ import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisin
 class Boot extends Loggable {
   def boot {
     if (!DB.jndiJdbcConnAvailable_?) {
-      val vendor = 
+      val vendor =
 	      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
-			     Props.get("db.url") openOr 
+			     Props.get("db.url") openOr
 			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
 			     Props.get("db.user"), Props.get("db.password"))
 
@@ -84,7 +85,7 @@ class Boot extends Loggable {
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
       Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
-    
+
     // Make the spinny image go away when it ends
     LiftRules.ajaxEnd =
       Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
@@ -134,5 +135,10 @@ class Boot extends Loggable {
     }
 
     logger.info("Loaded properties for mode " + Props.modeName + ": " + Props.props)
+
+    // apis
+    val x: List[WsEndpoint] = List(VenueLocatorAPI)
+    x.foreach(endpoint => LiftRules.dispatch.append
+              (endpoint.dispatchRules))
   }
 }
