@@ -39,14 +39,17 @@ class VenueLocatorAPI {
       " va.city as city," +
       " va.latitude as lat," +
       " va.longitude as lng," +
+      " c.description as description," +
+      "( 6371 * acos( cos( radians(" + lat + ") ) * cos( radians( va.latitude ) ) * cos( radians( va.longitude ) - radians(" + lng + ") ) + sin( radians(" + lat + ") ) * sin( radians( va.latitude ) ) ) ) AS distance, " +
+      " v.id as id" +
       " " +
       " " +
       " " +
       " " +
-      " va.id, "+
-      "( 6371 * acos( cos( radians(" + lat + ") ) * cos( radians( va.latitude ) ) * cos( radians( va.longitude ) - radians(" + lng + ") ) + sin( radians(" + lat + ") ) * sin( radians( va.latitude ) ) ) ) AS distance " +
+      " " +
       " FROM  venueaddress va " +
       " INNER JOIN venue v ON v.id = va.venue_id" +
+      " INNER JOIN chain c ON v.chain_id = c.id" +
       " HAVING distance < " + radius +
       " ORDER BY distance LIMIT 0 , 8";
     val x = DB.runQuery(query, Nil)
@@ -59,7 +62,15 @@ class VenueLocatorAPI {
     <markers>
       {
         x._2.map(row => {
-          <marker name={row(0)} address={row(1)+", "+row(2)+", "+row(3)} lat={row(4)} lng={row(5)} distance={row(6)}/>
+          <marker
+            name={row(0)}
+            address={row(1)+", "+row(2)+", "+row(3)}
+            lat={row(4)}
+            lng={row(5)}
+            description={row(6)}
+            distance={row(7)}
+            id={row(8)}
+          />
         })
       }
     </markers>

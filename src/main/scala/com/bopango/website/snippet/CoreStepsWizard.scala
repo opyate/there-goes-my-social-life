@@ -1,18 +1,26 @@
 package com.bopango.website.snippet
 
 import net.liftweb.http.js.JsCmds.RedirectTo
+import net.liftweb.http.SessionVar
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.SHtml._
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.{S, TemplateFinder, StatefulSnippet, SHtml}
 import net.liftweb.util.Mailer
-import net.liftweb.common.Loggable
+import net.liftweb.util.Mailer._
 import net.liftweb.http.js.{JsCmd, JsCmds}
 import xml.{NodeSeq, Text}
 import net.liftweb.http.js.JE._
+import com.bopango.website.model.{Venue, Reservation, User}
+import net.liftweb.common.{Box, Empty, Full, Loggable}
 
 /**
  * Wizard for main flow.
+ *
+ * Tips & Tricks:
+ *
+ * 1) Using instance vars with StatefulSnippet:
+ *    http://groups.google.com/group/liftweb/browse_thread/thread/247a0ff76323673c/065848a1ba9a0147?lnk=gst&q=toForm#
  *
  * @author Juan Uys
  */
@@ -25,6 +33,10 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
   var booking_details = "wizard.default.booking"
   var order_details = "wizard.default.order"
   var payment_details = "wizard.default.payment"
+
+  // the reservation
+  val reservation = Reservation.create
+
 
   def select_geo = {
     def doSubmit () {
@@ -75,31 +87,51 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 //        "geo" -> FocusOnLoad(ajaxText(geo, false, { v:String => println("submitting from Ajax: " + v); Run("codeAddress('"+v+"');"); }, ("id", "address"))),
 //        "js" -> render_restaurant_data("", ""),
         "x" -> Script(OnLoad(SHtml.ajaxCall(Str("Rendering map from initial submission."), ajaxFunc2 _)._2)),
-        "restaurant" -> SHtml.text(restaurant, restaurant = _),
+        "restaurant" -> SHtml.hidden({r:String => restaurant = r; println("got resto: " + r)}, restaurant, ("id", "restaurant")),
         "submit" -> SHtml.submit("Bop it!", doSubmit))
     ) openOr NodeSeq.Empty
   }
 
   def book = {
+
     def doSubmit () {
       registerThisSnippet
-      logger.debug("Booking = " + booking_details)
+
+      // populate the reservation with the newly-inputted data
+      val venue = Venue.find(restaurant) // the venue from the previous screen
+
+      // TODO clean up
+      reservation.venue(venue.open_!)
+
+      logger.debug("Venue from previous step: " + venue) // Full(Venue(...
+      logger.debug("Reservation sessionVar: " + reservation) // Full(Reservation(...
+
       dispatch = {case _ => xhtml => order}
     }
+    
+//    TemplateFinder.findAnyTemplate(List("coresteps", "book")).map(xhtml =>
+//      bind("form", xhtml,
+//        "geo" -> Text(geo),
+//        "restaurant" -> Text(restaurant),
+//        //"booking" -> SHtml.text(booking_details, booking_details = _),
+//        //"reservation" -> reservation.toForm,
+//        "submit" -> SHtml.submit("Continue", doSubmit))
+//    ) openOr NodeSeq.Empty
 
     TemplateFinder.findAnyTemplate(List("coresteps", "book")).map(xhtml =>
       bind("form", xhtml,
-        "geo" -> Text(geo),
-        "restaurant" -> Text(restaurant),
-        "booking" -> SHtml.text(booking_details, booking_details = _),
-        "submit" -> SHtml.submit("Continue", doSubmit))
+        "date" -> reservation.when.toForm,
+        "number_of_guests" -> reservation.number_of_guests.toForm,
+        "submit" -> SHtml.submit("Continue", doSubmit)
+        )
     ) openOr NodeSeq.Empty
   }
 
   def order = {
     def doSubmit () {
       registerThisSnippet
-      logger.debug("Order = " + order_details)
+
+      logger.debug("Order page, and the reservation is now: " + reservation)
       dispatch = {case _ => xhtml => pay}
     }
 
@@ -134,10 +166,18 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
   def confirmation = {
     logger.debug("confirmation")
 
-//    Mailer.sendMail(
-//      From("Bopango <confirmation@bopango.net>"),
-//      Subject("Confirmation of your reservation")
-//      )
+    val bccEmail = Empty
+
+    User.currentUser match {
+      case Full(user) => {
+        Mailer.sendMail(From("Bopango <confirmation@bopango.net>"), Subject("Bopango Order"),
+          (To(user.email) :: xmlToMailBodyType(<span>Bopango Order</span>) :: (bccEmail.toList.map(BCC(_)))): _*)
+      }
+      case _ => {
+        S.warning("DEMO: Log in first to receive an email.")
+      }
+    }
+
 
     TemplateFinder.findAnyTemplate(List("coresteps", "confirmation")).map(xhtml =>
       bind("form", xhtml,

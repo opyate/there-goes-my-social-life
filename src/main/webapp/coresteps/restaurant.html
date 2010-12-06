@@ -3,22 +3,25 @@
 
     <div class="prepend-1 span-8 colborder">
 
-        <lift:form.post>
+        <div id="sidebar">
+            Select a restaurant from the map...
+        </div>
 
-            <br/>
-            <!--<form:js/>-->
-            <form:x/>
-            <form:geo/>
+        <div id="sidebar_submit" style="visibility:hidden;">
+            <lift:form.post>
 
-            <div id="sidebar">
-                Select a restaurant from the map...
-            </div>
-            <form:submit/>
-        </lift:form.post>
+                <!--<form:js/>-->
+                <form:x/>
+                <form:geo/>
+                <form:restaurant/>
+                <form:submit/>
+             </lift:form.post>
+        </div>
     </div>
     <div class="span-12 prepend-1 append-1 last">
         <!--Not what you're looking for? Try somewhere else: <form:geo/>-->
         <lift:GoogleMaps/>
+
     </div>
 
 
@@ -51,9 +54,7 @@
     </div>
 
     <div class="span-9 last">
-        <p>Based at the heart of Soho, Costa Vista @ Piccadily Circus is the original restaurant of this very successful
-            franchise. We proud ourselves of only using locally produced, organic ingredients and pay the uttermost
-            attention to service quality &amp; friendliness.</p>
+        <div id="restaurant_info"></div>
     </div>
 
     <hr class="space"/>

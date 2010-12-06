@@ -32,6 +32,10 @@ class Boot extends Loggable {
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
 
+    // mailer
+    Mailer.jndiName = Full("mail/Session")
+    println("mailer jndi: " + Mailer.jndiSession)
+
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
     // any ORM you want

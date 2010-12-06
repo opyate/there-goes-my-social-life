@@ -196,15 +196,25 @@ function searchLocationsNear(center) {
 //            });
             var html = '<b>' + name + '</b> <br/>' + address;
 
-            var infoWindow = new google.maps.InfoWindow({
-                content: html,
-                position: point
-            });
-            google.maps.event.addListener(marker, 'click', function () {
-                infoWindow.open(map, marker);
-            });
 
-            var sidebarEntry = createSidebarEntry(marker, name, address, distance);
+            var infoWindow = new google.maps.InfoWindow({
+                content:html
+            });
+//            google.maps.event.addListener(marker, 'click', function () {
+//                infoWindow.open(map, this);
+//            });
+            
+            google.maps.event.addListener(marker, 'click', (function(event, index) {
+                return function() {
+                    infoWindow.content = "<b>" + markers[index].getAttribute('name')  + "</b><br/>" + markers[index].getAttribute('address');
+                    infoWindow.open(map, this);
+                }
+            })(marker, i));
+
+
+            var description = markers[i].getAttribute('description');
+            var id = markers[i].getAttribute('id');
+            var sidebarEntry = createSidebarEntry(marker, name, address, distance, description, id);
             sidebar.appendChild(sidebarEntry);
             bounds.extend(point);
 
@@ -225,14 +235,18 @@ function createMarker(point, name, address) {
     return marker;
 }
 
-function createSidebarEntry(marker, name, address, distance) {
+function createSidebarEntry(marker, name, address, distance, description, id) {
     var div = document.createElement('div');
-    var html = '' + name + ' (' + distance.toFixed(1) + ') ' + address;
+    var html = '' + name + ' (' + distance.toFixed(1) + 'km) ' + address;
     div.innerHTML = html;
     div.style.cursor = 'pointer';
-    div.style.marginBottom = '5px';
+    div.style.paddingBottom = '5px';
+    div.style.borderBottom = '1px solid #ddd';
     google.maps.event.addDomListener(div, 'click', function() {
         google.maps.event.trigger(marker, 'click');
+        document.getElementById('restaurant').value = id;
+        document.getElementById('sidebar_submit').style.visibility = 'visible';
+        document.getElementById('restaurant_info').innerHTML = description;
     });
     google.maps.event.addDomListener(div, 'mouseover', function() {
         div.style.backgroundColor = '#eee';
@@ -240,6 +254,8 @@ function createSidebarEntry(marker, name, address, distance) {
     google.maps.event.addDomListener(div, 'mouseout', function() {
         div.style.backgroundColor = '#fff';
     });
+
+    
     return div;
 }
 

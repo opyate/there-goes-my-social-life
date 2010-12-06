@@ -1,10 +1,11 @@
-<xml:group>
+<lift:form.post>
 
     <div class="prepend-1 span-11 colborder">
         <div class="greybob">
-            Select a date<br/><br/>
-            <img src="/images/temp/datepicker.png" alt=""/>
-
+            Select a date
+            <br/>
+            <form:date/>
+            
         </div>
     </div>
 
@@ -46,6 +47,9 @@
         <div class="greybob">
         How many guests, including you, will be attending?
 
+            
+            <form:number_of_guests/>
+            
             <select>
                 <option >1</option>
                 <option selected="selected">2</option>
@@ -93,11 +97,11 @@
 
     <div class=" prepend-1 span-22 last append-1">
         <div align="right">
-            <lift:form.post>
+
             <form:submit/>
-            </lift:form.post>
+
         </div>
     </div>
 
 
-</xml:group>
+</lift:form.post>

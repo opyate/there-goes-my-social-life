@@ -4,6 +4,7 @@ import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
 import net.liftweb.common.Full
+import com.bopango.website.lib.FancyMappedDate
 
 /**
  * A user's reservation w.r.t a venue.
@@ -30,7 +31,9 @@ class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with 
 
   object status extends MappedString(this, 32)
 
-  object when extends MappedDateTime(this)
+  object when extends FancyMappedDate(this)
+
+  object what_time extends MappedTime(this)
 
   object how_much_time extends MappedDouble(this)
 
@@ -39,10 +42,6 @@ class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with 
   object cost_total extends MappedDouble(this)
 
   object cost_remaining extends MappedDouble(this)
-
-  object created extends MappedDateTime(this)
-
-  object updated extends MappedDateTime(this)
 
   // TODO relationships
   object user extends LongMappedMapper(this, User) {
