@@ -29,7 +29,7 @@ class FancyMappedDate[T<:Mapper[T]](fieldOwner: T) extends MappedDate[T](fieldOw
 
       val divName = fieldId match {
         case Some(s) => s+"_calendar"
-        case _ => "" // fieldId should always be set here.
+        case _ => "" // fieldId should always be set, so this line should not execute.
       }
 
       S.fmapFunc({s: List[String] => this.setFromAny(s)}){funcName =>

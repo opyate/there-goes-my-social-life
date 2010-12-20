@@ -13,6 +13,7 @@ import xml.{NodeSeq, Text}
 import net.liftweb.http.js.JE._
 import com.bopango.website.model.{Venue, Reservation, User}
 import net.liftweb.common.{Box, Empty, Full, Loggable}
+import java.util.Calendar
 
 /**
  * Wizard for main flow.
@@ -108,20 +109,106 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
       dispatch = {case _ => xhtml => order}
     }
-    
-//    TemplateFinder.findAnyTemplate(List("coresteps", "book")).map(xhtml =>
-//      bind("form", xhtml,
-//        "geo" -> Text(geo),
-//        "restaurant" -> Text(restaurant),
-//        //"booking" -> SHtml.text(booking_details, booking_details = _),
-//        //"reservation" -> reservation.toForm,
-//        "submit" -> SHtml.submit("Continue", doSubmit))
-//    ) openOr NodeSeq.Empty
+
+    // TODO build the select box dynamically like in the lift-examples AjaxForm
+    // This gives a date: net.liftweb.util.DefaultDateTimeConverter.parseTime("12:00:00 AM")
+    val timesMap = List(
+      ("10:00:00 AM","10:00"),
+      ("10:15:00 AM","10:15"),
+      ("10:30:00 AM","10:30"),
+      ("10:45:00 AM","10:45"),
+
+      ("11:00:00 AM","11:00"),
+      ("11:15:00 AM","11:15"),
+      ("11:30:00 AM","11:30"),
+      ("11:45:00 AM","11:45"),
+
+      ("12:00:00 PM","12:00"),
+      ("12:15:00 PM","12:15"),
+      ("12:30:00 PM","12:30"),
+      ("12:45:00 PM","12:45"),
+
+      ("13:00:00 PM","13:00"),
+      ("13:15:00 PM","13:15"),
+      ("13:30:00 PM","13:30"),
+      ("13:45:00 PM","13:45"),
+
+      ("14:00:00 PM","14:00"),
+      ("14:15:00 PM","14:15"),
+      ("14:30:00 PM","14:30"),
+      ("14:45:00 PM","14:45"),
+
+      ("15:00:00 PM","15:00"),
+      ("15:15:00 PM","15:15"),
+      ("15:30:00 PM","15:30"),
+      ("15:45:00 PM","15:45"),
+
+      ("16:00:00 PM","16:00"),
+      ("16:15:00 PM","16:15"),
+      ("16:30:00 PM","16:30"),
+      ("16:45:00 PM","16:45"),
+
+      ("17:00:00 PM","17:00"),
+      ("17:15:00 PM","17:15"),
+      ("17:30:00 PM","17:30"),
+      ("17:45:00 PM","17:45"),
+
+      ("18:00:00 PM","18:00"),
+      ("18:15:00 PM","18:15"),
+      ("18:30:00 PM","18:30"),
+      ("18:45:00 PM","18:45"),
+
+      ("19:00:00 PM","19:00"),
+      ("19:15:00 PM","19:15"),
+      ("19:30:00 PM","19:30"),
+      ("19:45:00 PM","19:45"),
+
+      ("20:00:00 PM","20:00"),
+      ("20:15:00 PM","20:15"),
+      ("20:30:00 PM","20:30"),
+      ("20:45:00 PM","20:45"),
+
+      ("21:00:00 PM","21:00"),
+      ("21:15:00 PM","21:15"),
+      ("21:30:00 PM","21:30"),
+      ("21:45:00 PM","21:45"),
+
+      ("22:00:00 PM","22:00"),
+      ("22:15:00 PM","22:15"),
+      ("22:30:00 PM","22:30"),
+      ("22:45:00 PM","22:45"),
+
+      ("23:00:00 PM","23:00"),
+      ("23:15:00 PM","23:15"),
+      ("23:30:00 PM","23:30"),
+      ("23:45:00 PM","23:45")
+      )
+
+    val how_much_time = List(
+      ("30", "30 minutes"),
+      ("45", "45 minutes"),
+      ("60", "1 hour"),
+      ("90", "1½ hours"),
+      ("-1", "No time limit")
+      )
 
     TemplateFinder.findAnyTemplate(List("coresteps", "book")).map(xhtml =>
       bind("form", xhtml,
         "date" -> reservation.when.toForm,
         "number_of_guests" -> reservation.number_of_guests.toForm,
+        "time" -> SHtml.select(timesMap, Empty, (sel) => {
+            println("you selected time: " + sel)
+            net.liftweb.util.DefaultDateTimeConverter.parseTime(sel) match {
+              case Full(d) => reservation.what_time(d)
+              case _ => S.error("Invalid time selected")
+            }
+
+          }),
+        "how_much_time_in_minutes" -> SHtml.select(how_much_time, Empty, (sel) => {
+            println("you selected how_much_time: " + sel)
+            reservation.how_much_time_in_minutes(sel.toInt)
+          }),
+        "guest_details" -> ajaxButton("I am attending", () => {println("I am attending");Noop}), 
         "submit" -> SHtml.submit("Continue", doSubmit)
         )
     ) openOr NodeSeq.Empty

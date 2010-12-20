@@ -15,15 +15,7 @@
             <br/>
             <br/>
 
-            <select>
-                <option value="Lunch">Lunch</option>
-            </select>
-
-            <br/>
-
-            <button value="">12:00</button> <button value="">12:15</button> <button value="">12:30</button> <button value="">12:45</button><br/>
-            <button value="">13:00</button> <button value="">13:15</button> <button value="">13:30</button> <button value="">13:45</button><br/>
-            <button value="">14:00</button> <button value="">14:15</button> <button value="">14:30</button> <button value="">14:45</button><br/>
+            <form:time/>
 
         </div>
     </div>
@@ -35,8 +27,9 @@
         <div class="greybob">
             How much time do you have for lunch?
             <br/>
-
-            <button value="">30 minutes</button> <button value="">45 minutes</button> <button value="">1 hour</button> <button value="">1 &frac12; hour</button> <button value="">No time limit</button><br/>
+            <br/>
+            <form:how_much_time_in_minutes/>
+            
 
         </div>
     </div>
@@ -45,51 +38,50 @@
 
     <div class=" prepend-1 span-22 last append-1">
         <div class="greybob">
-        How many guests, including you, will be attending?
+            How many guests will be attending?
+            <br/>
+            <br/>
 
-            
             <form:number_of_guests/>
-            
-            <select>
-                <option >1</option>
-                <option selected="selected">2</option>
-                <option>3</option>
-                <option>...</option>
-            </select>
 
+            <br/>
             <br/>
             You can provide the guest details below (optional):
             <br/>
-            <table bgcolor="white">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Mobile</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Ben Morris</td>
-                        <td>ben@morris.com</td>
-                        <td>+44 (0)77 555 1234</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>David Coverdale</td>
-                        <td>david@purple.com</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+            <br/>
+            
+            <form:guest_details/>
+
+            <!--<table bgcolor="white">-->
+                <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<th>#</th>-->
+                        <!--<th>Name</th>-->
+                        <!--<th>Email</th>-->
+                        <!--<th>Mobile</th>-->
+                    <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                    <!--<tr>-->
+                        <!--<td>1</td>-->
+                        <!--<td>Ben Morris</td>-->
+                        <!--<td>ben@morris.com</td>-->
+                        <!--<td>+44 (0)77 555 1234</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>2</td>-->
+                        <!--<td>David Coverdale</td>-->
+                        <!--<td>david@purple.com</td>-->
+                        <!--<td></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>3</td>-->
+                        <!--<td></td>-->
+                        <!--<td></td>-->
+                        <!--<td></td>-->
+                    <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
         </div>
     </div>
 

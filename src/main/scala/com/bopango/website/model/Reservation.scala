@@ -35,9 +35,11 @@ class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with 
 
   object what_time extends MappedTime(this)
 
-  object how_much_time extends MappedDouble(this)
+  object how_much_time_in_minutes extends MappedInt(this)
 
-  object number_of_guests extends MappedInt(this)
+  object number_of_guests extends MappedInt(this) {
+    override def defaultValue = 1
+  }
 
   object cost_total extends MappedDouble(this)
 
