@@ -2,3 +2,38 @@
 
 http://groups.google.com/group/liftweb/browse_thread/thread/98eb33f05a09d594/e4374b26b27712be?lnk=gst&q=onetomany#
 
+* CSS Tabs
+http://flowplayer.org/tools/demos/tabs/multiple-tabs.htm
+
+* Sprites
+
+http://www.alistapart.com/articles/sprites/
+
+* Tracking/Analytics
+
+http://mixpanel.com/
+Google Analytics
+
+* All fields AJAX-editable
+
+https://github.com/dchenbecker/LiftTicket/blob/master/src/main/scala/org/liftticket/liftticket/model/AjaxEditableField.scala
+
+* Mobile optimisations
+
+https://groups.google.com/forum/?fromgroups#!searchin/liftweb/testcond/liftweb/4Riol5869Fg/6AwHFrMhUf4J
+
+* remote deploy:
+
+pwd /Users/juanuys/Documents/src/svn-repos/_other/dspace-recipe/trunk
+http://code.google.com/p/bungeni-dspace/wiki/InstallingDspaceUsingCapistrano
+http://stackoverflow.com/questions/183091/capistrano-for-java
+
+* CI/CD (continuous deployment)
+
+http://jeppenejsum.wordpress.com/2009/05/11/ec2-continuous-deployment-cooking-with-chef-and-a-stint-of-gradle/
+http://jeppenejsum.wordpress.com/2009/05/25/ec2-continuous-deployment-wrapping-up/
+
+* Lean/lightweight inspiration
+
+http://servicestack.net/RedisStackOverflow/
+https://github.com/mythz/ServiceStack.Examples/tree/master/src/RedisStackOverflow/RedisStackOverflow

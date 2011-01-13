@@ -39,8 +39,7 @@ class Order extends LongKeyedMapper[Order] with CreatedUpdated with IdPK {
     override def textareaCols = 50
     override def displayName = "Comments"
   }
-
-  // TODO relationships
+  
   object dish extends LongMappedMapper(this, Dish) {
     override def dbColumnName = "venue_id"
 

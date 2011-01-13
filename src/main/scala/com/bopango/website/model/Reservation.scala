@@ -45,7 +45,6 @@ class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with 
 
   object cost_remaining extends MappedDouble(this)
 
-  // TODO relationships
   object user extends LongMappedMapper(this, User) {
     override def dbColumnName = "user_id"
 

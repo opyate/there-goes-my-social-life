@@ -19,18 +19,27 @@ localhost:8080
 App ID: 166972886664110
 App secret: 1c1f2167d4ffa5223363d2238c12e8f1
 
-h1. TODO:
+h1. TO-DO
 
-* scala+liftweb payment APIs
-* user roles ('type' as per db schema diagram)
+See the deliverables list:
+https://spreadsheets.google.com/ccc?key=0AgL0Wcu_utXxdF9zTTNaUFhhZDJyUDV2ZTFka3AxSmc&hl=en#gid=0
 
-* for bookings across timezones:
+h2. High priority
+
+TODO orders: menu and dish selection
+TODO guest details
+
+h2. Medium priority
+
+TODO scala+liftweb payment APIs
+TODO user roles ('type' as per db schema diagram)
+See http://groups.google.com/group/liftweb/browse_thread/thread/6e6caddac5589fcf
+
+TODO bookings across timezones
 ** perhaps use a MappedTimezone for a venue, in case the user books a venue from the other side of the world.
 ** does ProtoUser have a MappedLocale?
 
-* Roles: http://groups.google.com/group/liftweb/browse_thread/thread/6e6caddac5589fcf
-* Date fields can come with "built in" date picker:
-** http://groups.google.com/group/liftweb/browse_thread/thread/c729a4e21c6120da/6de0b874f20dd20e?lnk=gst&q=date+picker#
+TODO have Menus and Dishes default to Chain with ability to override in Venue
 
 h1. Server info
 

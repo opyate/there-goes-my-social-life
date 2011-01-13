@@ -4,8 +4,9 @@ import net.liftweb.http.S
 import net.liftweb.mapper.{Mapper, MappedDate}
 import xml.{Text, NodeSeq}
 import java.util.Date
-import net.liftweb.common.{Box, Full}
 import net.liftweb.util.Helpers._
+import net.liftweb.common.{Empty, Box, Full}
+import net.liftweb.http.S.{AFuncHolder, LFuncHolder}
 
 /**
  * http://groups.google.com/group/liftweb/browse_thread/thread/c729a4e21c6120da/6de0b874f20dd20e?lnk=gst&q=date+picker#
@@ -32,7 +33,9 @@ class FancyMappedDate[T<:Mapper[T]](fieldOwner: T) extends MappedDate[T](fieldOw
         case _ => "" // fieldId should always be set, so this line should not execute.
       }
 
-      S.fmapFunc({s: List[String] => this.setFromAny(s)}){funcName =>
+      val lf = LFuncHolder({s: List[String] => this.setFromAny(s)}, Empty) 
+
+      S.fmapFunc(lf){funcName =>
       Full(<xml:group>
              <head>
             <script type="text/javascript" src="/scripts/jquery/jquery-ui-1.7.3.custom.min.js"></script>

@@ -58,7 +58,6 @@ class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with IdPK {
 
   object position extends MappedInt(this)
 
-  // TODO relationships
   object menu extends LongMappedMapper(this, Menu) {
     override def dbColumnName = "menu_id"
 

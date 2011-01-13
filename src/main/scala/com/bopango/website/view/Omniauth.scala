@@ -130,8 +130,9 @@ class Omniauth extends LiftView {
             case _ => {
               import net.liftweb.util.StringHelpers._
               val u = User.create
-              u.firstName(name).lastName(name).email(email).password(randomString(8))
+              u.firstName(name).lastName(name).email(email).password(randomString(32)).validated(true)
               u.save
+
               User.logUserIn(u)
             }
           }

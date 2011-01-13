@@ -12,3 +12,4 @@ target
 .scala_dependencies
 lib_managed
 project/boot/
+*.db

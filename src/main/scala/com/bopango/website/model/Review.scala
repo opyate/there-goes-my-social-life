@@ -52,7 +52,6 @@ class Review extends LongKeyedMapper[Review] with CreatedUpdated with IdPK {
 
   object score_total extends MappedInt(this)
 
-  // TODO relationships
   object venue extends LongMappedMapper(this, Venue) {
     override def dbColumnName = "venue_id"
 

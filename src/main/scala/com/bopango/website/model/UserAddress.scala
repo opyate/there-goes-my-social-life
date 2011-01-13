@@ -62,7 +62,6 @@ class UserAddress extends LongKeyedMapper[UserAddress] with CreatedUpdated with 
 
   object is_billing extends MappedBoolean(this)
 
-  // TODO relationships
   object user extends LongMappedMapper(this, User) {
     override def dbColumnName = "user_id"
 

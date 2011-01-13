@@ -9,7 +9,10 @@
     <lift:CSS.blueprint/>
     <lift:CSS.fancyType/>
     <link rel="stylesheet" type="text/css" href="/style/bopango.css"/>
-    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="/style/tabs.css"/>
+    <link rel="stylesheet" type="text/css" href="/style/accordion.css"/>
+    <!--<script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>-->
+    <script src="/scripts/jquery.tools.min.js" type="text/javascript"></script>
     <script id="json" src="/classpath/json.js" type="text/javascript"></script>
 
 </head>
@@ -75,27 +78,9 @@
         });
 
         // tabs
-        $(document).ready(function(){
-            //	When user clicks on tab, this code will be executed
-            $("#tabs li").click(function() {
-                //	First remove class "active" from currently active tab
-                $("#tabs li").removeClass('active');
-
-                //	Now add class "active" to the selected/clicked tab
-                $(this).addClass("active");
-
-                //	Hide all tab content
-                $(".tab_content").hide();
-
-                //	Here we get the href value of the selected tab
-                var selected_tab = $(this).find("a").attr("href");
-
-                //	Show the selected tab content
-                $(selected_tab).fadeIn();
-
-                //	At the end, we add return false so that the click on the link is not executed
-                return false;
-            });
+        $(function() {
+            $("ul.tabs").tabs("> .pane");
+            $(".accordion").tabs(".pane", {tabs: 'h2', effect: 'slide'});
         });
         
         /* ]]> */

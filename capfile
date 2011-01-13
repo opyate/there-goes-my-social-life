@@ -1,0 +1,21 @@
+# target/scala_2.8.1/bopango-website_2.8.1-0.1-SNAPSHOT.war
+
+desc "An example command from the Capistrano wiki"
+task :testy, :hosts => "root@bopango.net" do
+  run "ls -la"
+  run "cd ~/psa"
+  run "ls -la"
+end
+
+desc "Deploys to bopango staging"
+task :deploy, :hosts => "root@bopango.net" do
+  run "service tomcat6 stop"
+  run "rm -rf /var/lib/tomcat6/webapps/bopango/"
+  run "rm -rf /var/lib/tomcat6/webapps/bopango.war"
+  run "rm -rf /var/lib/tomcat6/webapps/../temp/*"
+  run "rm -rf /var/lib/tomcat6/webapps/../work/*"
+  run "cp ~/bopango-v0.4.war /var/lib/tomcat6/webapps/bopango.war"
+  run "service tomcat6 start"
+  run "sleep 5"
+  run "tail -n10 /var/log/tomcat6/catalina.out"
+end

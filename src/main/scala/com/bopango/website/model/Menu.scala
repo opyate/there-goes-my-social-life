@@ -58,8 +58,6 @@ class Menu extends LongKeyedMapper[Menu] with CreatedUpdated with IdPK with OneT
 
   object position extends MappedInt(this)
 
-  // TODO relationships
-
   object chain extends LongMappedMapper(this, Chain) {
     override def dbColumnName = "chain_id"
 

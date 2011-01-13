@@ -47,17 +47,19 @@ class Boot extends Loggable {
 
     // Build SiteMap
     val MustBeLoggedIn = User.loginFirst
+    val IfLoggedIn = Loc.If(() => User.currentUser.isDefined, "You must be logged in")
     val entries = List(
       // home
       Menu.i("Home") / "index" >> LocGroup("public"),
 
       // wizard
-      Menu.i("Core Steps - Geo") / "coresteps" / "geo" >> LocGroup("public") >> Hidden,
-      Menu.i("Core Steps - Restaurant") / "coresteps" / "restaurant" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu.i("Core Steps - Booking") / "coresteps" / "book" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu.i("Core Steps - Order") / "coresteps" / "order" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu.i("Core Steps - Pay") / "coresteps" / "pay" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu.i("Core Steps - Confirm") / "coresteps" / "confirmation" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
+      Menu("Core Steps - Geo") / "coresteps" / "geo" >> LocGroup("public") >> Hidden,
+      Menu("Core Steps - Restaurant") / "coresteps" / "restaurant" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
+      Menu("Core Steps - Booking") / "coresteps" / "book" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
+      Menu("Core Steps - Order") / "coresteps" / "order" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
+      Menu("Core Steps - Pay") / "coresteps" / "pay" >> LocGroup("public") >> Hidden >> IfLoggedIn,
+      Menu("Core Steps - Confirm") / "coresteps" / "confirmation" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
+      //Menu(Loc("Pay Up", List("coresteps", "pay"), "Pay Up", IfLoggedIn)),
 
       // administration
       Menu("Admin") / "admin" / "index" >> LocGroup("admin"),
@@ -98,7 +100,10 @@ class Boot extends Loggable {
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
     // What is the function to test if a user is logged in?
-    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+    LiftRules.loggedInTest = Full(() => {
+      println("doing logged-in test...")
+      User.loggedIn_?
+    })
 
 
     //this is optional. Provides SSO for users already logged in to facebook.com
@@ -106,6 +111,7 @@ class Boot extends Loggable {
       def apply[N](f: => N):N = {
         if (!User.loggedIn_?){
           for (c <- FacebookConnect.client; user <- User.findByFbId(c.session.uid)){
+            println("logging user in via SSO")
             User.logUserIn(user)
           }
         }
@@ -144,5 +150,10 @@ class Boot extends Loggable {
     val x: List[WsEndpoint] = List(VenueLocatorAPI)
     x.foreach(endpoint => LiftRules.dispatch.append
               (endpoint.dispatchRules))
+
+    // setup the 404 handler
+    LiftRules.uriNotFound.prepend(NamedPF("404handler"){
+      case (req,failure) => NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
+    })
   }
 }

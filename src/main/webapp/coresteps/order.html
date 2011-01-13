@@ -1,302 +1,36 @@
-<xml:group>
+<lift:children>
+    <!--<lift:test_cond.loggedin>-->
 
 
-    <div class="prepend-1 span-11 colborder">
-        <div class="greybob">
-            Choose a menu
-            <br/>
-            <br/>
-
-            <input type="radio" checked="checked" value="A la carte"/>A la carte<br/>
-            <input type="radio" value="Lunch special"/>Lunch special<br/>
-            <input type="radio" value="Buffet"/>Buffet<br/>
-
+        <div class=" prepend-1 span-11 append-1">
+            <h2>Menu</h2>
+            <form:menus_and_dishes/>
         </div>
-    </div>
 
-
-    <div class=" span-10 last">
-        <div class="greybob">
-            Current selection for guest #1<br/><br/>
-
-            <table bgcolor="white">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Dish</th>
-                        <th>Qty</th>
-                        <th>Unit price</th>
-                        <th>Total price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>L01</td>
-                        <td>Main 4</td>
-                        <td>1</td>
-                        <td>6.99</td>
-                        <td>6.99 <button>-</button></td>
-                    </tr>
-                    <tr>
-                        <td>D02</td>
-                        <td>Desert 5</td>
-                        <td>1</td>
-                        <td>3.99</td>
-                        <td>3.99 <button>-</button></td>
-                    </tr>
-                    <tr>
-                        <td>X05</td>
-                        <td>Red wine</td>
-                        <td>5</td>
-                        <td>2.99</td>
-                        <td>14.95 <button>-</button></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td>Total</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>25.93</td>
-                    </tr>
-                </tfoot>
-            </table>
-
+        <div class=" prepend-2 span-8 last append-1">
+            <h2>Guest selection</h2>
+            <form:guest_selections/>
+            <h2>
+                <span style="float:left;">Total</span>
+                <span style="float:right;" id="all_guests_total">0.00</span>
+            </h2>
         </div>
-    </div>
 
-    <hr class="space"/>
+        <hr class="space"/>
 
-    <div class="prepend-1 span-22 last append-1">
-
-        <div class="greybob">
-            Order your food &amp; drinks<br/><br/>
-
-
-            <div id="tabs_container">
-                <ul id="tabs">
-                    <li class="active"><a href="#tab1">Starters</a></li>
-                    <li><a href="#tab2">Mains</a></li>
-                    <li><a href="#tab3">Desserts</a></li>
-                    <li><a href="#tab4">Cold drinks</a></li>
-                    <li><a href="#tab5">Alcohol</a></li>
-                </ul>
-            </div>
-            <div id="tabs_content_container">
-                <div id="tab1" class="tab_content" style="display: block;">
-                    <table bgcolor="white">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="tab2" class="tab_content">
-                    <table bgcolor="white">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="tab3" class="tab_content">
-                    <table bgcolor="white">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="tab4" class="tab_content">
-                    <table bgcolor="white">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="tab5" class="tab_content">
-                    <table bgcolor="white">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                            <tr>
-                                <td>Photo</td>
-                                <td>S01</td>
-                                <td>Lunch 01</td>
-                                <td>Dish description</td>
-                                <td>6.99</td>
-                                <td><button>+</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <div class=" prepend-1 span-22 last append-1">
+            <div align="right">
+                <lift:form.post>
+                    <form:submit/>
+                </lift:form.post>
             </div>
         </div>
-    </div>
 
-    <hr class="space"/>
+    <!--</lift:test_cond.loggedin>-->
 
-    <div class=" prepend-1 span-22 last append-1">
-        <div align="right">
-            <lift:form.post>
-            <form:submit/>
-            </lift:form.post>
-        </div>
-    </div>
-
-
-</xml:group>
+    <!--<lift:test_cond.loggedout>-->
+        <!--<div class=" prepend-1 span-22 last append-1">-->
+            <!--Please log in to proceed-->
+        <!--</div>-->
+    <!--</lift:test_cond.loggedout>-->
+</lift:children>

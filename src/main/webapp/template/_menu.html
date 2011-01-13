@@ -1,0 +1,72 @@
+<div class="wrap">
+    <ul class="tabs">
+        <menus:list>
+            <li><a href="#">
+                <menu:name/>
+            </a></li>
+        </menus:list>
+    </ul>
+
+    <menus:list>
+        <div class="pane">
+            <p>
+                <menu:name/>
+            </p>
+
+            <ul class="tabs">
+                <menu_sections:list>
+                    <li><a href="#">
+                        <menu_section:name/>
+                    </a></li>
+                </menu_sections:list>
+            </ul>
+
+            <menu_sections:list>
+                <div class="pane">
+
+                    <p>
+                        <menu_section:name/>
+                    </p>
+
+                    <table bgcolor="white">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <dishes:list>
+                            <tr>
+                                <td>
+                                    <dish:photo/>
+                                </td>
+                                <td>
+                                    <dish:id/>
+                                </td>
+                                <td>
+                                    <dish:name/>
+                                </td>
+                                <td>
+                                    <dish:description/>
+                                </td>
+                                <td>
+                                    <dish:cost/>
+                                </td>
+                                <td>
+                                    <dish:button/>
+                                </td>
+                            </tr>
+                        </dishes:list>
+                        </tbody>
+                    </table>
+                </div>
+            </menu_sections:list>
+        </div>
+    </menus:list>
+
+</div>

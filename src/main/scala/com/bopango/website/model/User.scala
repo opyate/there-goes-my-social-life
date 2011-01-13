@@ -5,7 +5,8 @@ import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
 import xml.Text
 import net.liftweb.sitemap.Loc.{LocParam, If, Template}
-import net.liftweb.http.S
+import net.liftweb.http.{SessionVar, S}
+
 /**
  * The singleton that has methods for accessing the database
  */
@@ -39,6 +40,19 @@ object User extends User with MetaMegaProtoUser[User] {
       </div>
     </div>
   }
+
+//  object loginReferer extends SessionVar("/")
+//
+//  override def homePage = {
+//    var ret = loginReferer.is
+//    loginReferer.remove()
+//    ret
+//  }
+//
+//  override def login = {
+//    for (r <- S.referer if loginReferer.is == "/") loginReferer.set(r)
+//    super.login
+//  }
 }
 
 
@@ -79,7 +93,6 @@ class User extends MegaProtoUser[User] with OneToMany[Long, User] {
 
   object security_answer extends MappedString(this, 128)
 
-  // TODO relationships
   object reviews extends MappedOneToMany(Review, Review.reviewer,
     OrderBy(Review.id, Descending))
           with Owned[Review]
