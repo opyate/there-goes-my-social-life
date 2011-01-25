@@ -13,6 +13,7 @@ import mapper._
 import com.bopango.website.comet.BopditServer
 import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
 import com.bopango.website.lib.{VenueLocatorAPI, WsEndpoint}
+import javax.mail.internet.MimeMessage
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -32,9 +33,17 @@ class Boot extends Loggable {
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
 
-    // mailer
-    Mailer.jndiName = Full("mail/Session")
-    println("mailer jndi: " + Mailer.jndiSession)
+    // mail
+    //"mail.smtp.host" -> "smtp.gmail.com", "mail.smtp.auth" ->  "true", "mail.smtp.port" -> "587"
+    val mailProps = Map(
+      "mail.smtp.host" -> "localhost",
+      "mail.smtp.auth" ->  "false",
+      "mail.smtp.port" -> "25",
+      "mail.transport.protocol" -> "smtp",
+      "mail.debug" -> "true"
+    )
+    Mailer.customProperties = mailProps
+    //Mailer.devModeSend.default.set{(m : MimeMessage) => println("Dev mode message! " + m)}
 
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
@@ -51,6 +60,8 @@ class Boot extends Loggable {
     val entries = List(
       // home
       Menu.i("Home") / "index" >> LocGroup("public"),
+      // the sandbox for testing
+      Menu.i("Sanbox") / "sandbox" >> LocGroup("public") >> Hidden,
 
       // wizard
       Menu("Core Steps - Geo") / "coresteps" / "geo" >> LocGroup("public") >> Hidden,
@@ -101,7 +112,6 @@ class Boot extends Loggable {
 
     // What is the function to test if a user is logged in?
     LiftRules.loggedInTest = Full(() => {
-      println("doing logged-in test...")
       User.loggedIn_?
     })
 
@@ -155,5 +165,7 @@ class Boot extends Loggable {
     LiftRules.uriNotFound.prepend(NamedPF("404handler"){
       case (req,failure) => NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
     })
+
+    logger.info("Run mode: %s".format(Props.modeName))
   }
 }

@@ -227,7 +227,8 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       registerThisSnippet
 
       logger.debug("Order page, and the reservation is now: " + reservation)
-      dispatch = {case _ => xhtml => login}
+      //dispatch = {case _ => xhtml => login}
+      dispatch = {case _ => xhtml => pay}
     }
 
     // load the menus and dishes for this venue
@@ -462,6 +463,9 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
     ) openOr NodeSeq.Empty
   }
 
+/**
+ * TODO see this instead https://groups.google.com/d/topic/liftweb/V14oirqbub8/discussion
+ */
   def login = {
     def doSubmit () {
       registerThisSnippet

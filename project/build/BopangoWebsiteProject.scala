@@ -29,9 +29,9 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val databinder_net = "databinder.net repository" at "http://databinder.net/repo"
   val dispatch = "net.databinder" %% "dispatch-twitter" % "0.7.7"
 
-  val jetty7Plus = "org.eclipse.jetty" % "jetty-plus" % jettyVersionX % "test"
-  val jetty7Webapp = "org.eclipse.jetty" % "jetty-webapp" % jettyVersionX % "test"
-  val jetty7Server = "org.eclipse.jetty" % "jetty-server" % jettyVersionX % "test"
+  //val jetty7Plus = "org.eclipse.jetty" % "jetty-plus" % jettyVersionX % "test"
+  //val jetty7Webapp = "org.eclipse.jetty" % "jetty-webapp" % jettyVersionX % "test"
+  //val jetty7Server = "org.eclipse.jetty" % "jetty-server" % jettyVersionX % "test"
 
 
   val liftMapper = "net.liftweb" % "lift-mapper_2.8.1" % liftVersion % "compile->default"
@@ -43,13 +43,23 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val joda = "joda-time" % "joda-time" % "1.6.2" % "compile->default"
   val junit = "junit" % "junit" % "4.6" % "test->default"
   val specs = "org.scala-tools.testing" % "specs" % "1.6.2.1" % "test->default"
-  val h2 = "com.h2database" % "h2" % "1.3.149" % "test->default"
+  val h2 = "com.h2database" % "h2" % "1.3.149" % "test->default" intransitive()
 
+  
+
+  override def ivyXML =
+    <dependencies>
+      <exclude module="activation"/>
+    </dependencies>
+
+
+  val logback = "ch.qos.logback" % "logback-classic" % "0.9.27" % "compile->default"
   //override def scanDirectories = Nil
 
-  override def jettyEnvXml = Some(
-		(sourcePath / "main" / "resources" / "META-INF" / "jetty-env.xml").asFile
-	)
+//  override def jettyEnvXml = Some(
+//		(sourcePath / "main" / "resources" / "META-INF" / "jetty-env.xml").asFile
+//	)
+
 
 //  override def jettyEnvXml = Some(
 //		("tmp" / "jetty-env.xml").asFile
@@ -76,8 +86,6 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 //	  //"org.eclipse.jetty" % "jetty-plus" % jettyVersionX % "test->default"
 //    //,
 //
-//    // for embedded jetty (Tomcat has this in lib/)
-//    //,"javax.mail" % "mail" % "1.4.1" intransitive()
 //
 //  ) ++ super.libraryDependencies
 }

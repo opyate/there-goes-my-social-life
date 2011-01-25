@@ -1,10 +1,15 @@
 package com.bopango.website.snippet
 
-import xml.NodeSeq
 import net.liftweb.util.BindHelpers._
-import net.liftweb.http.SHtml
 import net.liftweb.mapper.{Ascending, OrderBy, By}
-
+import xml.{Text, NodeSeq}
+import com.bopango.website.model.User
+import net.liftweb.util.Mailer._
+import net.liftweb.http.{S, SHtml}
+import javax.naming.{Context, InitialContext}
+import net.liftweb.common.{Box, Empty, Full}
+import javax.mail.Session
+import net.liftweb.util.{Helpers, Mailer}
 /**
  * Home page
  *
@@ -103,6 +108,25 @@ class HomePage {
         )
       )
     ))
+  }
+
+  def sendMail(xhtml: NodeSeq): NodeSeq = {
+    def send() {
+      val bccEmail = Empty
+
+      User.currentUser match {
+        case Full(user) => {
+          Mailer.sendMail(From("Bopango <noreply@bopango.net>"), Subject("Bopango Order"),
+            (To(user.email) :: xmlToMailBodyType(<span>Bopango Order</span>) :: (bccEmail.toList.map(BCC(_)))): _*)
+          S.notice("Sent email to %s".format(user.email))
+        }
+        case _ => {
+          S.warning("DEMO: Log in first to receive an email.")
+        }
+      }
+    }
+
+    bind("a", xhtml, "button" -> SHtml.button("click here to send email", () => send))
   }
 
   // Doesnt work

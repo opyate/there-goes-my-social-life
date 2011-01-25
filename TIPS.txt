@@ -37,3 +37,19 @@ http://jeppenejsum.wordpress.com/2009/05/25/ec2-continuous-deployment-wrapping-u
 
 http://servicestack.net/RedisStackOverflow/
 https://github.com/mythz/ServiceStack.Examples/tree/master/src/RedisStackOverflow/RedisStackOverflow
+
+* Make Ajax sites crawlable
+
+- From GWT PDF:
+"Isolated activity is crawlable activity."
+"Add a bang (!) and a headless server -- crawlable"
+http://example.com/#!report:1245
+http://code.google.com/web/ajaxcrawling/docs/getting-started.html
+
+* Action plan
+
+http://www.time-management-guide.com/plan.html
+http://www.klariti.com/action-plan-template/
+
+* Real-time
+HTML5 WebSockets

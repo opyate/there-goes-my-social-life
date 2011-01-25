@@ -22,6 +22,7 @@ body {
     background-color:white;
     -webkit-border-radius:10px;
     -moz-border-radius:10px;
+    min-height: 600px;
 }
 
 .rounded {

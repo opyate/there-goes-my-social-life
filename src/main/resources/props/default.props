@@ -1,0 +1,13 @@
+callback.twitter=http://localhost.local:8080/bopango/auth/twitter/callback
+callback.facebook=http://localhost.local:8080/bopango/auth/facebook/callback
+
+facebook.appid=166972886664110
+facebook.secret=1c1f2167d4ffa5223363d2238c12e8f1
+
+gmaps.api=ABQIAAAAFbe0T0dzcuVJrktJ3Um1wRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQoGK7I3-_WyLI3kxz5Hlvhd4Q_5A
+
+# database stuff
+db.driver=com.mysql.jdbc.Driver
+db.url=jdbc:mysql://localhost:3306/bopango_test?connectTimeout=20000&socketTimeout=60000&autoReconnect=true&useServerPrepStmts=false&cachePrepStmts=true&jdbcCompliantTruncation=false&useUnicode=true
+db.user=root
+db.password=
