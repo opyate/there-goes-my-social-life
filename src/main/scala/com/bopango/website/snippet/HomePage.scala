@@ -117,7 +117,7 @@ class HomePage {
       User.currentUser match {
         case Full(user) => {
           Mailer.sendMail(From("Bopango <noreply@bopango.net>"), Subject("Bopango Order"),
-            (To(user.email) :: xmlToMailBodyType(<span>Bopango Order</span>) :: (bccEmail.toList.map(BCC(_)))): _*)
+            (To(user.email) :: xmlToMailBodyType(<span>Mail</span>) :: (bccEmail.toList.map(BCC(_)))): _*)
           S.notice("Sent email to %s".format(user.email))
         }
         case _ => {
