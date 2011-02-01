@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:8080/" />
+<title>1_selections_and_basket</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">1_selections_and_basket</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/bopango/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>//img[@alt='Bopango']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>F128819161834Y3E</td>
+	<td>nw5 4ba</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>F128819171835MFY</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='sidebar']/div[12]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>F128819171856MXR</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=12</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>F1288191618714PF</td>
+	<td>3</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>F1288191718754TK</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Drinks - Panache</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Hot drinks (PA)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161940WWR=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161940WWR=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161940WWR=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161941HRV=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161941HRV=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F1288191619665Z4=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//h2[2]/span[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=A la carte - Panache</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F1288191619110SR=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F1288191619110SR=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161912WYE=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161914EI1=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161915FGV=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//h2[3]/span[1]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Desserts (PA)</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F1288191619250GO=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161926NS2=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//button[@onclick='liftAjax.lift_ajaxHandler(&quot;F128819161928USW=true&quot;, null, null, null); return false;']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>F128819171901IFY</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>19.95</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>23.95</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>11.6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>verifyTextPresent</td>
+	<td>55.5</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

@@ -2,6 +2,7 @@
 // lat = 51.51158
 // lng = 0  (London)
 
+var sideBarName = "sidebar";
 var geocoder;
 var map;
 
@@ -87,64 +88,38 @@ function codeAddress(address) {
     } else {
         geocoder = new google.maps.Geocoder();
         if (address) {
-    //        alert("address arg: " + address);
         } else {
-    //        alert("no address arg, using id");
             address = document.getElementById("address").value;
         }
 
         geocoder.geocode({ 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
-    //            var marker = new google.maps.Marker({
-    //                map: map,
-    //                position: results[0].geometry.location
-    //            });
-
-                // yields something like (51.5498766, -0.1485683)
-                //alert(results[0].geometry.location);
-
-
-                // If I want to be able to post a location from the same page, Ajax-style:
-                // TODO
-                // - post 'results[0].geometry.location' back to the server
-                // - render a postback call here which
-                // -- takes the location
-                // -- finds restaurants close-by
-                // -- calls 'setMarkers' once all the data's obtained
-
-                //setMarkers(map, restaurant_data);
                 var where = results[0].geometry.location;
                 searchLocationsNear(where.lat(), where.lng());
 
             } else {
-                //alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
-
-                // TODO let the server know that there was a problem
+                alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
             }
         });
     }
 }
 
 function searchLocationsNear(lat, lng) {
-//    alert("you submitted: " + center);
-    // TODO either get radius from user, and base it on the GMap current zoom level
+    // TODO either get radius from user, or base it on the GMap current zoom level
     //var radius = document.getElementById('radiusSelect').value;
 
-    //var searchUrl = 'phpsqlsearch_genxml.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
     var searchUrl = 'api/venues/'+lat+'/'+lng+'/25';
 
     downloadUrl(searchUrl, function(data) {
-        var xml = data; //GXml.parse(data);
+        var xml = data;
         var markers = xml.documentElement.getElementsByTagName('marker');
-        //map.clearOverlays();
 
-        var sidebar = document.getElementById('sidebar');
+        var sidebar = document.getElementById(sideBarName);
         sidebar.innerHTML = '';
 
         if (markers.length == 0) {
             sidebar.innerHTML = 'No results found.';
-            //map.setCenter(new google.maps.LatLng(40, -100), 4);
             return;
         }
 
@@ -208,34 +183,23 @@ function searchLocationsNear(lat, lng) {
                 var sidebarEntry = createSidebarEntry(marker, name, address, distance, description, id);
                 sidebar.appendChild(sidebarEntry);
 
-    //            google.maps.event.addListener(marker, 'click', function() {
-    //                showInContentWindow(markers[i].getAttribute('address'));
-    //            });
                 var html = '<b>' + name + '</b> <br/>' + address;
-
 
                 var infoWindow = new google.maps.InfoWindow({
                     content:html
                 });
-    //            google.maps.event.addListener(marker, 'click', function () {
-    //                infoWindow.open(map, this);
-    //            });
 
                 google.maps.event.addListener(marker, 'click', (function(event, index) {
                     return function() {
-                        infoWindow.content = "<b>" + markers[index].getAttribute('name')  + "</b><br/>" + markers[index].getAttribute('address');
+                        infoWindow.content = "<b>" + markers[index].getAttribute('name')  + "</b><br/>" + markers[index].getAttribute('address') + '<br/>' + getRestaurantForm(markers[index].getAttribute('id'));
                         infoWindow.open(map, this);
                     }
                 })(marker, i));
 
-                var sidebarEntry = createSidebarEntry(marker, name, address, distance, description, id);
-                sidebar.appendChild(sidebarEntry);
                 bounds.extend(point);
             }
         }
 
-
-        //map.setCenter(bounds.getCenter(), map.getBoundsZoomLevel(bounds));
         if (!(typeof bounds == "undefined")) {
             map.fitBounds(bounds);
         }
@@ -253,18 +217,22 @@ function createMarker(point, name, address) {
 
 function createSidebarEntry(marker, name, address, distance, description, id) {
     var div = document.createElement('div');
-    var html = '' + name + ' (' + distance.toFixed(1) + 'km) ' + address;
-    div.innerHTML = html;
+    var html = '<b>' + name + '</b>' +
+            ' (' + distance.toFixed(1) + 'km)<br/>' +
+            address;
+
     div.style.cursor = 'pointer';
+    div.style.padding = '2px';
     div.style.paddingBottom = '5px';
     div.style.borderBottom = '1px solid #ddd';
+    div.innerHTML = html;
 
     if ( !(typeof google == "undefined") ) {
         google.maps.event.addDomListener(div, 'click', function() {
             google.maps.event.trigger(marker, 'click');
-            document.getElementById('restaurant').value = id;
-            document.getElementById('sidebar_submit').style.visibility = 'visible';
-            document.getElementById('restaurant_info').innerHTML = description;
+            //document.getElementById('restaurant').value = id;
+            //document.getElementById('sidebar_submit').style.visibility = 'visible';
+            document.getElementById('restaurant_info').innerHTML = description + '<br/>' + getRestaurantForm(id);
         });
         google.maps.event.addDomListener(div, 'mouseover', function() {
             div.style.backgroundColor = '#eee';
@@ -276,7 +244,7 @@ function createSidebarEntry(marker, name, address, distance, description, id) {
         div.click = function() {
             document.getElementById('restaurant').value = id;
             document.getElementById('sidebar_submit').style.visibility = 'visible';
-            document.getElementById('restaurant_info').innerHTML = description;
+            document.getElementById('restaurant_info').innerHTML = description + '<br/>' + getRestaurantForm(id);
         };
         div.mouseover = function() {
             div.style.backgroundColor = '#eee';
@@ -286,14 +254,15 @@ function createSidebarEntry(marker, name, address, distance, description, id) {
         };
     }
 
-    
     return div;
 }
 
-// http://localhost.local:8080/bopango/api/venues/lat/long/radius
+function getRestaurantForm(id) {
+    return '<form method="get" action="book"><input type="hidden" name="restaurant_id" value="'+id+'"/><input type="submit" value="Go"/></form>'
+}
 
 function showInContentWindow(text) {
-    var sidediv = document.getElementById('sidebar');
+    var sidediv = document.getElementById(sideBarName);
     sidediv.innerHTML = text;
 }
 

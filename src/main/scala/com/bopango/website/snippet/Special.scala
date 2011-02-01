@@ -61,12 +61,16 @@ class Special {
   def render3(in: NodeSeq): NodeSeq = {
     <div>TODO: Specials</div>
   }
+
+  def render(in: NodeSeq): NodeSeq = {
+    <br/>
+  }
   /**
    *
    * PS a tab with an icon:
    * <li><a class="icon_accept" href="#tab2">Restaurant finder</a></li>
    */
-  def render(in: NodeSeq): NodeSeq = {
+  def render4(in: NodeSeq): NodeSeq = {
     <lift:children>
       <div class="wrap">
 

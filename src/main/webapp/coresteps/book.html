@@ -1,3 +1,11 @@
+<lift:children>
+
+    <head>
+            <script type="text/javascript" src="/scripts/jquery/jquery-ui-1.7.3.custom.min.js"></script>
+            <script src="/scripts/jquery/i18n/jquery-ui-i18n.js" type="text/javascript"></script>
+            <link type="text/css" href="/css/overcast/jquery-ui-1.7.3.custom.css" rel="Stylesheet" />
+           </head>
+
 <lift:form.post>
 
     <div class="prepend-1 span-11 colborder">
@@ -44,44 +52,12 @@
 
             <form:number_of_guests/>
 
-            <!--<br/>-->
-            <!--<br/>-->
-            <!--You can provide the guest details below (optional):-->
-            <!--<br/>-->
-            <!--<br/>-->
-            <!-- -->
-            <!--<form:guest_details/>-->
+            <div id="howmanyguests">
+                <input type="radio" id="radio1" name="radio" /><label for="radio1">Choice 1</label>
+                <input type="radio" id="radio2" name="radio" checked="checked" /><label for="radio2">Choice 2</label>
+                <input type="radio" id="radio3" name="radio" /><label for="radio3">Choice 3</label>
+            </div>
 
-            <!--<table bgcolor="white">-->
-                <!--<thead>-->
-                    <!--<tr>-->
-                        <!--<th>#</th>-->
-                        <!--<th>Name</th>-->
-                        <!--<th>Email</th>-->
-                        <!--<th>Mobile</th>-->
-                    <!--</tr>-->
-                <!--</thead>-->
-                <!--<tbody>-->
-                    <!--<tr>-->
-                        <!--<td>1</td>-->
-                        <!--<td>Ben Morris</td>-->
-                        <!--<td>ben@morris.com</td>-->
-                        <!--<td>+44 (0)77 555 1234</td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                        <!--<td>2</td>-->
-                        <!--<td>David Coverdale</td>-->
-                        <!--<td>david@purple.com</td>-->
-                        <!--<td></td>-->
-                    <!--</tr>-->
-                    <!--<tr>-->
-                        <!--<td>3</td>-->
-                        <!--<td></td>-->
-                        <!--<td></td>-->
-                        <!--<td></td>-->
-                    <!--</tr>-->
-                <!--</tbody>-->
-            <!--</table>-->
         </div>
     </div>
 
@@ -97,3 +73,14 @@
 
 
 </lift:form.post>
+
+<lift:tail>
+<script type="text/javascript">
+    /* <![CDATA[ */
+        $(function() {
+            $("#howmanyguests").buttonset();
+        });
+    /* ]]> */
+</script>
+</lift:tail>
+</lift:children>

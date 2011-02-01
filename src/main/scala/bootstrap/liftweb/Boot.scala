@@ -7,13 +7,16 @@ import Helpers._
 
 import common._
 import http._
+import provider.{HTTPCookie, HTTPRequest}
 import sitemap._
 import Loc._
 import mapper._
-import com.bopango.website.comet.BopditServer
 import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
 import com.bopango.website.lib.{VenueLocatorAPI, WsEndpoint}
+import net.liftweb.widgets.logchanger._
 import javax.mail.internet.MimeMessage
+import javax.mail.Transport
+import java.util.Locale
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -21,6 +24,16 @@ import javax.mail.internet.MimeMessage
  */
 class Boot extends Loggable {
   def boot {
+
+    // log-level changer widget
+    LogLevelChanger.init
+    object logLevel extends LogLevelChanger with LogbackLoggingBackend
+
+    // message bundles
+//    LiftRules.localeCalculator = localeCalculator _
+//    LiftRules.resourceNames = "i18n/bopango" :: LiftRules.resourceNames
+
+    // datasource
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor =
 	      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
@@ -44,6 +57,10 @@ class Boot extends Loggable {
     )
     Mailer.customProperties = mailProps
     //Mailer.devModeSend.default.set{(m : MimeMessage) => println("Dev mode message! " + m)}
+    Mailer.testModeSend.default.set{(m: MimeMessage) => Transport.send(m)}
+//    object Mailer {
+//      override lazy val devModeSend = {(m: MimeMessage) => Transport.send(m)}
+//    }
 
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
@@ -55,21 +72,31 @@ class Boot extends Loggable {
     LiftRules.addToPackages("com.bopango.website")
 
     // Build SiteMap
-    val MustBeLoggedIn = User.loginFirst
-    val IfLoggedIn = Loc.If(() => User.currentUser.isDefined, "You must be logged in")
+    val RequireLogin = Loc.EarlyResponse(() => Full(
+        RedirectResponse("/user_mgt/login?returnTo="+Helpers.urlEncode(S.uriAndQueryString.open_!))).filter(ignore => !User.loggedIn_?))
+
+    // is this ever called?
+    LiftRules.loggedInTest = Full(() => User.loggedIn_?)
+
     val entries = List(
       // home
       Menu.i("Home") / "index" >> LocGroup("public"),
+
+      // search
+      Menu.i("Search") / "search" >> LocGroup("public"),
+
+      // book
+      Menu.i("Book") / "book" >> RequireLogin >> LocGroup("public"),
+
       // the sandbox for testing
       Menu.i("Sanbox") / "sandbox" >> LocGroup("public") >> Hidden,
+      logLevel.menu,
 
       // wizard
-      Menu("Core Steps - Geo") / "coresteps" / "geo" >> LocGroup("public") >> Hidden,
-      Menu("Core Steps - Restaurant") / "coresteps" / "restaurant" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu("Core Steps - Booking") / "coresteps" / "book" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu("Core Steps - Order") / "coresteps" / "order" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
-      Menu("Core Steps - Pay") / "coresteps" / "pay" >> LocGroup("public") >> Hidden >> IfLoggedIn,
-      Menu("Core Steps - Confirm") / "coresteps" / "confirmation" >> LocGroup("public") >> Hidden >> MustBeLoggedIn,
+      Menu("Core Steps - Booking") / "coresteps" / "book" >> LocGroup("public") >> Hidden,// >> MustBeLoggedIn,
+      Menu("Core Steps - Order") / "coresteps" / "order" >> LocGroup("public") >> Hidden,// >> MustBeLoggedIn,
+      Menu("Core Steps - Pay") / "coresteps" / "pay" >> LocGroup("public") >> Hidden,// >> MustBeLoggedIn,
+      Menu("Core Steps - Confirm") / "coresteps" / "confirmation" >> LocGroup("public") >> Hidden,// >> MustBeLoggedIn,
       //Menu(Loc("Pay Up", List("coresteps", "pay"), "Pay Up", IfLoggedIn)),
 
       // administration
@@ -110,24 +137,18 @@ class Boot extends Loggable {
     // Force the request to be UTF-8
     LiftRules.early.append(_.setCharacterEncoding("UTF-8"))
 
-    // What is the function to test if a user is logged in?
-    LiftRules.loggedInTest = Full(() => {
-      User.loggedIn_?
-    })
-
-
     //this is optional. Provides SSO for users already logged in to facebook.com
-    S.addAround(List(new LoanWrapper{
-      def apply[N](f: => N):N = {
-        if (!User.loggedIn_?){
-          for (c <- FacebookConnect.client; user <- User.findByFbId(c.session.uid)){
-            println("logging user in via SSO")
-            User.logUserIn(user)
-          }
-        }
-        f
-      }
-    }))
+//    S.addAround(List(new LoanWrapper{
+//      def apply[N](f: => N):N = {
+//        if (!User.loggedIn_?){
+//          for (c <- FacebookConnect.client; user <- User.findByFbId(c.session.uid)){
+//            println("logging user in via SSO")
+//            User.logUserIn(user)
+//          }
+//        }
+//        f
+//      }
+//    }))
 
     // Make a transaction span the whole HTTP request
     S.addAround(DB.buildLoanWrapper)
@@ -167,5 +188,30 @@ class Boot extends Loggable {
     })
 
     logger.info("Run mode: %s".format(Props.modeName))
+
+
   }
+
+  def localeCalculator(request : Box[HTTPRequest]): Locale =
+      request.flatMap(r => {
+        def localeCookie(in: String): HTTPCookie =
+          HTTPCookie("bopango.i18n",Full(in),
+            Full(S.hostName),Full(S.contextPath),Full(2629743),Empty,Empty)
+        def localeFromString(in: String): Locale = {
+          val x = in.split("_").toList; new Locale(x.head,x.last)
+        }
+        def calcLocale: Box[Locale] =
+          S.findCookie("bopango.i18n").map(
+            _.value.map(localeFromString)
+          ).openOr(Full(LiftRules.defaultLocaleCalculator(request)))
+        S.param("locale") match {
+          case Full(null) => calcLocale
+          case f@Full(selectedLocale) =>
+            S.addCookie(localeCookie(selectedLocale))
+            tryo(localeFromString(selectedLocale))
+          case _ => calcLocale
+        }
+      }).openOr(Locale.getDefault())
+
+
 }

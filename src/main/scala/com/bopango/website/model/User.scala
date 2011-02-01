@@ -2,10 +2,13 @@ package com.bopango.website.model
 
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
+import _root_.net.liftweb.util.BindHelpers._
 import _root_.net.liftweb.common._
+import _root_.net.liftweb.http.js.JsCmds._
 import xml.Text
 import net.liftweb.sitemap.Loc.{LocParam, If, Template}
 import net.liftweb.http.{SessionVar, S}
+import com.bopango.website.view.Omniauth
 
 /**
  * The singleton that has methods for accessing the database
@@ -23,11 +26,6 @@ object User extends User with MetaMegaProtoUser[User] {
   def findByFbId(fbid: Long):Box[User] = find(By(User.fbid, fbid))
   def findByFbId(fbid: String):Box[User] = findByFbId(fbid.toLong)
 
-//  override protected def loginMenuLocParams: List[LocParam[Unit]] = 
-//    If(notLoggedIn_? _, S.??("already.logged.in")) ::
-//    Template(() => {wrapIt(login) ::
-//    Nil
-
   override def loginXhtml = {
     <div id="loginpage">
       <div class="span-18">
@@ -41,18 +39,20 @@ object User extends User with MetaMegaProtoUser[User] {
     </div>
   }
 
-//  object loginReferer extends SessionVar("/")
-//
-//  override def homePage = {
-//    var ret = loginReferer.is
-//    loginReferer.remove()
-//    ret
-//  }
-//
-//  override def login = {
-//    for (r <- S.referer if loginReferer.is == "/") loginReferer.set(r)
-//    super.login
-//  }
+  /**
+   * custom method which doesn't trash the session.
+   */
+  override def logUserIn(who: TheUserType, postLogin: () => Nothing): Nothing = {
+    logUserIn(who)
+    postLogin()
+  }
+
+  override def login = {
+    for {r <- S.request
+         ret <- r.param("returnTo")}
+    loginRedirect(Full(Helpers.urlDecode(ret)))
+    super.login
+  }
 }
 
 

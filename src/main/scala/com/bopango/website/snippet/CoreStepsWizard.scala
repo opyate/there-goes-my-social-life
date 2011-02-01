@@ -39,11 +39,10 @@ import scala.collection.mutable.ListBuffer
 class CoreStepsWizard extends StatefulSnippet with Loggable {
   val fromWhence = S.referer openOr "/"
   var dispatch: DispatchIt = {
-    case _ => xhtml => select_geo
+    case _  => xhtml => book
   }
 
-  var geo = ""
-  var restaurant = "wizard.default.restaurant"
+  var restaurant = S.param("restaurant_id") openOr {S.warning("Please select a restaurant."); S.redirectTo(S.referer openOr "/")}
   var booking_details = "wizard.default.booking"
   var order_details = "wizard.default.order"
   var payment_details = "wizard.default.payment"
@@ -54,51 +53,13 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
   // so as not to exhaust the primary key count when a visitor comes to the home page.
   val reservation = Reservation.create
 
-
-  def select_geo = {
-    def doSubmit () {
-      registerThisSnippet
-      logger.debug("Geo = " + geo)
-      dispatch = {case _ => xhtml => select_restaurant}
-    }
-
-    TemplateFinder.findAnyTemplate(List("coresteps", "geo")).map(xhtml =>
-      bind("form", xhtml,
-        "geo" -> FocusOnLoad(SHtml.text(geo, geo = _)),
-        "submit" -> SHtml.submit("Go now!", doSubmit))
-    ) openOr NodeSeq.Empty
-  }
-
-  def select_restaurant = {
-    def doSubmit () {
-      registerThisSnippet
-      logger.debug("Restaurant = " + restaurant)
-      dispatch = {case _ => xhtml => book}
-    }
-
-
-    def ajaxFunc2(str: String) : JsCmd = {
-      //println("Received " + str)
-      JsRaw("codeAddress(null);")
-    }
-
-    //render_restaurant_data("", "")
-
-    TemplateFinder.findAnyTemplate(List("coresteps", "restaurant")).map(xhtml =>
-      bind("form", xhtml,
-        "geo" -> SHtml.hidden({g => geo = g}, geo, ("id", "address")),
-        "x" -> Script(OnLoad(SHtml.ajaxCall(Str("Rendering map from initial submission."), ajaxFunc2 _)._2)),
-        "restaurant" -> SHtml.hidden({r:String => restaurant = r; println("got resto: " + r)}, restaurant, ("id", "restaurant")),
-        "submit" -> SHtml.submit("Bop it!", doSubmit))
-    ) openOr NodeSeq.Empty
-  }
-
   def book = {
 
     def doSubmit () {
       registerThisSnippet
 
       // populate the reservation with the newly-inputted data
+      S.notice("The restaurant from the previous selection was " + restaurant)
       val venue = Venue.find(restaurant) // the venue from the previous screen
 
       reservation.venue(venue.open_!)
@@ -503,17 +464,16 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
               </tr>
           </thead>
           <tbody>
-          {totals.map{case (g,t) => <tr><td>Guest #{g+1}</td><td>{t}</td></tr>}}
+          {totals.map{case (g,t) => <tr><td>Guest #{g+1}</td><td>{String.format("%3.2f", double2Double(t))}</td></tr>}}
           </tbody>
           <tfoot>
-            <tr><td>Total</td><td>{total}</td></tr>
+            <tr><td>Total</td><td>{String.format("%3.2f", double2Double(total))}</td></tr>
           </tfoot>
       </table>
     }
 
     TemplateFinder.findAnyTemplate(List("coresteps", "pay")).map(xhtml =>
       bind("form", xhtml,
-        "geo" -> Text(geo),
         "restaurant" -> Text(restaurant),
         "booking" -> Text(booking_details),
         "order" -> Text(order_details),
@@ -553,7 +513,6 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
     TemplateFinder.findAnyTemplate(List("coresteps", "confirmation")).map(xhtml =>
       bind("form", xhtml,
-        "geo" -> Text(geo),
         "restaurant" -> Text(restaurant),
         "booking" -> Text(booking_details),
         "order" -> Text(order_details),

@@ -21,10 +21,11 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 //  override def javaCompileOptions = JavaCompileOption("-Xlint:unchecked") :: super.javaCompileOptions.toList
 
   //val liftVersion = "2.1"
-  val liftVersion = "2.2"
+  //val liftVersion = "2.2"
+  val liftVersion = "2.3-SNAPSHOT"
   val jettyVersionX = "7.2.2.v20101205" // Servlet 2.5, JSP 2.1
 
-  //val lift281 = "lift281" at "http://scala-tools.org/repo-snapshots"
+  val lift281 = "lift281" at "http://scala-tools.org/repo-snapshots"
 
   val databinder_net = "databinder.net repository" at "http://databinder.net/repo"
   val dispatch = "net.databinder" %% "dispatch-twitter" % "0.7.7"

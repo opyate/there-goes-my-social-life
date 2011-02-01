@@ -8,8 +8,10 @@ Lighter purple: 8f6599
 body {
     color: #222;
     background-color:#f5f5f5;
+    background-image: url(images/bg.png);
     /*font-size: small;*/
     /*font-family: Verdana, Geneva, sans-serif;*/
+    font-family: 'Museo300', 'Century Gothic', 'Futura Medium', 'Apple Gothic', Helvetica, Arial, sans-serif;
 }
 
 #ajax-loader {

@@ -7,6 +7,7 @@ import java.util.Date
 import net.liftweb.util.Helpers._
 import net.liftweb.common.{Empty, Box, Full}
 import net.liftweb.http.S.{AFuncHolder, LFuncHolder}
+import net.liftweb.util.FieldError
 
 /**
  * http://groups.google.com/group/liftweb/browse_thread/thread/c729a4e21c6120da/6de0b874f20dd20e?lnk=gst&q=date+picker#
@@ -24,9 +25,9 @@ class FancyMappedDate[T<:Mapper[T]](fieldOwner: T) extends MappedDate[T](fieldOw
   override def _toForm: Box[NodeSeq] = {
       val onLoad ="""jQuery(function($){
             $.datepicker.setDefaults($.datepicker.regional['']);
-            $('div#"""+name+"""_calendar').datepicker({altField: 'input#"""+name+"""'});
+            $('div#%s_calendar').datepicker({altField: 'input#%s', defaultDate: +1});
             });
-            """
+            """.format(name, name)
 
       val divName = fieldId match {
         case Some(s) => s+"_calendar"
@@ -51,6 +52,13 @@ class FancyMappedDate[T<:Mapper[T]](fieldOwner: T) extends MappedDate[T](fieldOw
         </xml:group>)
       }
   }
+
+  // TODO
+//    def valMustBeAfter(when: Date, msg: => String)(value: ValueType): List[FieldError] =
+//      valueTypeToBoxString(value) match {
+//        case Full(str) if (null ne str) && str.length >= len => Nil
+//        case _ => List(FieldError(this, Text(msg)))
+//      }
 }
 
 /*
