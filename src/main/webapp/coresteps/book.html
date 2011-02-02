@@ -1,8 +1,8 @@
 <lift:children>
 
     <head>
-            <script type="text/javascript" src="/scripts/jquery/jquery-ui-1.7.3.custom.min.js"></script>
-            <script src="/scripts/jquery/i18n/jquery-ui-i18n.js" type="text/javascript"></script>
+            <!--<script type="text/javascript" src="/scripts/jquery/jquery-ui-1.7.3.custom.min.js"></script>-->
+            <!--<script src="/scripts/jquery/i18n/jquery-ui-i18n.js" type="text/javascript"></script>-->
             <link type="text/css" href="/css/overcast/jquery-ui-1.7.3.custom.css" rel="Stylesheet" />
            </head>
 
@@ -50,12 +50,10 @@
             <br/>
             <br/>
 
-            <form:number_of_guests/>
-
             <div id="howmanyguests">
-                <input type="radio" id="radio1" name="radio" /><label for="radio1">Choice 1</label>
-                <input type="radio" id="radio2" name="radio" checked="checked" /><label for="radio2">Choice 2</label>
-                <input type="radio" id="radio3" name="radio" /><label for="radio3">Choice 3</label>
+                <form:number_of_guests>
+                    <nog:input/> <nog:label/>
+                </form:number_of_guests>
             </div>
 
         </div>

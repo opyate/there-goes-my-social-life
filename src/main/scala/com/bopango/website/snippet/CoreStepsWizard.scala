@@ -152,12 +152,53 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       ("-1", "No time limit")
       )
 
+    object GuestCount extends Enumeration {
+      val OnlyMe = Value("Myself")
+      val Plus1 = Value("+1")
+      val Plus2 = Value("+2")
+      val Plus3 = Value("+3")
+      val Plus4 = Value("+4")
+      val Plus5 = Value("+5")
+      val Plus6 = Value("+6")
+      val Plus7 = Value("+7")
+      val Plus8 = Value("+8")
+
+    }
+    //var chosenGuestCount: Box[GuestCount.Value] = Empty
+
+    // call in bind() as radios.toForm
+//    val radios =
+//    SHtml.radio(GuestCount.values.toList.map(_.toString), Empty,
+//      selected => {
+//        //chosenGuestCount = Box(GuestCount.withName(selected))
+//        reservation.number_of_guests(GuestCount.withName(selected).id+1)
+//      })
+
+    // RADIO HEAVEN:
+    // https://groups.google.com/forum/?fromgroups#!searchin/liftweb/How$20do$20I$20add$20unique$20id$20to$20radio$20inputs$20for$20labels/liftweb/7OHNkbClFyI/SuiSEf5gjHYJ
+
+    def label(text: String, in: NodeSeq): NodeSeq = <label for={in \\"@id"}>{text}</label> ++ in
+    
+    val inputs = SHtml.radio(GuestCount.iterator.map(_.toString).toList,
+            Full("Myself"),
+            (s: String) => reservation.number_of_guests(GuestCount.withName(s).id+1))
+
+    def doRadio(id:String)(node:NodeSeq) = {
+      ("input [id]" #> id)(node)
+    }
+    
+    val labelized = inputs.flatMap { choice => label(choice.key,
+      choice.xhtml match {
+            case Seq(elem:Elem) => doRadio(GuestCount.withName(choice.key).id.toString)(elem)
+          } )
+      }
+
 
 
     TemplateFinder.findAnyTemplate(List("coresteps", "book")).map(xhtml =>
       bind("form", xhtml,
         "date" -> reservation.when.toForm,
-        "number_of_guests" -> reservation.number_of_guests.toForm,
+
         "time" -> SHtml.select(timesMap, Empty, (sel) => {
             println("you selected time: " + sel)
             net.liftweb.util.DefaultDateTimeConverter.parseTime(sel) match {
@@ -173,6 +214,15 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
         // TODO ability to add guest details
         "guest_details" -> ajaxButton("Add a guest", () => {println("I am attending");Noop}), 
         "submit" -> SHtml.submit("Continue", doSubmit)
+        , "number_of_guests" -> labelized
+//        ,
+//        "number_of_guests" -> { ns: NodeSeq =>
+//          SHtml.radio(GuestCount.iterator.map(_.toString).toList,
+//            Full("0"),
+//            (s: String) => reservation.number_of_guests(GuestCount.withName(s).id+1))
+//              .flatMap((choice: ChoiceItem[String]) =>
+//                {bind("nog", ns,
+//                      "input" -> choice.xhtml, "label" -> <label for={"sumink"}>{choice.key}</label>)})}
         )
     ) openOr NodeSeq.Empty
   }
@@ -393,23 +443,24 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
     def ajaxHeader2(text: NodeSeq, func: () => JsCmd, attrs: ElemAttr*): Elem = {
       attrs.foldLeft(fmapFunc(contextFuncBuilder(func))(name =>
-        <h2 onclick={makeAjaxCall(Str(name + "=true")).toJsCmd + "; return false;"}>{text}</h2>))((e, f) => f(e))
+        <h3 onclick={makeAjaxCall(Str(name + "=true")).toJsCmd + "; return false;"}>{text}</h3>))((e, f) => f(e))
     }
 
     def render_guest_selections(template: NodeSeq): NodeSeq = {
       val range = 0.until(reservation.number_of_guests.is)
 
 
-      <div class="accordion">
+      <div id="accordion">
 
         {range.map(i => {
         ajaxHeader2(
-          <lift:children>
+          <a href="#">
             <span>{"Guest #"+(i+1)}</span>
             <span style="float:right; color:#8f6599;" id={"guest_subtotal_"+i}>0.00</span>
-          </lift:children>,
-          () => {guest_select(i)}) ++ <div class="pane" id={"guest_selection_"+i}>
+          </a>,
+          () => {guest_select(i)}) ++ <div id={"guest_selection_"+i}>
             Select something from the menu
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
           </div>
         })}
 

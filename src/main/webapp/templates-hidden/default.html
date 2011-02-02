@@ -13,9 +13,24 @@
     <link rel="stylesheet" type="text/css" href="/style/tabs.css"/>
     <link rel="stylesheet" type="text/css" href="/style/accordion.css"/>
     <!--<script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>-->
-    <script src="/scripts/jquery.tools.min.js" type="text/javascript"></script>
+    <!--<script src="/scripts/jquery.tools.min.js" type="text/javascript"></script>-->
+
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/overcast/jquery-ui.css"/>
+
+    <lift:HeaderLoader/>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js"></script>
+    <!-- ALL jQuery Tools. No jQuery library -->
+    <script src="http://cdn.jquerytools.org/1.2.5/all/jquery.tools.min.js"></script>
+
     <script id="json" src="/classpath/json.js" type="text/javascript"></script>
 
+    <script type="text/javascript">
+        /* <![CDATA[ */
+//        google.load("jquery", "1.4.4");
+//        google.load("jqueryui", "1.8.9");
+        /* ]]> */
+    </script>
 </head>
 <body>
 <div class="container">
@@ -81,7 +96,12 @@
         // tabs
         $(function() {
             $("ul.tabs").tabs("> .pane");
-            $(".accordion").tabs(".pane", {tabs: 'h2', effect: 'slide'});
+
+            // this works with jQueryTools (flowplayer.org):
+            //$(".accordion").tabs(".pane", {tabs: 'h2', effect: 'slide'});
+
+            // jQueryUI accordian
+            $("#accordion").accordion();
         });
         
         /* ]]> */

@@ -3,8 +3,9 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
 import xml.NodeSeq
-import net.liftweb.common.Full
 import com.bopango.website.lib.FancyMappedDate
+import net.liftweb.common.{Empty, Box, Full}
+import net.liftweb.http.S
 
 /**
  * A user's reservation w.r.t a venue.
@@ -39,6 +40,21 @@ class Reservation extends LongKeyedMapper[Reservation] with CreatedUpdated with 
 
   object number_of_guests extends MappedInt(this) {
     override def defaultValue = 1
+
+//    override def _toForm: Box[NodeSeq] = {
+//      import net.liftweb.http.S.{AFuncHolder, LFuncHolder}
+//
+//      val lf = LFuncHolder({s: List[String] => this.setFromAny(s)}, Empty)
+//
+//      S.fmapFunc(lf){funcName =>
+//      Full(<xml:group>
+//          <input type='text' id={fieldId}
+//          name={funcName}
+//          style="visibility:hidden;"
+//          value={is match {case null => "" case d => ""+d  }}/>
+//        </xml:group>)
+//      }
+//    }
   }
 
   object cost_total extends MappedDouble(this)
