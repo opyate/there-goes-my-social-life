@@ -538,22 +538,20 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
     logger.debug("confirmation")
 
     def doMail (): NodeSeq = {
-      TemplateFinder.findAnyTemplate(List("email", "order")).map(xhtml => {
-        bind("order", xhtml,
-//          "user" -> reservation.user.is.firstName,
-//          "what_time"
-            "r" -> reservation.toHtml
-        )
-      }) openOr <span>Please phone for order confirmation</span>
+//      TemplateFinder.findAnyTemplate(List("email", "order")).map(xhtml => {
+//        bind("order", xhtml,
+//            "r" -> reservation.toHtml
+//        )
+//      }) openOr <span>Please phone for order confirmation</span>
 
-
+      MailConfirmation.guest(reservation, guest_selections)
     }
 
     val bccEmail = Empty
 
     User.currentUser match {
       case Full(user) => {
-        Mailer.sendMail(From("Bopango <confirmation@bopango.net>"), Subject("Bopango Order"),
+        Mailer.sendMail(From("Bopango <confirmation@bopango.net>"), Subject("Bopango Order Confirmation"),
           (To(user.email) :: xmlToMailBodyType(doMail) :: (bccEmail.toList.map(BCC(_)))): _*)
       }
       case _ => {

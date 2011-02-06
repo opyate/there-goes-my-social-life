@@ -43,7 +43,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val mysql = "mysql" % "mysql-connector-java" % "5.1.13" % "compile->default"
   val joda = "joda-time" % "joda-time" % "1.6.2" % "compile->default"
   val junit = "junit" % "junit" % "4.6" % "test->default"
-  val specs = "org.scala-tools.testing" % "specs" % "1.6.2.1" % "test->default"
+  val specs = "org.scala-tools.testing" % "specs_2.8.1" % "1.6.6" % "test->default"
   val h2 = "com.h2database" % "h2" % "1.3.149" % "test->default" intransitive()
 
   

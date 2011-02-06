@@ -1,21 +1,26 @@
 # target/scala_2.8.1/bopango-website_2.8.1-0.1-SNAPSHOT.war
 
-desc "An example command from the Capistrano wiki"
+desc "An example command from the Capistrano wiki. Use with -s version=1.2.3"
 task :testy, :hosts => "root@bopango.net" do
-  run "ls -la"
-  run "cd ~/psa"
-  run "ls -la"
+  run "ls -lart /root/bopango-deployments"
+  run "echo \"You're about to install version #{version} \""
 end
 
-desc "Deploys to bopango staging"
+desc "Deploys to bopango staging. Use with -s version=1.2.3"
 task :deploy, :hosts => "root@bopango.net" do
   run "service tomcat6 stop"
   run "rm -rf /var/lib/tomcat6/webapps/bopango/"
   run "rm -rf /var/lib/tomcat6/webapps/bopango.war"
   run "rm -rf /var/lib/tomcat6/webapps/../temp/*"
   run "rm -rf /var/lib/tomcat6/webapps/../work/*"
-  run "cp ~/bopango-v0.4.war /var/lib/tomcat6/webapps/bopango.war"
+  run "cp ~/bopango-deployments/bopango-v#{version}.war /var/lib/tomcat6/webapps/bopango.war"
   run "service tomcat6 start"
-  run "sleep 5"
+  run "sleep 10"
   run "tail -n10 /var/log/tomcat6/catalina.out"
 end
+
+desc "Tail bopango.net Tomcat log. Should see, e.g. 'INFO: Server startup in 8734 ms'"
+task :tail, :hosts => "root@bopango.net" do
+  run "tail -n1 /var/log/tomcat6/catalina.out"
+end
+

@@ -49,9 +49,9 @@ class Boot extends Loggable {
     // mail
     //"mail.smtp.host" -> "smtp.gmail.com", "mail.smtp.auth" ->  "true", "mail.smtp.port" -> "587"
     val mailProps = Map(
-      "mail.smtp.host" -> "localhost",
+      "mail.smtp.host" -> (Props.get("smtp.host") openOr "localhost"),
       "mail.smtp.auth" ->  "false",
-      "mail.smtp.port" -> "25",
+      "mail.smtp.port" -> (Props.get("smtp.port") openOr "25"),
       "mail.transport.protocol" -> "smtp",
       "mail.debug" -> "true"
     )

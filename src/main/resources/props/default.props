@@ -11,3 +11,7 @@ db.driver=com.mysql.jdbc.Driver
 db.url=jdbc:mysql://localhost:3306/bopango_test?connectTimeout=20000&socketTimeout=60000&autoReconnect=true&useServerPrepStmts=false&cachePrepStmts=true&jdbcCompliantTruncation=false&useUnicode=true
 db.user=root
 db.password=
+
+# SMTP
+smtp.host=localhost
+smtp.port=25
