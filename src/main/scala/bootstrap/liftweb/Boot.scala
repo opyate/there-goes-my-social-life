@@ -11,7 +11,7 @@ import provider.{HTTPCookie, HTTPRequest}
 import sitemap._
 import Loc._
 import mapper._
-import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue}
+import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue, Price, Deal, DishProperties}
 import com.bopango.website.lib.{VenueLocatorAPI, WsEndpoint}
 import net.liftweb.widgets.logchanger._
 import javax.mail.internet.MimeMessage
@@ -66,7 +66,7 @@ class Boot extends Loggable {
     // you don't need to use Mapper to use Lift... use
     // any ORM you want
     Schemifier.schemify(true, Schemifier.infoF _, User, UserAddress, VenueAddress, Chain, Cuisine, Dish, BopangoMenu,
-      MenuSection, Order, Payment, Reservation, Review, Venue)
+      MenuSection, Order, Payment, Reservation, Review, Venue, Price, Deal, DishProperties)
 
     // where to search snippet
     LiftRules.addToPackages("com.bopango.website")
@@ -113,6 +113,9 @@ class Boot extends Loggable {
       Menu("Reservation") / "admin" / "reservation" >> LocGroup("admin") submenus(Reservation.menus : _*),
       Menu("Review") / "admin" / "review" >> LocGroup("admin") submenus(Review.menus : _*),
       Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*),
+      Menu("Price") / "admin" / "price" >> LocGroup("admin") submenus(Price.menus : _*),
+      Menu("Deal") / "admin" / "deal" >> LocGroup("admin") submenus(Deal.menus : _*),
+      Menu("DishProperties") / "admin" / "dishproperties" >> LocGroup("admin") submenus(DishProperties.menus : _*),
 
       //Omniauth site menu items
       Menu(Loc("AuthCallback", List("omniauth","callback"), "AuthCallback", Hidden)),

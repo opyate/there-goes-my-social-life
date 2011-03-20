@@ -58,3 +58,7 @@ h1. Migration
 
 Currrent: Scala 2.8.0 and Lift 2.1
 Future: Scala 2.8.1 and Lift 2.2-SNAPSHOT (or stable, or 2.3)
+
+h1. Developer
+
+Run locally with sbt jetty-run

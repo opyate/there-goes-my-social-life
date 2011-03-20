@@ -23,7 +23,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   //val liftVersion = "2.1"
   //val liftVersion = "2.2"
   val liftVersion = "2.3-SNAPSHOT"
-  val jettyVersionX = "7.2.2.v20101205" // Servlet 2.5, JSP 2.1
+  //val jettyVersionX = "7.2.2.v20101205" // Servlet 2.5, JSP 2.1
 
   val lift281 = "lift281" at "http://scala-tools.org/repo-snapshots"
 
@@ -43,6 +43,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val mysql = "mysql" % "mysql-connector-java" % "5.1.13" % "compile->default"
   val joda = "joda-time" % "joda-time" % "1.6.2" % "compile->default"
   val junit = "junit" % "junit" % "4.6" % "test->default"
+
   val specs = "org.scala-tools.testing" % "specs_2.8.1" % "1.6.6" % "test->default"
   val h2 = "com.h2database" % "h2" % "1.3.149" % "test->default" intransitive()
 
@@ -66,7 +67,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 //		("tmp" / "jetty-env.xml").asFile
 //	)
 
-//  override def libraryDependencies = Set(
+  override def libraryDependencies = Set(
 //    "net.liftweb" % "lift-mapper_2.8.1" % liftVersion % "compile->default",
 //    "net.liftweb" % "lift-wizard_2.8.1" % liftVersion % "compile->default",
 //    "net.liftweb" % "lift-widgets_2.8.1" % liftVersion % "compile->default",
@@ -88,5 +89,6 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 //    //,
 //
 //
-//  ) ++ super.libraryDependencies
+  "org.mortbay.jetty" % "jetty" % "6.1.25" % "test->default"
+  ) ++ super.libraryDependencies
 }
