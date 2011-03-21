@@ -2,10 +2,15 @@
 
 desc "An example command from the Capistrano wiki. Use with -s version=1.2.3"
 task :testy, :hosts => "root@bopango.net" do
-  run "ls -lart /root/bopango-deployments"
-  run "echo \"You're about to install version #{version} \""
+  run "date"
+  run "echo $!"
+#  run "ls -lart /root/bopango-deployments"
+#  run "echo \"You're about to install version #{version} \""
+#  run "export APPLE=apple"
+#  run "echo \"You set env var $APPLE\""
 end
 
+# TODO link latest WAR file to /root/latest.war and use that below.
 desc "Deploys to bopango staging. Use with -s version=1.2.3"
 task :deploy, :hosts => "root@bopango.net" do
   run "service tomcat6 stop"
@@ -24,3 +29,8 @@ task :tail, :hosts => "root@bopango.net" do
   run "tail -n1 /var/log/tomcat6/catalina.out"
 end
 
+desc "Install base dependencies"
+task :base, :hosts => "root@bopango.net" do
+  run "yum install -y java"
+  run "yum install -y git"
+end

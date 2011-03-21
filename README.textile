@@ -62,3 +62,26 @@ Future: Scala 2.8.1 and Lift 2.2-SNAPSHOT (or stable, or 2.3)
 h1. Developer
 
 Run locally with sbt jetty-run
+
+h1. Deploying
+
+TODO do this first to apply Capistrano to project properly:
+
+(see new ebook in 'Documents/ebook/devops' folder
+
+As of cap2, the --apply-to option is dead. Instead, you should use  
+the new capify script:
+
+ capify /path/to/rails/root/app/
+
+h1. Management
+
+git clone git@gitosis.net-a-porter.com:/puppet.git 
+See /Users/juanuys/Documents/src/nap/puppet
+
+Also read ebook (download it first):
+"Capistrano and the Rails Application Lifecycle"
+
+On Linode:
+http://library.linode.com/application-stacks/puppet/installation
+http://library.linode.com/application-stacks/puppet/automation
