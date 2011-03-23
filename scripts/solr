@@ -1,0 +1,46 @@
+ #!/bin/sh
+
+ # Source function library.
+ . /etc/init.d/functions
+
+
+start () {
+    echo -n $"Starting $prog: "
+
+    # start daemon
+    cd /opt/solr-standalone
+    daemon java -Dsolr.solr.home=/opt/solr-home -jar start.jar > /var/log/solr.log
+        RETVAL=$?
+    echo
+    [ $RETVAL = 0 ] && touch /var/lock/subsys/cups
+    return $RETVAL
+}
+
+stop () {
+    # stop daemon
+    echo -n $"Stopping $prog: "
+    kill `ps uax | grep -i "-jar start.jar" | head -n 1 | awk '{print $2}'`
+    RETVAL=$?
+    return $RETVAL
+}
+
+restart() {
+    stop
+    start
+}
+
+case $1 in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    *)
+
+    echo $"Usage: $prog {start|stop}"
+    exit 3
+esac
+
+exit $RETVAL
+
