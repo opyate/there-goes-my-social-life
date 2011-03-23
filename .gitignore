@@ -14,3 +14,5 @@ lib_managed
 project/boot/
 *.db
 *.swp
+solr-home.tgz
+solr-home/tmp

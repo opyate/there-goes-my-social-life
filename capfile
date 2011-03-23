@@ -11,8 +11,8 @@ task :testy, :hosts => "root@bopango.net" do
 end
 
 # TODO link latest WAR file to /root/latest.war and use that below.
-desc "Deploys to bopango staging. Use with -s version=1.2.3"
-task :deploy, :hosts => "root@bopango.net" do
+desc "Call deploy-webapp.sh, which calls this task. Does stuff with Bopango Webapp. Use with -s version=1.2.3"
+task :deploywebapp, :hosts => "root@bopango.net" do
   run "service tomcat6 stop"
   run "rm -rf /var/lib/tomcat6/webapps/bopango/"
   run "rm -rf /var/lib/tomcat6/webapps/bopango.war"
@@ -34,3 +34,14 @@ task :base, :hosts => "root@bopango.net" do
   run "yum install -y java"
   run "yum install -y git"
 end
+
+# This relies on scripts/solr to be installed as a SYSV service on the target box.
+# See http://stackoverflow.com/questions/2150767/how-to-start-solr-automatically
+desc "Call deploy-solr.sh, which calls this task. Does stuff with Bopango SOLR. Unpacks SOLR Home."
+task :deploysolr, :hosts => "root@bopango.net" do
+  run "/etc/init.d/solr stop"
+  run "mv /root/solr-home-deploys/solr-home.tgz /opt/"
+  run "cd /opt && tar xzf solr-home.tgz"
+  run "/etc/init.d/solr start"
+end
+

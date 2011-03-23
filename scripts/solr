@@ -1,4 +1,8 @@
- #!/bin/sh
+ #!/bin/bash
+ # chkconfig: 2345 95 20
+ # description: Custom SOLR service
+ # Stops/starts/restarts SOLR
+ # processname: solr
 
  # Source function library.
  . /etc/init.d/functions
@@ -19,9 +23,10 @@ start () {
 stop () {
     # stop daemon
     echo -n $"Stopping $prog: "
-    kill `ps uax | grep -i "-jar start.jar" | head -n 1 | awk '{print $2}'`
-    RETVAL=$?
-    return $RETVAL
+    kill $(ps uax | grep -i "\-jar start.jar" | grep -v "grep -i" | head -n 1 | awk '{print $2}')
+    #RETVAL=$?
+    #return $RETVAL
+    return 0
 }
 
 restart() {
