@@ -1,0 +1,13 @@
+<dataConfig>
+    <document>
+      <entity name="foo" query="
+        SELECT 1
+          "
+          deltaQuery="SELECT  '${dataimporter.last_index_time}'"
+          deltaImportQuery="
+          SELECT '${deltaimporter.delta.id}'
+          "
+          >
+        </entity>
+    </document>
+</dataConfig>
