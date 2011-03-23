@@ -2,6 +2,6 @@
 <solr sharedLib="lib" persistent="true">
   <cores adminPath="/admin/cores">
 
-    <core name="restos"  instanceDir="restaurants" properties="properties"/>
+    <core name="restos"  instanceDir="restaurants" properties="../props.properties"/>
   </cores>
 </solr>
