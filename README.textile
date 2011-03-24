@@ -63,7 +63,7 @@ h1. Developer
 
 Run locally with sbt jetty-run
 
-h1. Deploying
+h1. Deploying webapp
 
 TODO do this first to apply Capistrano to project properly:
 
@@ -85,3 +85,22 @@ Also read ebook (download it first):
 On Linode:
 http://library.linode.com/application-stacks/puppet/installation
 http://library.linode.com/application-stacks/puppet/automation
+
+h1. SOLR
+
+h2. Preparing
+
+prepare-solr.sh
+
+h2. Deploying
+
+deploy-solr.sh
+
+h2. Checking result
+
+http://bopango.net:8983/solr/restos/select/?q=*%3A*&version=2.2&start=0&rows=10&indent=on&wt=json
+
+h2. Data import
+
+http://bopango.net:8983/solr/restos/admin/dataimport.jsp?handler=/dataimport
+

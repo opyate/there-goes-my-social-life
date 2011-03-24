@@ -13,7 +13,7 @@ start () {
 
     # start daemon
     cd /opt/solr-standalone
-    daemon java -Dsolr.solr.home=/opt/solr-home -jar start.jar > /var/log/solr.log
+    daemon java -Dsolr.solr.home=/opt/solr-home -jar start.jar > /var/log/solr.log 2>&1 &
         RETVAL=$?
     echo
     [ $RETVAL = 0 ] && touch /var/lock/subsys/cups
