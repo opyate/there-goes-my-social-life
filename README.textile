@@ -1,6 +1,5 @@
 h1. Bopango Webapp
 
-
 h1. API keys
 
 h2. Google Maps API keys
@@ -19,28 +18,6 @@ localhost:8080
 App ID: 166972886664110
 App secret: 1c1f2167d4ffa5223363d2238c12e8f1
 
-h1. TO-DO
-
-See the deliverables list:
-https://spreadsheets.google.com/ccc?key=0AgL0Wcu_utXxdF9zTTNaUFhhZDJyUDV2ZTFka3AxSmc&hl=en#gid=0
-
-h2. High priority
-
-TODO orders: menu and dish selection
-TODO guest details
-
-h2. Medium priority
-
-TODO scala+liftweb payment APIs
-TODO user roles ('type' as per db schema diagram)
-See http://groups.google.com/group/liftweb/browse_thread/thread/6e6caddac5589fcf
-
-TODO bookings across timezones
-** perhaps use a MappedTimezone for a venue, in case the user books a venue from the other side of the world.
-** does ProtoUser have a MappedLocale?
-
-TODO have Menus and Dishes default to Chain with ability to override in Venue
-
 h1. Server info
 
 * http://wavded.tumblr.com/post/258713913/installing-tomcat-6-on-centos-5
@@ -54,39 +31,14 @@ h2. Stopping/starting
 service httpd stop
 service tomcat6 stop
 
-h1. Migration
-
-Currrent: Scala 2.8.0 and Lift 2.1
-Future: Scala 2.8.1 and Lift 2.2-SNAPSHOT (or stable, or 2.3)
-
 h1. Developer
 
 Run locally with sbt jetty-run
 
-h1. Deploying webapp
 
-TODO do this first to apply Capistrano to project properly:
+h1. Search Engine
 
-(see new ebook in 'Documents/ebook/devops' folder
-
-As of cap2, the --apply-to option is dead. Instead, you should use  
-the new capify script:
-
- capify /path/to/rails/root/app/
-
-h1. Management
-
-git clone git@gitosis.net-a-porter.com:/puppet.git 
-See /Users/juanuys/Documents/src/nap/puppet
-
-Also read ebook (download it first):
-"Capistrano and the Rails Application Lifecycle"
-
-On Linode:
-http://library.linode.com/application-stacks/puppet/installation
-http://library.linode.com/application-stacks/puppet/automation
-
-h1. SOLR
+Built on Solr.
 
 h2. Preparing
 
