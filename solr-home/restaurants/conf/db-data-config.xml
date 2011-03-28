@@ -1,12 +1,12 @@
 <dataConfig>
     <document>
       <entity name="venue" query="
-        SELECT
-        v.id as id,
-        v.description as description
-
-
-        FROM
+          SELECT
+          v.id as id,
+          v.description as venue_description,
+          v.name as venue_name,
+          v.chain_id as chain_id
+          FROM
           venue v
           "
           deltaQuery="SELECT  '${dataimporter.last_index_time}'"
@@ -18,6 +18,25 @@
             select 'http://bopango.net:8080/bopango/book?restaurant_id=${venue.id}' as restaurant_url
             "
             />
+          <entity name="chain" query="
+            SELECT
+            c.id as chain_id,
+            c.description as chain_description,
+            c.name as chain_name,
+            c.cuisine_id as cuisine_id
+            FROM
+            chain c
+            WHERE c.id = ${venue.chain_id}
+            "
+            >
+            <entity name="cuisine" query="
+              SELECT
+              cu.name as cuisine_name,
+              cu.description as cuisine_description
+              FROM cuisine cu
+              WHERE cu.id = ${chain.cuisine_id}
+              "/>
+          </entity>
         </entity>
     </document>
 </dataConfig>

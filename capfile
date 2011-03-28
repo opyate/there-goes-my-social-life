@@ -40,6 +40,8 @@ end
 desc "Call deploy-solr.sh, which calls this task. Does stuff with Bopango SOLR. Unpacks SOLR Home."
 task :deploysolr, :hosts => "root@bopango.net" do
   run "/etc/init.d/solr stop"
+  run "/etc/init.d/solr stop"
+  run "/etc/init.d/solr stop"
   run "mv /root/solr-home-deploys/solr-home.tgz /opt/"
   run "cd /opt && tar xzf solr-home.tgz"
   run "/etc/init.d/solr start"

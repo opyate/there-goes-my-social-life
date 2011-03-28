@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <solr sharedLib="lib" persistent="true">
-  <cores adminPath="/admin">
-
-    <core name="restos"  instanceDir="restaurants" properties="/etc/solr-bopango/props.properties"/>
+  <cores adminPath="/admin/cores">
+    <core name="restaurants"  instanceDir="restaurants" properties="/etc/solr-bopango/props.properties"/>
   </cores>
 </solr>

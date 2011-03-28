@@ -256,7 +256,12 @@
        best performance.
    -->
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
-   <field name="description" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="venue_name" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="venue_description" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="chain_name" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="chain_description" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="cuisine_name" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="cuisine_description" type="text" indexed="true" stored="true" compressed="true"/>
    <field name="restaurant_url" type="string" indexed="false" stored="true" compressed="true"/>
 
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
@@ -274,10 +279,17 @@
  <uniqueKey>id</uniqueKey>
 
  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>description</defaultSearchField>
+ <defaultSearchField>text</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>
+
+ <copyField source="venue_name" dest="text"/>
+ <copyField source="venue_description" dest="text"/>
+ <copyField source="chain_name" dest="text"/>
+ <copyField source="chain_description" dest="text"/>
+ <copyField source="cuisine_name" dest="text"/>
+ <copyField source="cuisine_description" dest="text"/>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
