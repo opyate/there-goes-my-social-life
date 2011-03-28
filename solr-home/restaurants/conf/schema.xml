@@ -255,33 +255,17 @@
        When using MoreLikeThis, fields used for similarity should be stored for 
        best performance.
    -->
-
    <field name="id" type="string" indexed="true" stored="true" required="true" /> 
-   <field name="title" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="designer" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="notes01" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="notes02" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="long_description" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="colour" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="size" type="text" indexed="true" stored="true" compressed="true" multiValued="true"/>
+   <field name="description" type="text" indexed="true" stored="true" compressed="true"/>
+   <field name="restaurant_url" type="string" indexed="false" stored="true" compressed="true"/>
 
-   <!-- catchall field, containing all other searchable text fields (implemented
-        via copyField further on in this schema  -->
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
    <!-- uncomment the following to ignore any fields that don't already match an existing 
         field name or dynamic field, rather than reporting them as an error. 
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
         unknown fields indexed and/or stored by default --> 
    <dynamicField name="*" type="ignored" multiValued="true" />
-   
-   <field name="nav1" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="nav2" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="nav3" type="text" indexed="true" stored="true" compressed="true"/>
-   <field name="allnav" type="text" indexed="true" stored="true" compressed="true" multiValued="true"/>
-   <field name="images" type="text" indexed="true" stored="true" compressed="true" multiValued="true"/>
-   <field name="thumbnailImage" type="text" indexed="false" stored="true" compressed="true" multiValued="false"/>
-	 
-	 <field name="last_updated_dts" type="date" indexed="true" stored="true" compressed="true" multiValued="false"/>
+	 <field name="updatedat" type="date" indexed="true" stored="true" compressed="true" multiValued="false"/>
  </fields>
 
  <!-- Field to use to determine and enforce document uniqueness. 
@@ -290,7 +274,7 @@
  <uniqueKey>id</uniqueKey>
 
  <!-- field for the QueryParser to use when an explicit fieldname is absent -->
- <defaultSearchField>title</defaultSearchField>
+ <defaultSearchField>description</defaultSearchField>
 
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>
@@ -299,24 +283,7 @@
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
    <!--<copyField source="keywords" dest="text"/>-->
-   <copyField source="title" dest="text"/>
 
-   <!--<copyField source="orig_size" dest="size"/>-->
-   <!--<copyField source="std_size" dest="size"/>-->
-   <!--<copyField source="us_size" dest="size"/>-->
-
-   <copyField source="nav1" dest="allnav"/>
-   <copyField source="nav2" dest="allnav"/>
-   <copyField source="nav3" dest="allnav"/>
-
-   <copyField source="fr_m_img" dest="images"/>
-   <copyField source="bk_m_img" dest="images"/>
-   <copyField source="in_m_img" dest="images"/>
-   <copyField source="ou_m_img" dest="images"/>
-   <copyField source="cu_m_img" dest="images"/>
-
-   <copyField source="in_m_img" dest="thumbnailImage"/>
- 
  <!-- Similarity is the scoring routine for each document vs. a query.
       A custom similarity may be specified here, but the default is fine
       for most applications.  -->

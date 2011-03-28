@@ -9,6 +9,8 @@ tar czf solr-home.tgz solr-home
 ssh root@bopango.net "mkdir -p /root/solr-home-deploys"
 scp solr-home.tgz root@bopango.net:/root/solr-home-deploys
 
+echo "Deploying SOLR Home"
 cap deploysolr
+rm solr-home.tgz
 
 echo "Done."

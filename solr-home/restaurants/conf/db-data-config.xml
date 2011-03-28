@@ -1,13 +1,23 @@
 <dataConfig>
     <document>
-      <entity name="foo" query="
-        SELECT 1
+      <entity name="venue" query="
+        SELECT
+        v.id as id,
+        v.description as description
+
+
+        FROM
+          venue v
           "
           deltaQuery="SELECT  '${dataimporter.last_index_time}'"
           deltaImportQuery="
           SELECT '${deltaimporter.delta.id}'
           "
           >
+          <entity name="links" query="
+            select 'http://bopango.net:8080/bopango/book?restaurant_id=${venue.id}' as restaurant_url
+            "
+            />
         </entity>
     </document>
 </dataConfig>

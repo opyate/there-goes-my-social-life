@@ -23,7 +23,7 @@ start () {
 stop () {
     # stop daemon
     echo -n $"Stopping $prog: "
-    kill $(ps uax | grep -i "\-jar start.jar" | grep -v "grep -i" | head -n 1 | awk '{print $2}')
+    kill -9 $(ps uax | grep -i "\-jar start.jar" | grep -v "grep -i" | head -n 1 | awk '{print $2}')
     #RETVAL=$?
     #return $RETVAL
     return 0
