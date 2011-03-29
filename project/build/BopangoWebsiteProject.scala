@@ -47,7 +47,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val specs = "org.scala-tools.testing" % "specs_2.8.1" % "1.6.6" % "test->default"
   val h2 = "com.h2database" % "h2" % "1.3.149" % "test->default" intransitive()
 
-  
+  val solrj = "org.apache.solr" % "solr-solrj" % "1.4.0" % "compile->default"
 
   override def ivyXML =
     <dependencies>

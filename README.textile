@@ -1,14 +1,14 @@
 h1. Bopango Webapp
 
-h1. API keys
+h2. API keys
 
-h2. Google Maps API keys
+h3. Google Maps API keys
 
 uys.be: ABQIAAAAFbe0T0dzcuVJrktJ3Um1wRSDhSbWPhdAHdoI-bWURTSzkNVpbBRKjvpvYNG1ideFhDYhLkJTmjRfmA
 localhost: ABQIAAAAFbe0T0dzcuVJrktJ3Um1wRT2yXp_ZAY8_ufC3CFXhHIE1NvwkxQoGK7I3-_WyLI3kxz5Hlvhd4Q_5A
 bopango.net: ABQIAAAAFbe0T0dzcuVJrktJ3Um1wRQiaxsaJr2m8bC_9uzhRb-69XhVihTOUEyWCMxkzKAEsckTCx3JdersKw
 
-h2. FaceBook API keys
+h3. FaceBook API keys
 
 bopango.net
 App ID: 115578888505254
@@ -18,7 +18,7 @@ localhost:8080
 App ID: 166972886664110
 App secret: 1c1f2167d4ffa5223363d2238c12e8f1
 
-h1. Server info
+h2. Server info
 
 * http://wavded.tumblr.com/post/258713913/installing-tomcat-6-on-centos-5
 * rpm -ql tomcat6.noarch
@@ -26,14 +26,15 @@ h1. Server info
 /var/lib/tomcat6/webapps
 /var/www/vhosts/bopango.net/conf
 
-h2. Stopping/starting
+h3. Stopping/starting
 
 service httpd stop
 service tomcat6 stop
 
-h1. Developer
+h2. Developer
 
 Run locally with sbt jetty-run
+
 
 
 h1. Search Engine
@@ -56,3 +57,7 @@ h2. Data import
 
 http://bopango.net:8983/solr/restos/admin/dataimport.jsp?handler=/dataimport
 
+
+h1. Manual Tasks
+
+* when updating chains, locations, menus, etc, run the delta-import task on Solr manually
