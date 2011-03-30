@@ -35,6 +35,9 @@ h2. Developer
 
 Run locally with sbt jetty-run
 
+h2. Log levels
+
+http://localhost:8080/loglevel/change
 
 
 h1. Search Engine

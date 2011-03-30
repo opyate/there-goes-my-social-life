@@ -84,7 +84,8 @@ function google_maps_init() {
 
 function codeAddress(address) {
     if ( typeof google == "undefined" ) {
-        searchLocationsNear(51.51158, 0); // search for "default" coords
+        var customCentre = new google.maps.LatLng(51.51158, 0, true);
+        centreAndSearchLocationsNear(customCentre); // search for "default" coords
     } else {
         geocoder = new google.maps.Geocoder();
         if (address) {
@@ -94,9 +95,8 @@ function codeAddress(address) {
 
         geocoder.geocode({ 'address': address}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                map.setCenter(results[0].geometry.location);
-                var where = results[0].geometry.location;
-                searchLocationsNear(where.lat(), where.lng());
+
+                centreAndSearchLocationsNear(results[0].geometry.location);
 
             } else {
                 alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
@@ -105,11 +105,13 @@ function codeAddress(address) {
     }
 }
 
-function searchLocationsNear(lat, lng) {
+function centreAndSearchLocationsNear(location) {
+    map.setCenter(location);
+
     // TODO either get radius from user, or base it on the GMap current zoom level
     //var radius = document.getElementById('radiusSelect').value;
 
-    var searchUrl = 'api/venues/'+lat+'/'+lng+'/25';
+    var searchUrl = 'api/venues/'+location.lat()+'/'+location.lng()+'/25';
 
     downloadUrl(searchUrl, function(data) {
         var xml = data;

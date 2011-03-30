@@ -78,7 +78,8 @@ class GoogleMaps extends Loggable {
 
       // TODO render the Solr search results, and put each restaurant in the search results
       // on the neighbouring Google Map using a placeMarker function etc
-      <span>goodie!</span>
+
+      renderDeferToGoogleMapsAPIWithLatLong(51.51158, 0)
     }
     catch {
       case s: SolrServerException => {
@@ -89,6 +90,25 @@ class GoogleMaps extends Loggable {
     }
 
     return_xml
+  }
+
+  /**
+   * TODO this is good headway, but break the Javascript into something that accepts an array
+   * of google.maps.LatLng objects
+   */
+  private def renderDeferToGoogleMapsAPIWithLatLong(lat: Double, lng: Double): NodeSeq = {
+
+    // call something like this from Scala code:
+    // centreAndSearchLocationsNear(new google.maps.LatLng(51.51158, 0, true))
+
+    val toCall = "centreAndSearchLocationsNear(new google.maps.LatLng(%s, %s, true));".format(lat, lng)
+
+    <lift:children>
+      {head}
+      {SHtml.ajaxText("blah", (s) => {Call("codeAddress", s)})}
+      <div id="map_canvas" style="width: 460px; height: 345px"></div>
+      {Script(OnLoad(JsRaw("google_maps_init(); ")) & OnLoad(JsRaw(toCall)))}
+    </lift:children>
   }
 
   private def renderDeferToGoogleMapsAPI(searchTerm: String): NodeSeq = {
