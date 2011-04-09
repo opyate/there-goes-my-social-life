@@ -105,7 +105,123 @@ function codeAddress(address) {
     }
 }
 
-function centreAndSearchLocationsNear(location) {
+/**
+ * Takes 'term' and calls various APIs until a sufficient result is achieved.
+ *
+ * Calls:
+ * 1) Google Geocoder, then if we get a valid result,
+ * 1.1) proximity query to get results near the geo result
+ * 2) Boffin, based on loose search
+ *
+ * TODO have "show more results near this" function, especially in case of (2) above.
+ *
+ * @param term
+ */
+function search(term) {
+    if ( typeof google == "undefined" ) {
+        //var customCentre = new google.maps.LatLng(51.51158, 0, true);
+        //centreAndSearchLocationsNear(customCentre); // search for "default" coords
+
+        // just search instead of (1.1) around a preselected geo above
+        centreAndSearchByQuery(term);
+    } else {
+        geocoder = new google.maps.Geocoder();
+        if (term) {
+        } else {
+            // if the search term was not provided as an argument, try and find it in
+            // a preselected place on the form.
+            alert("term should not be gotten from the page");
+            term = document.getElementById("term").value;
+        }
+
+        geocoder.geocode({ 'address': term}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                centreAndSearchLocationsNear(results[0].geometry.location, term);
+            } else {
+                //  search Boffin
+                centreAndSearchByQuery(term);
+            }
+        });
+    }
+}
+
+function placeMarker(point, id, name, address, description, lat, lng, distance) {
+
+    if (typeof google == "undefined") {
+        var sidebarEntry = createSidebarEntry(marker, name, address, parseFloat(distance), description, id);
+        sidebar.appendChild(sidebarEntry);
+    } else {
+        // Marker sizes are expressed as a Size of X,Y
+        // where the origin of the image (0,0) is located
+        // in the top left of the image.
+
+        // Origins, anchor positions and coordinates of the marker
+        // increase in the X direction to the right and in
+        // the Y direction down.
+        var image = new google.maps.MarkerImage('images/bopango_flag.png',
+          // This marker is 20 pixels wide by 32 pixels tall.
+          new google.maps.Size(20, 32),
+          // The origin for this image is 0,0.
+          new google.maps.Point(0,0),
+          // The anchor for this image is the base of the flagpole at 0,32.
+          new google.maps.Point(0, 32));
+        var shadow = new google.maps.MarkerImage('images/bopango_flag_shadow.png',
+          // The shadow image is larger in the horizontal dimension
+          // while the position and offset are the same as for the main image.
+          new google.maps.Size(37, 32),
+          new google.maps.Point(0,0),
+          new google.maps.Point(0, 32));
+          // Shapes define the clickable region of the icon.
+          // The type defines an HTML &lt;area&gt; element 'poly' which
+          // traces out a polygon as a series of X,Y points. The final
+          // coordinate closes the poly by connecting to the first
+          // coordinate.
+        var shape = {
+          coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+          type: 'poly'
+        };
+
+        var marker = new google.maps.Marker({
+            position: point,
+            map: map,
+            shadow: shadow,
+            icon: image,
+            shape: shape,
+            title: name
+        });
+
+        var sidebarEntry = createSidebarEntry(marker, name, address, parseFloat(distance), description, id);
+        sidebar.appendChild(sidebarEntry);
+
+        var html = '<b>' + name + '</b> <br/>' + address;
+
+        var infoWindow = new google.maps.InfoWindow({
+            content:html
+        });
+
+        google.maps.event.addListener(marker, 'click', (function(event, index) {
+            return function() {
+                infoWindow.content = "<b>" + name  + "</b><br/>" + address + '<br/>' + getRestaurantForm(id);
+                infoWindow.open(map, this);
+            }
+        })(marker, id));
+    }
+}
+
+function centreAndSearchByQuery(query) {
+
+    if (query) {
+
+        // TODO this does not work with query parameter, but does with path variable -- WTF?
+        var searchUrl = 'api/search/restaurants/' + encodeURI(query) + '.xml';
+        // center the map on the first venue in the result, if we have any results -- using 'true'.
+        doWithSearchUrl(searchUrl, query, true);
+    }
+
+
+}
+
+function centreAndSearchLocationsNear(location, term) {
     map.setCenter(location);
 
     // TODO either get radius from user, or base it on the GMap current zoom level
@@ -113,9 +229,23 @@ function centreAndSearchLocationsNear(location) {
 
     var searchUrl = 'api/venues/'+location.lat()+'/'+location.lng()+'/25';
 
+    // map already centered -- using 'false'.
+    doWithSearchUrl(searchUrl, term, false);
+}
+
+function doWithSearchUrl(searchUrl, term, centerMap) {
     downloadUrl(searchUrl, function(data) {
         var xml = data;
         var markers = xml.documentElement.getElementsByTagName('marker');
+
+        // we've reached this point, because the search term yields a Geo result,
+        // but our own API can't find anything nearby.
+        // So, let's try our own search engine instead
+        if (markers.length == 0) {
+            // TODO
+            centreAndSearchByQuery(term);
+            return;
+        }
 
         var sidebar = document.getElementById(sideBarName);
         sidebar.innerHTML = '';
@@ -131,75 +261,23 @@ function centreAndSearchLocationsNear(location) {
         }
 
         for (var i = 0; i < markers.length; i++) {
+            var lat =  markers[i].getAttribute('lat');
+            var lng =  markers[i].getAttribute('lng');
+            var point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
 
-            var distance = parseFloat(markers[i].getAttribute('distance'));
-            var name = markers[i].getAttribute('name');
-            var address = markers[i].getAttribute('address');
-            var description = markers[i].getAttribute('description');
-            var id = markers[i].getAttribute('id');
-
-            if (typeof google == "undefined") {
-                var sidebarEntry = createSidebarEntry(marker, name, address, distance, description, id);
-                sidebar.appendChild(sidebarEntry);
-            } else {
-                // Marker sizes are expressed as a Size of X,Y
-                // where the origin of the image (0,0) is located
-                // in the top left of the image.
-                var point = new google.maps.LatLng(parseFloat(markers[i].getAttribute('lat')),
-                        parseFloat(markers[i].getAttribute('lng')));
-                // Origins, anchor positions and coordinates of the marker
-                // increase in the X direction to the right and in
-                // the Y direction down.
-                var image = new google.maps.MarkerImage('images/bopango_flag.png',
-                  // This marker is 20 pixels wide by 32 pixels tall.
-                  new google.maps.Size(20, 32),
-                  // The origin for this image is 0,0.
-                  new google.maps.Point(0,0),
-                  // The anchor for this image is the base of the flagpole at 0,32.
-                  new google.maps.Point(0, 32));
-                var shadow = new google.maps.MarkerImage('images/bopango_flag_shadow.png',
-                  // The shadow image is larger in the horizontal dimension
-                  // while the position and offset are the same as for the main image.
-                  new google.maps.Size(37, 32),
-                  new google.maps.Point(0,0),
-                  new google.maps.Point(0, 32));
-                  // Shapes define the clickable region of the icon.
-                  // The type defines an HTML &lt;area&gt; element 'poly' which
-                  // traces out a polygon as a series of X,Y points. The final
-                  // coordinate closes the poly by connecting to the first
-                  // coordinate.
-                var shape = {
-                  coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-                  type: 'poly'
-                };
-
-                var marker = new google.maps.Marker({
-                    position: point,
-                    map: map,
-                    shadow: shadow,
-                    icon: image,
-                    shape: shape,
-                    title: markers[i].getAttribute('name')
-                });
-
-                var sidebarEntry = createSidebarEntry(marker, name, address, distance, description, id);
-                sidebar.appendChild(sidebarEntry);
-
-                var html = '<b>' + name + '</b> <br/>' + address;
-
-                var infoWindow = new google.maps.InfoWindow({
-                    content:html
-                });
-
-                google.maps.event.addListener(marker, 'click', (function(event, index) {
-                    return function() {
-                        infoWindow.content = "<b>" + markers[index].getAttribute('name')  + "</b><br/>" + markers[index].getAttribute('address') + '<br/>' + getRestaurantForm(markers[index].getAttribute('id'));
-                        infoWindow.open(map, this);
-                    }
-                })(marker, i));
-
-                bounds.extend(point);
+            if (centerMap && i == 0) {
+                map.setCenter(point);
             }
+
+            placeMarker(point,
+                    markers[i].getAttribute('id'),
+                    markers[i].getAttribute('name'),
+                    markers[i].getAttribute('address'),
+                    markers[i].getAttribute('description'),
+                    lat,
+                    lng,
+                    markers[i].getAttribute('distance'));
+            bounds.extend(point);
         }
 
         if (!(typeof bounds == "undefined")) {

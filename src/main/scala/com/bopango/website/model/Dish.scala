@@ -25,7 +25,8 @@ object Dish extends Dish with LongKeyedMetaMapper[Dish]
       override def deleteMenuLocParams = LocGroup("admin") :: Nil
     }
 
-class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with IdPK {
+//class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with IdPK {
+class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with OneToMany[Long, Dish] with ManyToMany with IdPK {
   def getSingleton = Dish
 
   object name extends MappedString(this, 32) {
@@ -58,6 +59,15 @@ class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with IdPK {
 
   object position extends MappedInt(this)
 
+  object dish_parent extends LongMappedMapper(this, Dish) {
+    override def dbColumnName = "dish_id"
+
+    override def validSelectValues =
+      Full(Dish.findMap(OrderBy(Dish.name, Ascending)) {
+        case s: Dish => Full(s.id.is -> s.name.is)
+      })
+  }
+
   object menu extends LongMappedMapper(this, Menu) {
     override def dbColumnName = "menu_id"
 
@@ -75,4 +85,6 @@ class Dish extends LongKeyedMapper[Dish] with CreatedUpdated with IdPK {
         case s: MenuSection => Full(s.id.is -> s.name.is)
       })
   }
+
+  object attributes extends MappedManyToMany(DishAttribute, DishAttribute.dish, DishAttribute.attribute, Attribute)
 }

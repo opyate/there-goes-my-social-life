@@ -11,27 +11,33 @@
 
   </head>
   <body>
-    <!--header -->
-    <div id="header-wrap">
-      <div id="header">
-        <a name="top" id="top"></a>
-        <div id="nav">
+    <div style="width:950px;">
+
+        <div class="span-24 last">
+            <h2>Bopango BackOffice</h2>
+        </div>
+    <!-- menu -->
+      <div class="span-4">
           <lift:menu.builder group="admin" linkToSelf="true"
             li_item:id="current" />
-        </div>
       </div>
-    </div>
 
     <!-- content -->
-    <div id="content-wrap" class="clear">
-      <div id="content">
-        <!-- messages appear here -->
-        <lift:msgs showAll="true" />
+      <div class="span-20 last">
+
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>error</lift:error_class>
+            <lift:warning_msg></lift:warning_msg>
+            <lift:warning_class>notice</lift:warning_class>
+            <lift:notice_msg></lift:notice_msg>
+            <lift:notice_class>success</lift:notice_class>
+        </lift:snippet>
+          
         <!-- content goes here -->
         <lift:bind name="content" />
 
       </div>
     </div>
-
   </body>
 </html>
