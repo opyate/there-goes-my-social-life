@@ -263,6 +263,8 @@
    <field name="cuisine_name" type="text" indexed="true" stored="true" compressed="true"/>
    <field name="cuisine_description" type="text" indexed="true" stored="true" compressed="true"/>
    <field name="restaurant_url" type="string" indexed="false" stored="true" compressed="true"/>
+   <field name="latitude" type="double" indexed="false" stored="true" compressed="true"/>
+   <field name="longitude" type="double" indexed="false" stored="true" compressed="true"/>
 
    <field name="text" type="text" indexed="true" stored="false" multiValued="true"/>
    <!-- uncomment the following to ignore any fields that don't already match an existing 

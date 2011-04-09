@@ -12,11 +12,11 @@
   </head>
   <body>
     <h1>Bopango Start Page</h1>
-    <blockquote>
+    <em>
       Keep documentation current and fresh.
       Archive stale data as soon as possible.
-      Use free and open formats that will work on both PC and Mac.
-    </blockquote>
+      Use free and open formats that will work on both PC, Mac and Linux.
+    </em>
 
     <h2>Online Office</h2>
     <div id="locations">
@@ -56,11 +56,39 @@
         </dd>
       </dl>
       <dl>
-        <dt>Search Engine</dt>
+        <dt>Prototype Back Office</dt>
+        <dd>
+          <a href="http://bopango.net:8080/bopango/admin/index">http://bopango.net:8080/bopango/admin/index</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Prototype Boffin</dt>
+        <dd>
+          <a href="http://bopango.net:8080/bopango/search?q=searchterm">http://bopango.net:8080/bopango/search?q=searchterm</a>
+        </dd>
+      </dl>
+      <dl>
+        <dt>SOLR Search Engine</dt>
         <dd>
           <a href="http://bopango.net:8983/solr/">http://bopango.net:8983/solr/</a>
           <br/><a href="http://bopango.net:8983/solr/restaurants/admin/dataimport.jsp?handler=/dataimport">Import handler</a>
+          <br/><a href="http://bopango.net:8080/bopango/api/restaurants/search?q=searchterm">Facaded behind Bopango</a>
         </dd>
+      </dl>
+      <dl>
+        <dt>GEO Search Engine</dt>
+        <dd>
+          <a href="http://bopango.net:8080/bopango/api/venues/51.51158/0/25">http://bopango.net:8080/bopango/api/venues/51.51158/0/25</a>
+          <br/>In the form api/venues/latitude/longitude/distance
+        </dd>
+      </dl>
+    </div>
+
+    <h2>Social Presence</h2>
+    <div id="social">
+      <dl>
+        <dt>FoodyGeek</dt>
+        <dd><a href="http://www.facebook.com/pages/FoodyGeek/187901461254245">FoodyGeek Facebook page</a></dd>
       </dl>
     </div>
   </body>

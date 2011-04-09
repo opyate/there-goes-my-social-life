@@ -5,9 +5,12 @@
           v.id as id,
           v.description as venue_description,
           v.name as venue_name,
-          v.chain_id as chain_id
+          v.chain_id as chain_id,
+          va.latitude as latitude,
+          va.longitude as longitude
           FROM
           venue v
+          INNER JOIN venueaddress va on va.venue_id = v.id
           "
           deltaQuery="SELECT  '${dataimporter.last_index_time}'"
           deltaImportQuery="

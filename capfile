@@ -12,7 +12,7 @@ end
 
 # TODO link latest WAR file to /root/latest.war and use that below.
 desc "Call deploy-webapp.sh, which calls this task. Does stuff with Bopango Webapp. Use with -s version=1.2.3"
-task :deploywebapp, :hosts => "root@bopango.net" do
+task :deploywebapptomcat, :hosts => "root@bopango.net" do
   run "service tomcat6 stop"
   run "rm -rf /var/lib/tomcat6/webapps/bopango/"
   run "rm -rf /var/lib/tomcat6/webapps/bopango.war"
@@ -22,6 +22,23 @@ task :deploywebapp, :hosts => "root@bopango.net" do
   run "service tomcat6 start"
   run "sleep 10"
   run "tail -n10 /var/log/tomcat6/catalina.out"
+end
+
+# TODO link latest WAR file to /root/latest.war and use that below.
+desc "Call deploy-webapp.sh, which calls this task. Does stuff with Bopango Webapp. Use with -s version=1.2.3"
+task :deploywebappjetty, :hosts => "root@bopango.net" do
+#  run "kill -9 `ps aux|grep jetty|grep start.jar|cut -d\" \" -f7` > /dev/null 2>&1"
+  run "/usr/bin/killjetty.sh"
+  run "cd /usr/local/jetty && rm -rf nohup.out"
+#  run "rm -rf /var/lib/tomcat6/webapps/bopango/"
+#  run "rm -rf /var/lib/tomcat6/webapps/bopango.war"
+#  run "rm -rf /var/lib/tomcat6/webapps/../temp/*"
+#  run "rm -rf /var/lib/tomcat6/webapps/../work/*"
+#  run "cp ~/bopango-deployments/bopango-v#{version}.war /var/lib/tomcat6/webapps/bopango.war"
+  run "cp ~/bopango-deployments/bopango-v#{version}.war /usr/local/jetty/webapps/bopango.war"
+  run "cd /usr/local/jetty && nohup java -Djava.awt.headless=true -Drun.mode=staging -Djetty.port=8080 -jar start.jar &"
+  run "sleep 10"
+  run "cat /usr/local/jetty/nohup.out"
 end
 
 desc "Tail bopango.net Tomcat log. Should see, e.g. 'INFO: Server startup in 8734 ms'"

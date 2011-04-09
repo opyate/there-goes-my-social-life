@@ -2,8 +2,10 @@ package com.bopango.website.model
 
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
-import xml.NodeSeq
 import net.liftweb.common.Full
+import net.liftweb.sitemap.{*, Loc}
+import xml.{Text, NodeSeq}
+import net.liftweb.sitemap.{Menu => LMenu}
 
 /**
  * A venue's address.
