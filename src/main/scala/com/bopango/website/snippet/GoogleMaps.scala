@@ -39,8 +39,8 @@ class GoogleMaps extends Loggable {
             type="text/javascript"
             src={"/scripts/bopango_googlemaps.js"}>
           </script>
+          <script src="/scripts/util.js"/>
         </lift:with-resource-id>
-        <script src="/scripts/util.js"/>
       </head>
 
   def render(xhtml: NodeSeq): NodeSeq = {

@@ -15,3 +15,11 @@ db.password=
 # SMTP
 smtp.host=localhost
 smtp.port=25
+
+# SOLR e.g. http://bopango.net:8983/solr/restaurants/select/?q=nw5%204ba
+solr.server=localhost
+solr.port=8983
+solr.core=restaurants
+solr.webapp=solr
+# not really used with SolrJ client
+solr.query=/select/?q=

@@ -70,6 +70,8 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 //		("tmp" / "jetty-env.xml").asFile
 //	)
 
+  override val jettyPort = 8081
+
   override def libraryDependencies = Set(
 //    "net.liftweb" % "lift-mapper_2.8.1" % liftVersion % "compile->default",
 //    "net.liftweb" % "lift-wizard_2.8.1" % liftVersion % "compile->default",

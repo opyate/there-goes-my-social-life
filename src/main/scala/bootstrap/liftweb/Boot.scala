@@ -200,6 +200,9 @@ class Boot extends Loggable {
       case (req,failure) => NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
     })
 
+    // Use HTML5 for rendering
+//    LiftRules.htmlProperties.default.set((r: Req) =>
+//      new Html5Properties(r.userAgent))
   }
 
   def localeCalculator(request : Box[HTTPRequest]): Locale =

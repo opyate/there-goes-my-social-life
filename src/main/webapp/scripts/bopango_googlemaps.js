@@ -60,7 +60,7 @@ function google_maps_init() {
     if ( typeof google == "undefined" ) {
         document.getElementById('map_canvas').innerHTML =
                 "Google Maps is not available at this time. Please continue booking by selecting a venue from the listing.";
-        codeAddress(null);
+        //codeAddress(null);
     } else {
         var latlng = new google.maps.LatLng(51.524552, -0.126987);
         var myOptions = {
@@ -82,31 +82,31 @@ function google_maps_init() {
     }
 }
 
-function codeAddress(address) {
-    if ( typeof google == "undefined" ) {
-        var customCentre = new google.maps.LatLng(51.51158, 0, true);
-        centreAndSearchLocationsNear(customCentre); // search for "default" coords
-    } else {
-        geocoder = new google.maps.Geocoder();
-        if (address) {
-        } else {
-            address = document.getElementById("address").value;
-        }
-
-        geocoder.geocode({ 'address': address}, function(results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-
-                centreAndSearchLocationsNear(results[0].geometry.location);
-
-            } else {
-                alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
-            }
-        });
-    }
-}
+//function codeAddress(address) {
+//    if ( typeof google == "undefined" ) {
+//        var customCentre = new google.maps.LatLng(51.51158, 0, true);
+//        findLocationsNear(customCentre); // search for "default" coords
+//    } else {
+//        geocoder = new google.maps.Geocoder();
+//        if (address) {
+//        } else {
+//            address = document.getElementById("address").value;
+//        }
+//
+//        geocoder.geocode({ 'address': address}, function(results, status) {
+//            if (status == google.maps.GeocoderStatus.OK) {
+//
+//                findLocationsNear(results[0].geometry.location);
+//
+//            } else {
+//                alert("Unfortunately, Google Maps could not find your location. (" + status + ")");
+//            }
+//        });
+//    }
+//}
 
 /**
- * Takes 'term' and calls various APIs until a sufficient result is achieved.
+ * Takes 'query' and calls various APIs until a sufficient result is achieved.
  *
  * Calls:
  * 1) Google Geocoder, then if we get a valid result,
@@ -115,113 +115,51 @@ function codeAddress(address) {
  *
  * TODO have "show more results near this" function, especially in case of (2) above.
  *
- * @param term
+ * @param query
  */
-function search(term) {
+function search(query) {
     if ( typeof google == "undefined" ) {
         //var customCentre = new google.maps.LatLng(51.51158, 0, true);
-        //centreAndSearchLocationsNear(customCentre); // search for "default" coords
+        //findLocationsNear(customCentre); // search for "default" coords
 
         // just search instead of (1.1) around a preselected geo above
-        centreAndSearchByQuery(term);
+        //alert("Google is not defined. Searching restos instead");
+        searchRestaurants(query);
     } else {
         geocoder = new google.maps.Geocoder();
-        if (term) {
+        if (query) {
         } else {
-            // if the search term was not provided as an argument, try and find it in
+            // if the search query was not provided as an argument, try and find it in
             // a preselected place on the form.
-            alert("term should not be gotten from the page");
-            term = document.getElementById("term").value;
+            //alert("query should not be gotten from the page");
+            query = document.getElementById("query").value;
         }
 
-        geocoder.geocode({ 'address': term}, function(results, status) {
+        geocoder.geocode({ 'address': query}, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-                centreAndSearchLocationsNear(results[0].geometry.location, term);
+                findLocationsNear(results[0].geometry.location, query);
             } else {
                 //  search Boffin
-                centreAndSearchByQuery(term);
+                searchRestaurants(query);
             }
         });
     }
 }
 
-function placeMarker(point, id, name, address, description, lat, lng, distance) {
-
-    if (typeof google == "undefined") {
-        var sidebarEntry = createSidebarEntry(marker, name, address, parseFloat(distance), description, id);
-        sidebar.appendChild(sidebarEntry);
-    } else {
-        // Marker sizes are expressed as a Size of X,Y
-        // where the origin of the image (0,0) is located
-        // in the top left of the image.
-
-        // Origins, anchor positions and coordinates of the marker
-        // increase in the X direction to the right and in
-        // the Y direction down.
-        var image = new google.maps.MarkerImage('images/bopango_flag.png',
-          // This marker is 20 pixels wide by 32 pixels tall.
-          new google.maps.Size(20, 32),
-          // The origin for this image is 0,0.
-          new google.maps.Point(0,0),
-          // The anchor for this image is the base of the flagpole at 0,32.
-          new google.maps.Point(0, 32));
-        var shadow = new google.maps.MarkerImage('images/bopango_flag_shadow.png',
-          // The shadow image is larger in the horizontal dimension
-          // while the position and offset are the same as for the main image.
-          new google.maps.Size(37, 32),
-          new google.maps.Point(0,0),
-          new google.maps.Point(0, 32));
-          // Shapes define the clickable region of the icon.
-          // The type defines an HTML &lt;area&gt; element 'poly' which
-          // traces out a polygon as a series of X,Y points. The final
-          // coordinate closes the poly by connecting to the first
-          // coordinate.
-        var shape = {
-          coord: [1, 1, 1, 20, 18, 20, 18 , 1],
-          type: 'poly'
-        };
-
-        var marker = new google.maps.Marker({
-            position: point,
-            map: map,
-            shadow: shadow,
-            icon: image,
-            shape: shape,
-            title: name
-        });
-
-        var sidebarEntry = createSidebarEntry(marker, name, address, parseFloat(distance), description, id);
-        sidebar.appendChild(sidebarEntry);
-
-        var html = '<b>' + name + '</b> <br/>' + address;
-
-        var infoWindow = new google.maps.InfoWindow({
-            content:html
-        });
-
-        google.maps.event.addListener(marker, 'click', (function(event, index) {
-            return function() {
-                infoWindow.content = "<b>" + name  + "</b><br/>" + address + '<br/>' + getRestaurantForm(id);
-                infoWindow.open(map, this);
-            }
-        })(marker, id));
-    }
-}
-
-function centreAndSearchByQuery(query) {
+function searchRestaurants(query) {
 
     if (query) {
-
+        //alert("Searching query: " + encodeURI(query));
         // TODO this does not work with query parameter, but does with path variable -- WTF?
         var searchUrl = 'api/search/restaurants/' + encodeURI(query) + '.xml';
         // center the map on the first venue in the result, if we have any results -- using 'true'.
-        doWithSearchUrl(searchUrl, query, true);
+        callAPI(searchUrl, query, true);
     }
 
 
 }
 
-function centreAndSearchLocationsNear(location, term) {
+function findLocationsNear(location, query) {
     map.setCenter(location);
 
     // TODO either get radius from user, or base it on the GMap current zoom level
@@ -230,20 +168,20 @@ function centreAndSearchLocationsNear(location, term) {
     var searchUrl = 'api/venues/'+location.lat()+'/'+location.lng()+'/25';
 
     // map already centered -- using 'false'.
-    doWithSearchUrl(searchUrl, term, false);
+    callAPI(searchUrl, query, false);
 }
 
-function doWithSearchUrl(searchUrl, term, centerMap) {
+function callAPI(searchUrl, query, centerMap) {
     downloadUrl(searchUrl, function(data) {
         var xml = data;
         var markers = xml.documentElement.getElementsByTagName('marker');
 
-        // we've reached this point, because the search term yields a Geo result,
+        // we've reached this point, because the search query yields a Geo result,
         // but our own API can't find anything nearby.
         // So, let's try our own search engine instead
         if (markers.length == 0) {
-            // TODO
-            centreAndSearchByQuery(term);
+            //alert("zero results, calling searchResults");
+            searchRestaurants(query);
             return;
         }
 
@@ -263,11 +201,15 @@ function doWithSearchUrl(searchUrl, term, centerMap) {
         for (var i = 0; i < markers.length; i++) {
             var lat =  markers[i].getAttribute('lat');
             var lng =  markers[i].getAttribute('lng');
-            var point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+            var point;
+            if (!(typeof google == "undefined")) {
+                point = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
 
-            if (centerMap && i == 0) {
-                map.setCenter(point);
+                if (centerMap && i == 0) {
+                    map.setCenter(point);
+                }
             }
+
 
             placeMarker(point,
                     markers[i].getAttribute('id'),
@@ -277,7 +219,10 @@ function doWithSearchUrl(searchUrl, term, centerMap) {
                     lat,
                     lng,
                     markers[i].getAttribute('distance'));
-            bounds.extend(point);
+
+            if (!(typeof google == "undefined")) {
+                bounds.extend(point);
+            }
         }
 
         if (!(typeof bounds == "undefined")) {
@@ -299,7 +244,8 @@ function createSidebarEntry(marker, name, address, distance, description, id) {
     var div = document.createElement('div');
     var html = '<b>' + name + '</b>' +
             ' (' + distance.toFixed(1) + 'km)<br/>' +
-            address;
+            address + '<br/>' +
+            '';
 
     div.style.cursor = 'pointer';
     div.style.padding = '2px';
@@ -312,6 +258,7 @@ function createSidebarEntry(marker, name, address, distance, description, id) {
             google.maps.event.trigger(marker, 'click');
             //document.getElementById('restaurant').value = id;
             //document.getElementById('sidebar_submit').style.visibility = 'visible';
+
             document.getElementById('restaurant_info').innerHTML = description + '<br/>' + getRestaurantForm(id);
         });
         google.maps.event.addDomListener(div, 'mouseover', function() {
@@ -321,11 +268,16 @@ function createSidebarEntry(marker, name, address, distance, description, id) {
             div.style.backgroundColor = '#fff';
         });
     } else {
-        div.click = function() {
-            document.getElementById('restaurant').value = id;
-            document.getElementById('sidebar_submit').style.visibility = 'visible';
+        //alert("Google not available, but setting sidebar entry anyway.");
+
+        // TODO when these divs are clicked, we need to add a 'proceed' button
+        div.onclick = function() {
+            alert("this div: " + this);
+//            document.getElementById('restaurant').value = id;
+//            document.getElementById('sidebar_submit').style.visibility = 'visible';
             document.getElementById('restaurant_info').innerHTML = description + '<br/>' + getRestaurantForm(id);
         };
+        //div.onclick
         div.mouseover = function() {
             div.style.backgroundColor = '#eee';
         };
@@ -394,4 +346,67 @@ function setMarkers(map, locations) {
     google.maps.event.addListener(marker, 'click', function() {showInContentWindow(restaurant[4]);});
 
   }
+}
+
+function placeMarker(point, id, name, address, description, lat, lng, distance) {
+
+    if (typeof google == "undefined") {
+        var sidebarEntry = createSidebarEntry(marker, name, address, parseFloat(distance), description, id);
+        sidebar.appendChild(sidebarEntry);
+    } else {
+        // Marker sizes are expressed as a Size of X,Y
+        // where the origin of the image (0,0) is located
+        // in the top left of the image.
+
+        // Origins, anchor positions and coordinates of the marker
+        // increase in the X direction to the right and in
+        // the Y direction down.
+        var image = new google.maps.MarkerImage('images/bopango_flag.png',
+          // This marker is 20 pixels wide by 32 pixels tall.
+          new google.maps.Size(20, 32),
+          // The origin for this image is 0,0.
+          new google.maps.Point(0,0),
+          // The anchor for this image is the base of the flagpole at 0,32.
+          new google.maps.Point(0, 32));
+        var shadow = new google.maps.MarkerImage('images/bopango_flag_shadow.png',
+          // The shadow image is larger in the horizontal dimension
+          // while the position and offset are the same as for the main image.
+          new google.maps.Size(37, 32),
+          new google.maps.Point(0,0),
+          new google.maps.Point(0, 32));
+          // Shapes define the clickable region of the icon.
+          // The type defines an HTML &lt;area&gt; element 'poly' which
+          // traces out a polygon as a series of X,Y points. The final
+          // coordinate closes the poly by connecting to the first
+          // coordinate.
+        var shape = {
+          coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+          type: 'poly'
+        };
+
+        var marker = new google.maps.Marker({
+            position: point,
+            map: map,
+            shadow: shadow,
+            icon: image,
+            shape: shape,
+            title: name
+        });
+
+        var sidebarEntry = createSidebarEntry(marker, name, address, parseFloat(distance), description, id);
+        sidebar.appendChild(sidebarEntry);
+
+        var html = '<b>' + name + '</b> <br/>' + address;
+
+        var infoWindow = new google.maps.InfoWindow({
+            content:html
+        });
+
+        google.maps.event.addListener(marker, 'click', (function(event, index) {
+            return function() {
+                infoWindow.content = "<b>" + name  + "</b><br/>" + address + '<br/>' + getRestaurantForm(id);
+                infoWindow.open(map, this);
+            }
+        })(marker, id));
+    }
 }
