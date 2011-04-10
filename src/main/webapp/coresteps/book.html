@@ -1,84 +1,83 @@
 <lift:children>
 
     <head>
-            <!--<script type="text/javascript" src="/scripts/jquery/jquery-ui-1.7.3.custom.min.js"></script>-->
-            <!--<script src="/scripts/jquery/i18n/jquery-ui-i18n.js" type="text/javascript"></script>-->
-            <link type="text/css" href="/css/overcast/jquery-ui-1.7.3.custom.css" rel="Stylesheet" />
-           </head>
+        <link type="text/css" href="/css/overcast/jquery-ui-1.7.3.custom.css" rel="Stylesheet"/>
+    </head>
 
-<lift:form.post>
+    <lift:form.post>
 
-    <div class="prepend-1 span-11 colborder">
-        <div class="greybob">
-            Select a date
-            <br/>
-            <form:date/>
-            
-        </div>
-    </div>
+        <div class="prepend-1 span-11 colborder">
+            <div class="greybob">
+                Select a date
+                <br/>
+                <form:date/>
 
-    <div class=" span-10 last">
-        <div class="greybob">
-            Select a time slot
-            <br/>
-            <br/>
-
-            <form:time/>
-
-        </div>
-    </div>
-
-    <hr class="space"/>
-
-    <div class="prepend-1 span-22 last append-1">
-
-        <div class="greybob">
-            How much time do you have for lunch?
-            <br/>
-            <br/>
-            <form:how_much_time_in_minutes/>
-            
-
-        </div>
-    </div>
-
-    <hr class="space"/>
-
-    <div class=" prepend-1 span-22 last append-1">
-        <div class="greybob">
-            How many guests will be attending?
-            <br/>
-            <br/>
-
-            <div id="howmanyguests">
-                <form:number_of_guests>
-                    <nog:input/> <nog:label/>
-                </form:number_of_guests>
             </div>
-
         </div>
-    </div>
 
-    <hr class="space"/>
+        <div class=" span-10 last">
+            <div class="greybob">
+                Select a time slot
+                <br/>
+                <br/>
 
-    <div class=" prepend-1 span-22 last append-1">
-        <div align="right">
+                <form:time/>
 
-            <form:submit/>
-
+            </div>
         </div>
-    </div>
+
+        <hr class="space"/>
+
+        <div class="prepend-1 span-22 last append-1">
+
+            <div class="greybob">
+                How much time do you have for lunch?
+                <br/>
+                <br/>
+                <form:how_much_time_in_minutes/>
 
 
-</lift:form.post>
+            </div>
+        </div>
 
-<lift:tail>
-<script type="text/javascript">
-    /* <![CDATA[ */
-        $(function() {
-            $("#howmanyguests").buttonset();
-        });
-    /* ]]> */
-</script>
-</lift:tail>
+        <hr class="space"/>
+
+        <div class=" prepend-1 span-22 last append-1">
+            <div class="greybob">
+                How many guests will be attending?
+                <br/>
+                <br/>
+
+                <div id="howmanyguests">
+                    <form:number_of_guests>
+                        <nog:input/>
+                        <nog:label/>
+                    </form:number_of_guests>
+                </div>
+
+            </div>
+        </div>
+
+        <hr class="space"/>
+
+        <div class=" prepend-1 span-22 last append-1">
+            <div align="right">
+
+                <form:submit/>
+
+            </div>
+        </div>
+
+
+    </lift:form.post>
+
+    <lift:tail>
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            $(function() {
+                $("#howmanyguests").buttonset();
+            });
+            /* ]]> */
+        </script>
+    </lift:tail>
 </lift:children>

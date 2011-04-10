@@ -5,7 +5,7 @@ echo "Deploying latest build to bopango.net"
 
 sbt clean release
 
-VERSION=$(echo "$(ls -lat target/scala_2.8.1/ | grep war | head -n1)" | sed 's/.*\([0-9]\.[0-9]\.[0-9]\).war/\1/')
+VERSION=$(echo "$(ls -lat target/scala_2.8.1/ | grep war | head -n1)" | sed 's/.*\([0-9]\.[0-9]\.[0-9]*\).war/\1/')
 
 echo "Version = ${VERSION}"
 
