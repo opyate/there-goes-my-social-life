@@ -1,7 +1,6 @@
 package bootstrap.liftweb
 
 import net.liftweb._
-import ext_api.facebook.FacebookConnect
 import util._
 import Helpers._
 
@@ -11,12 +10,14 @@ import provider.{HTTPCookie, HTTPRequest}
 import sitemap._
 import Loc._
 import mapper._
-import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine, Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review, Venue, Price, Deal, DishProperties}
-import com.bopango.website.lib.{VenueLocatorAPI, WsEndpoint}
+import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine,
+Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review,
+Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group}
 import net.liftweb.widgets.logchanger._
 import javax.mail.internet.MimeMessage
 import javax.mail.Transport
 import java.util.Locale
+import com.bopango.website.lib.{BoffinAPI, VenueLocatorAPI, WsEndpoint}
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -65,8 +66,9 @@ class Boot extends Loggable {
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
     // any ORM you want
-    Schemifier.schemify(true, Schemifier.infoF _, User, UserAddress, VenueAddress, Chain, Cuisine, Dish, BopangoMenu,
-      MenuSection, Order, Payment, Reservation, Review, Venue, Price, Deal, DishProperties)
+    Schemifier.schemify(true, Schemifier.infoF _, User, UserAddress, VenueAddress, Chain,
+      Cuisine, Dish, BopangoMenu, MenuSection, Order, Payment, Reservation, Review,
+      Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group)
 
     // where to search snippet
     LiftRules.addToPackages("com.bopango.website")
@@ -101,21 +103,26 @@ class Boot extends Loggable {
 
       // administration
       Menu("Admin") / "admin" / "index" >> LocGroup("admin"),
-      Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),
-      Menu("Venue Address") / "admin" / "venue_address" >> LocGroup("admin") submenus(VenueAddress.menus : _*),
+      Menu("Group") / "admin" / "group" >> LocGroup("admin") submenus(Group.menus : _*),
       Menu("Chain") / "admin" / "chain" >> LocGroup("admin") submenus(Chain.menus : _*),
+      Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*),
+      Menu("Venue Address") / "admin" / "venue_address" >> LocGroup("admin") submenus(VenueAddress.menus : _*),
       Menu("Cuisine") / "admin" / "cuisine" >> LocGroup("admin") submenus(Cuisine.menus : _*),
       Menu("Dish") / "admin" / "dish" >> LocGroup("admin") submenus(Dish.menus : _*),
       Menu("Menu") / "admin" / "menu" >> LocGroup("admin") submenus(BopangoMenu.menus : _*),
       Menu("Menu Section") / "admin" / "menusection" >> LocGroup("admin") submenus(MenuSection.menus : _*),
+      Menu("Price") / "admin" / "price" >> LocGroup("admin") submenus(Price.menus : _*),
+      Menu("DishProperties") / "admin" / "dishproperties" >> LocGroup("admin") submenus(DishProperties.menus : _*),
+      Menu("DishExtra") / "admin" / "dishextra" >> LocGroup("admin") submenus(DishExtra.menus : _*),
+      Menu("Attribute") / "admin" / "attribute" >> LocGroup("admin") submenus(Attribute.menus : _*),
+
       Menu("Order") / "admin" / "order" >> LocGroup("admin") submenus(Order.menus : _*),
       Menu("Payment") / "admin" / "payment" >> LocGroup("admin") submenus(Payment.menus : _*),
       Menu("Reservation") / "admin" / "reservation" >> LocGroup("admin") submenus(Reservation.menus : _*),
       Menu("Review") / "admin" / "review" >> LocGroup("admin") submenus(Review.menus : _*),
-      Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*),
-      Menu("Price") / "admin" / "price" >> LocGroup("admin") submenus(Price.menus : _*),
       Menu("Deal") / "admin" / "deal" >> LocGroup("admin") submenus(Deal.menus : _*),
-      Menu("DishProperties") / "admin" / "dishproperties" >> LocGroup("admin") submenus(DishProperties.menus : _*),
+
+      Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),  
 
       //Omniauth site menu items
       Menu(Loc("AuthCallback", List("omniauth","callback"), "AuthCallback", Hidden)),
@@ -181,18 +188,21 @@ class Boot extends Loggable {
     logger.info("Loaded properties for mode " + Props.modeName + ": " + Props.props)
 
     // apis
-    val x: List[WsEndpoint] = List(VenueLocatorAPI)
-    x.foreach(endpoint => LiftRules.dispatch.append
-              (endpoint.dispatchRules))
+    val apis: List[WsEndpoint] = VenueLocatorAPI :: Nil
+    
+    // stateful: x.foreach(endpoint => LiftRules.dispatch.append(endpoint.dispatchRules))
+    // use stateless instead:
+    apis.foreach(endpoint => LiftRules.statelessDispatchTable.append(endpoint.dispatchRules))
+    LiftRules.statelessDispatchTable.append(BoffinAPI)
 
     // setup the 404 handler
     LiftRules.uriNotFound.prepend(NamedPF("404handler"){
       case (req,failure) => NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
     })
 
-    logger.info("Run mode: %s".format(Props.modeName))
-
-
+    // Use HTML5 for rendering
+//    LiftRules.htmlProperties.default.set((r: Req) =>
+//      new Html5Properties(r.userAgent))
   }
 
   def localeCalculator(request : Box[HTTPRequest]): Locale =

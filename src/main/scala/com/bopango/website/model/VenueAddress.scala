@@ -2,14 +2,16 @@ package com.bopango.website.model
 
 import net.liftweb.mapper._
 import net.liftweb.sitemap.Loc.LocGroup
-import xml.NodeSeq
 import net.liftweb.common.Full
+import net.liftweb.sitemap.{*, Loc}
+import xml.{Text, NodeSeq}
+import net.liftweb.sitemap.{Menu => LMenu}
 
 /**
  * A venue's address.
- * 
+ *
  * Display on Google Maps with:
- * 
+ *
 
 
 set @lat=51.546949;
@@ -63,7 +65,7 @@ class VenueAddress extends LongKeyedMapper[VenueAddress] with CreatedUpdated wit
 
   object country extends MappedCountry[VenueAddress](this){
     override def dbColumnName = "country_enum"
-    override def defaultValue = Countries.UK 
+    override def defaultValue = Countries.UK
   }
 
   object postcode extends MappedPostalCode[VenueAddress](this, country)
@@ -75,6 +77,19 @@ class VenueAddress extends LongKeyedMapper[VenueAddress] with CreatedUpdated wit
   object longitude extends MappedDouble(this)
 
   object latitude extends MappedDouble(this)
+
+  object fax extends MappedString(this, 16)
+
+  object email extends MappedEmail(this, 64)
+
+  object opening_times extends MappedTextarea(this, 8192) {
+    override def textareaRows  = 10
+    override def textareaCols = 50
+  }
+
+  object manager_name extends MappedString(this, 32)
+
+  object external_id extends MappedString(this, 32)
 
   object venue extends LongMappedMapper(this, Venue) {
     override def dbColumnName = "venue_id"

@@ -26,6 +26,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   //val jettyVersionX = "7.2.2.v20101205" // Servlet 2.5, JSP 2.1
 
   val lift281 = "lift281" at "http://scala-tools.org/repo-snapshots"
+  val openCsv = "opencsv" at "http://oss.sonatype.org/content/groups/sourceforge" // /net/sf/opencsv/opencsv/"
 
   val databinder_net = "databinder.net repository" at "http://databinder.net/repo"
   val dispatch = "net.databinder" %% "dispatch-twitter" % "0.7.7"
@@ -47,7 +48,9 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val specs = "org.scala-tools.testing" % "specs_2.8.1" % "1.6.6" % "test->default"
   val h2 = "com.h2database" % "h2" % "1.3.149" % "test->default" intransitive()
 
-  
+  val solrj = "org.apache.solr" % "solr-solrj" % "1.4.0" % "compile->default"
+
+  val opencsv = "net.sf.opencsv" % "opencsv" % "2.1" % "compile->default"
 
   override def ivyXML =
     <dependencies>
@@ -66,6 +69,8 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 //  override def jettyEnvXml = Some(
 //		("tmp" / "jetty-env.xml").asFile
 //	)
+
+  override val jettyPort = 8081
 
   override def libraryDependencies = Set(
 //    "net.liftweb" % "lift-mapper_2.8.1" % liftVersion % "compile->default",

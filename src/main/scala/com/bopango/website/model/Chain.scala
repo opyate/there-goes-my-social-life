@@ -68,4 +68,13 @@ class Chain extends LongKeyedMapper[Chain] with CreatedUpdated with IdPK with On
         case s: Cuisine => Full(s.id.is -> s.name.is)
       })
   }
+
+  object group extends LongMappedMapper(this, Group) {
+    override def dbColumnName = "group_id"
+
+    override def validSelectValues =
+      Full(Group.findMap(OrderBy(Group.name, Ascending)) {
+        case s: Group => Full(s.id.is -> s.name.is)
+      })
+  }
 }

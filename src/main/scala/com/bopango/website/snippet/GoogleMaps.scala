@@ -8,6 +8,10 @@ import xml.NodeSeq
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.{RequestVar, SHtml, S}
 import net.liftweb.common.{Full, Loggable}
+import org.apache.solr.client.solrj.impl._
+import org.apache.solr.client.solrj.response.QueryResponse
+import org.apache.solr.client.solrj.{SolrServerException, SolrQuery}
+import org.apache.solr.common.{SolrDocument, SolrDocumentList}
 
 /**
  * Renders an input box and a Google Map. The input is geoCoded on the client,
@@ -35,8 +39,8 @@ class GoogleMaps extends Loggable {
             type="text/javascript"
             src={"/scripts/bopango_googlemaps.js"}>
           </script>
+          <script src="/scripts/util.js"/>
         </lift:with-resource-id>
-        <script src="/scripts/util.js"/>
       </head>
 
   def render(xhtml: NodeSeq): NodeSeq = {
@@ -44,11 +48,15 @@ class GoogleMaps extends Loggable {
 
     val searchTerm = S.param("search") openOr {S.warning("Empty search term. Try again."); S.redirectTo(S.referer openOr "/")}
 
+    renderDeferToGoogleMapsAPI(searchTerm)
+  }
+
+  private def renderDeferToGoogleMapsAPI(searchTerm: String): NodeSeq = {
     <lift:children>
       {head}
-      {SHtml.ajaxText(searchTerm, (s) => {Call("codeAddress", s)})}
+      {SHtml.ajaxText(searchTerm, (s) => {Call("search", s)})}
       <div id="map_canvas" style="width: 460px; height: 345px"></div>
-      {Script(OnLoad(JsRaw("google_maps_init(); ")) & Call("codeAddress", searchTerm))}
+      {Script(OnLoad(JsRaw("google_maps_init(); ")) & Call("search", searchTerm))}
     </lift:children>
   }
 
