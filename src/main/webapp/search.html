@@ -1,13 +1,19 @@
-<lift:surround with="default" at="content">
-    <div class="prepend-1 span-8 colborder">
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Results</title>
+  </head>
+  <body class="lift:content_id=main">
+    <div id="main" class="lift:surround?with=default;at=content">
+      <div class="prepend-1 span-8 colborder">
 
         <div id="boffin_results">
             Select a restaurant from the map...
         </div>
 
     </div>
-    <div class="span-12 prepend-1 append-1 last">
-        <lift:BoffinFrontend/>
+    <div class="span-12 prepend-1 append-1 last lift:BoffinFrontend">
+        Google Map will appear here
     </div>
 
 
@@ -44,5 +50,7 @@
     </div>
 
     <hr class="space"/>
-</lift:surround>
+   </div>
+  </body>
+</html>
 

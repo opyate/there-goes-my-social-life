@@ -1,16 +1,22 @@
-<lift:surround with="default" at="content">
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body class="lift:content_id=main">
+<div id="main" class="lift:surround?with=default;at=content">
     <div class="prepend-1 span-14 colborder">
-        <lift:Special/>
+        <div class="lift:Special"></div>
     </div>
 
     <div class="span-7 last">
         <div id="geo" class="rounded">
             <span style="color:white;">Where do you fancy eating?</span>
 
-                <form method="post" action="/search">
-                    <input type="text" name="search" id="search" value=""/><br/>
-                    <input type="submit" value="Go now!"/>
-                </form>
+            <form method="post" action="/search">
+                <input type="text" name="search" id="search" value=""/><br/>
+                <input type="submit" value="Go now!"/>
+            </form>
 
             <div align="right">
                 <span style="color:white;font-size:smaller;">Follow us on </span>
@@ -31,15 +37,18 @@
     <div class="prepend-1 span-14 colborder">
         <div id="bopd" class="rounded">
             <h2>They've BOP'd it!</h2>
+
             <div id="blanco" class="rounded">
-                <lift:comet type="BopditComet"/>
+                <div class="lift:comet?type=BopditComet"></div>
             </div>
         </div>
     </div>
     <div class="span-6 prepend-1 append-1 last">
-        <lift:Welcome/>
+        <div class="lift:Welcome"></div>
     </div>
 
     <hr class="space"/>
-</lift:surround>
+</div>
+</body>
+</html>
 

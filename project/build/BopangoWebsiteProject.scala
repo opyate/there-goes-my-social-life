@@ -22,7 +22,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
   //val liftVersion = "2.1"
   //val liftVersion = "2.2"
-  val liftVersion = "2.3-SNAPSHOT"
+  val liftVersion = "2.4-SNAPSHOT"
   //val jettyVersionX = "7.2.2.v20101205" // Servlet 2.5, JSP 2.1
 
   val lift281 = "lift281" at "http://scala-tools.org/repo-snapshots"
@@ -55,10 +55,11 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
   override def ivyXML =
     <dependencies>
       <exclude module="activation"/>
+      <exclude module="slf4j-log4j12"/>
     </dependencies>
 
 
-  val logback = "ch.qos.logback" % "logback-classic" % "0.9.27" % "compile->default"
+  val logback = "ch.qos.logback" % "logback-classic" % "0.9.28" % "compile->default"
   //override def scanDirectories = Nil
 
 //  override def jettyEnvXml = Some(

@@ -53,6 +53,16 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
   // so as not to exhaust the primary key count when a visitor comes to the home page.
   val reservation = Reservation.create
 
+  private def template(name: String, f: NodeSeq => NodeSeq): NodeSeq =
+    TemplateFinder.
+            findAnyTemplate(List("templating") ::: List(name)).map(f) openOr
+            NodeSeq.Empty
+
+  private def template(prefix: String, name: String, f: NodeSeq => NodeSeq): NodeSeq =
+    TemplateFinder.
+            findAnyTemplate(List(prefix, name)).map(f) openOr
+            NodeSeq.Empty
+
   def book = {
 
     def doSubmit () {
@@ -179,7 +189,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
     def label(text: String, in: NodeSeq): NodeSeq = <label for={in \\"@id"}>{text}</label> ++ in
     
-    val inputs = SHtml.radio(GuestCount.iterator.map(_.toString).toList,
+    val inputs = SHtml.radio(GuestCount.values.iterator.map(_.toString).toList,
             Full("Myself"),
             (s: String) => reservation.number_of_guests(GuestCount.withName(s).id+1))
 
@@ -194,37 +204,25 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       }
 
 
+    //TemplateFinder.findAnyTemplate(List("coresteps", "order")).map(xhtml =>
 
-    TemplateFinder.findAnyTemplate(List("coresteps", "book")).map(xhtml =>
-      bind("form", xhtml,
-        "date" -> reservation.when.toForm,
+    template("coresteps", "book",
+      "name=date" #> reservation.when.toForm &
+    "name=time" #> SHtml.select(timesMap, Empty, (sel) => {
+        println("you selected time: " + sel)
+        net.liftweb.util.DefaultDateTimeConverter.parseTime(sel) match {
+          case Full(d) => reservation.what_time(d)
+          case _ => S.error("Invalid time selected")
+        }
 
-        "time" -> SHtml.select(timesMap, Empty, (sel) => {
-            println("you selected time: " + sel)
-            net.liftweb.util.DefaultDateTimeConverter.parseTime(sel) match {
-              case Full(d) => reservation.what_time(d)
-              case _ => S.error("Invalid time selected")
-            }
-
-          }),
-        "how_much_time_in_minutes" -> SHtml.select(how_much_time, Empty, (sel) => {
-            println("you selected how_much_time: " + sel)
-            reservation.how_much_time_in_minutes(sel.toInt)
-          }),
-        // TODO ability to add guest details
-        "guest_details" -> ajaxButton("Add a guest", () => {println("I am attending");Noop}), 
-        "submit" -> SHtml.submit("Continue", doSubmit)
-        , "number_of_guests" -> labelized
-//        ,
-//        "number_of_guests" -> { ns: NodeSeq =>
-//          SHtml.radio(GuestCount.iterator.map(_.toString).toList,
-//            Full("0"),
-//            (s: String) => reservation.number_of_guests(GuestCount.withName(s).id+1))
-//              .flatMap((choice: ChoiceItem[String]) =>
-//                {bind("nog", ns,
-//                      "input" -> choice.xhtml, "label" -> <label for={"sumink"}>{choice.key}</label>)})}
-        )
-    ) openOr NodeSeq.Empty
+      }) &
+    "name=how_much_time_in_minutes" #> SHtml.select(how_much_time, Empty, (sel) => {
+        println("you selected how_much_time: " + sel)
+        reservation.how_much_time_in_minutes(sel.toInt)
+      }) &
+    "name=guest_details" #> ajaxButton("Add a guest", () => {println("I am attending");Noop}) &
+    "type=submit" #> SHtml.submit("Continue", doSubmit))
+    // & "name=number_of_guests" #> labelized
   }
 
   /**

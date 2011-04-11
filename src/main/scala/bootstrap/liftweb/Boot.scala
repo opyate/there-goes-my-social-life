@@ -185,8 +185,6 @@ class Boot extends Loggable {
         RewriteResponse("omniauth"::"callback":: Nil, Map("provider" -> providerName))
     }
 
-    logger.info("Loaded properties for mode " + Props.modeName + ": " + Props.props)
-
     // apis
     val apis: List[WsEndpoint] = VenueLocatorAPI :: Nil
     
@@ -201,8 +199,11 @@ class Boot extends Loggable {
     })
 
     // Use HTML5 for rendering
-//    LiftRules.htmlProperties.default.set((r: Req) =>
-//      new Html5Properties(r.userAgent))
+    LiftRules.htmlProperties.default.set((r: Req) =>
+      new Html5Properties(r.userAgent))
+
+    // done
+    logger.info("Loaded properties for mode [%s]".format(Props.mode.toString))
   }
 
   def localeCalculator(request : Box[HTTPRequest]): Locale =

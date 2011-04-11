@@ -22,7 +22,7 @@ import util.Helpers._
 
 Local is better for off-line development.
  */
-class HeaderLoader {
+object HeaderLoader {
 	def render(xhtml: NodeSeq): NodeSeq = {
     val src = "https://www.google.com/jsapi?key=" + (Props.get("gmaps.api") match {
       case Full(apiKey) => apiKey
@@ -39,9 +39,6 @@ class HeaderLoader {
     
     <lift:children>
       <script id="googlejsapi" type="text/javascript" src={src}></script>
-      <script id="jquery" type="text/javascript" src="/scripts/jquery/jquery-1.5.1.min.js"></script>
-      <script id="jqueryui" type="text/javascript" src="/scripts/jquery/jquery-ui-1.8.11.custom.min.js"></script>
-      <script id="jquerytools" src="/scripts/jquery/jquery.tools.min.js"></script>
     </lift:children>
   }
 }

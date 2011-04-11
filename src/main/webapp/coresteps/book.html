@@ -1,16 +1,21 @@
-<lift:children>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book</title>
+      <link type="text/css" href="/css/overcast/jquery-ui-1.7.3.custom.css" rel="Stylesheet"/>
+  </head>
+  <body>
+    <div>
 
-    <head>
-        <link type="text/css" href="/css/overcast/jquery-ui-1.7.3.custom.css" rel="Stylesheet"/>
-    </head>
+        <form class="lift:form.post">
 
-    <lift:form.post>
+
 
         <div class="prepend-1 span-11 colborder">
             <div class="greybob">
                 Select a date
                 <br/>
-                <form:date/>
+                <input name="date"/>
 
             </div>
         </div>
@@ -21,7 +26,7 @@
                 <br/>
                 <br/>
 
-                <form:time/>
+                <input name="time"/>
 
             </div>
         </div>
@@ -34,7 +39,7 @@
                 How much time do you have for lunch?
                 <br/>
                 <br/>
-                <form:how_much_time_in_minutes/>
+                <input name="how_much_time_in_minutes"/>
 
 
             </div>
@@ -49,10 +54,11 @@
                 <br/>
 
                 <div id="howmanyguests">
-                    <form:number_of_guests>
-                        <nog:input/>
-                        <nog:label/>
-                    </form:number_of_guests>
+                    TODO
+                    <!--<form:number_of_guests>-->
+                        <!--<nog:input/>-->
+                        <!--<nog:label/>-->
+                    <!--</form:number_of_guests>-->
                 </div>
 
             </div>
@@ -63,21 +69,15 @@
         <div class=" prepend-1 span-22 last append-1">
             <div align="right">
 
-                <form:submit/>
+                <input type="submit"/>
 
             </div>
         </div>
 
 
-    </lift:form.post>
+    </form>
 
-    <lift:tail>
-        <script type="text/javascript">
-            /* <![CDATA[ */
-            $(function() {
-                $("#howmanyguests").buttonset();
-            });
-            /* ]]> */
-        </script>
-    </lift:tail>
-</lift:children>
+   </div>
+  </body>
+</html>
+
