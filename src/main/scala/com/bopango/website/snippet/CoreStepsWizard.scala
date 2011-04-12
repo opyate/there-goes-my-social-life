@@ -163,26 +163,16 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       )
 
     object GuestCount extends Enumeration {
-      val OnlyMe = Value("Myself")
-      val Plus1 = Value("+1")
-      val Plus2 = Value("+2")
-      val Plus3 = Value("+3")
-      val Plus4 = Value("+4")
-      val Plus5 = Value("+5")
-      val Plus6 = Value("+6")
-      val Plus7 = Value("+7")
-      val Plus8 = Value("+8")
+      val One = Value("1")
+      val Two = Value("2")
+      val Three = Value("3")
+      val Four = Value("4")
+      val Five = Value("5")
+      val Six = Value("6")
+      val Seven = Value("7")
+      val Eight = Value("8")
 
     }
-    //var chosenGuestCount: Box[GuestCount.Value] = Empty
-
-    // call in bind() as radios.toForm
-//    val radios =
-//    SHtml.radio(GuestCount.values.toList.map(_.toString), Empty,
-//      selected => {
-//        //chosenGuestCount = Box(GuestCount.withName(selected))
-//        reservation.number_of_guests(GuestCount.withName(selected).id+1)
-//      })
 
     // RADIO HEAVEN:
     // https://groups.google.com/forum/?fromgroups#!searchin/liftweb/How$20do$20I$20add$20unique$20id$20to$20radio$20inputs$20for$20labels/liftweb/7OHNkbClFyI/SuiSEf5gjHYJ
@@ -190,7 +180,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
     def label(text: String, in: NodeSeq): NodeSeq = <label for={in \\"@id"}>{text}</label> ++ in
     
     val inputs = SHtml.radio(GuestCount.values.iterator.map(_.toString).toList,
-            Full("Myself"),
+            Full("1"),
             (s: String) => reservation.number_of_guests(GuestCount.withName(s).id+1))
 
     def doRadio(id:String)(node:NodeSeq) = {
@@ -209,7 +199,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
     template("coresteps", "book",
       "name=date" #> reservation.when.toForm &
     "name=time" #> SHtml.select(timesMap, Empty, (sel) => {
-        println("you selected time: " + sel)
+        logger.debug("selected time [%s]".format(sel))
         net.liftweb.util.DefaultDateTimeConverter.parseTime(sel) match {
           case Full(d) => reservation.what_time(d)
           case _ => S.error("Invalid time selected")
@@ -217,11 +207,11 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
       }) &
     "name=how_much_time_in_minutes" #> SHtml.select(how_much_time, Empty, (sel) => {
-        println("you selected how_much_time: " + sel)
+        logger.debug("selected how_much_time [%s]".format(sel))
         reservation.how_much_time_in_minutes(sel.toInt)
       }) &
-    "name=guest_details" #> ajaxButton("Add a guest", () => {println("I am attending");Noop}) &
-    "type=submit" #> SHtml.submit("Continue", doSubmit) & "id=number_of_guests" #> labelized)
+    "name=guest_details" #> ajaxButton("Add a guest", () => {Noop}) &
+    "type=submit" #> SHtml.submit("Continue", doSubmit) & "id=howmanyguests *" #> labelized)
   }
 
   /**
@@ -282,17 +272,13 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       }
 
       def removeDishFromGuest(dish: Dish): JsCmd = {
-        println("removing dish %s from guest %s".format(dish.id, current_guest))
-        println("guest_selections [BEFORE]: " + guest_selections)
+        logger.debug("removing dish %s from guest %s".format(dish.id, current_guest))
+        //logger.debug("guest_selections BEFORE = [%s]".format(guest_selections))
 
         tryo(guest_selections(current_guest)) match {
           case Full(current: MMap[Dish, Int]) => {
-            println("current: " + current)
-            // if guest already has dish, decrement the count, otherwise just remove it
-            // TODO themap.getOrElseUpdate
             tryo(current(dish)) match {
               case Full(quantity: Int) => {
-                println("quantity: " + quantity)
                 quantity match {
                   case 1 => {
                     current.remove(dish)
@@ -305,13 +291,12 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
               }
               case _ => {
-                // dish doesn't exist in the guest's selection, so can't be removed
+                // Do nothing -- dish doesn't exist in the guest's selection, so can't be removed
               }
             }
           }
           case _ => {
-            // this guest is not yet in the map
-            // nothing to remove
+            // Do nothing -- this guest is not yet in the map
           }
         }
 
@@ -333,19 +318,19 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
           }}
           total += guest_total
           js += SetHtml("guest_subtotal_"+guest_number, Text(String.format("%3.2f", double2Double(guest_total))))
-          println("guest %s has  a total of %s".format(guest_number, guest_total))
+          logger.debug("guest %s has  a total of %s".format(guest_number, guest_total))
         }}
 
         js += SetHtml("all_guests_total", Text(String.format("%3.2f", double2Double(
           total.foldLeft(0.0)(_ + _)
           ))))
 
-        println("guest_selections [AFTER]: " + guest_selections)
+        //logger.debug("guest_selections AFTER = [%s]".format(guest_selections))
 
         // set new guest HTML
         val selection = guest_selections(current_guest)
         if (selection.isEmpty) {
-          println("guest %s now has nothing selected!".format(current_guest))
+          logger.debug("guest %s now has nothing selected!".format(current_guest))
           js += SetHtml("guest_selection_"+current_guest, Text("Select something from the menu"))
         } else {
           js += SetHtml("guest_selection_"+current_guest,
@@ -377,23 +362,18 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       }
 
       def addDishToGuest(dish: Dish): JsCmd = {
-        println("adding dish %s to guest %s".format(dish.id, current_guest))
-        println("guest_selections [BEFORE]: " + guest_selections)
+        logger.debug("adding dish %s to guest %s".format(dish.id, current_guest))
+        //logger.debug("guest_selections BEFORE = [%s]".format(guest_selections))
 
         tryo(guest_selections(current_guest)) match {
           case Full(current: MMap[Dish, Int]) => {
-            println("current: " + current)
-            // if guest already has dish, increment the count, otherwise just add it
-            // TODO themap.getOrElseUpdate
             tryo(current(dish)) match {
               case Full(quantity: Int) => {
-                println("quantity: " + quantity)
                 current(dish) = quantity + 1
                 guest_selections(current_guest) = current
 
               }
               case _ => {
-                println("no quantity. new selection")
                 current(dish) = 1
                 guest_selections(current_guest) = current
               }
@@ -401,7 +381,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
           }
           case _ => {
             // this guest is not yet in the map
-            println("new guest addition. new selection")
+            logger.debug("new guest addition. new selection")
             val new_selection = MMap.empty[Dish, Int]
             new_selection(dish) = 1
             guest_selections(current_guest) = new_selection
@@ -434,7 +414,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
     def guest_select(i: Int): JsCmd = {
       current_guest=i
-      println("you selected guest: " + current_guest)
+      logger.debug("you selected guest [%s]".format(current_guest))
       Noop
     }
 
@@ -464,12 +444,10 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       </div>
     }
 
-    TemplateFinder.findAnyTemplate(List("coresteps", "order")).map(xhtml =>
-      bind("form", xhtml,
-        "guest_selections" -> render_guest_selections _,
-        "menus_and_dishes" -> render_menus _,
-        "submit" -> SHtml.submit("Continue", doSubmit))
-    ) openOr NodeSeq.Empty
+    template("coresteps", "order",
+        "id=guest_selections" #> render_guest_selections _ &
+        "id=menus_and_dishes" #> render_menus _ &
+        "type=submit" #> SHtml.submit("Continue", doSubmit))
   }
 
 /**
@@ -535,12 +513,6 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
     logger.debug("confirmation")
 
     def doMail (): NodeSeq = {
-//      TemplateFinder.findAnyTemplate(List("email", "order")).map(xhtml => {
-//        bind("order", xhtml,
-//            "r" -> reservation.toHtml
-//        )
-//      }) openOr <span>Please phone for order confirmation</span>
-
       MailConfirmation.guest(reservation, guest_selections)
     }
 

@@ -1,36 +1,29 @@
-<lift:children>
-    <!--<lift:test_cond.loggedin>-->
+<form class="lift:form.post">
+    <div class=" prepend-1 span-11 append-1">
+        <h2>Menu</h2>
 
-
-        <div class=" prepend-1 span-11 append-1">
-            <h2>Menu</h2>
-            <form:menus_and_dishes/>
+        <div id="menus_and_dishes">
+            Menus and dishes rendered here.
         </div>
+    </div>
 
-        <div class=" prepend-2 span-8 last append-1">
-            <h2>Guest selection</h2>
-            <form:guest_selections/>
-            <h2>
-                <span style="float:left;">Total</span>
-                <span style="float:right;" id="all_guests_total">0.00</span>
-            </h2>
+    <div class=" prepend-2 span-8 last append-1">
+        <h2>Guest selection</h2>
+
+        <div id="guest_selections">
+            Guest selections rendered here.
         </div>
+        <h2>
+            <span style="float:left;">Total</span>
+            <span style="float:right;" id="all_guests_total">0.00</span>
+        </h2>
+    </div>
 
-        <hr class="space"/>
+    <hr class="space"/>
 
-        <div class=" prepend-1 span-22 last append-1">
-            <div align="right">
-                <lift:form.post>
-                    <form:submit/>
-                </lift:form.post>
-            </div>
+    <div class=" prepend-1 span-22 last append-1">
+        <div align="right">
+            <input type="submit"/>
         </div>
-
-    <!--</lift:test_cond.loggedin>-->
-
-    <!--<lift:test_cond.loggedout>-->
-        <!--<div class=" prepend-1 span-22 last append-1">-->
-            <!--Please log in to proceed-->
-        <!--</div>-->
-    <!--</lift:test_cond.loggedout>-->
-</lift:children>
+    </div>
+</form>
