@@ -221,8 +221,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
         reservation.how_much_time_in_minutes(sel.toInt)
       }) &
     "name=guest_details" #> ajaxButton("Add a guest", () => {println("I am attending");Noop}) &
-    "type=submit" #> SHtml.submit("Continue", doSubmit))
-    // & "name=number_of_guests" #> labelized
+    "type=submit" #> SHtml.submit("Continue", doSubmit) & "id=number_of_guests" #> labelized)
   }
 
   /**
