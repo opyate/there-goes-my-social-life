@@ -236,6 +236,8 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       // a couple of DB lookups to get the menu items and dishes
       val menus:List[BopangoMenu] = BopangoMenu.findAll(By(BopangoMenu.venue, reservation.venue.is), OrderBy(BopangoMenu.position, Ascending))
 
+      logger.info("For restaurant [%s] I found these [%s] menus: [%s]".format(reservation.venue.is, menus.size, menus))
+
       def dish_stuff(menu_section: MenuSection): NodeSeq = {
         val dishes: List[Dish] = Dish.findAll(By(Dish.menu_section, menu_section), OrderBy(Dish.position, Ascending))
 
@@ -446,7 +448,7 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
 
     template("coresteps", "order",
         "id=guest_selections" #> render_guest_selections _ &
-        "id=menus_and_dishes" #> render_menus _ &
+        "id=menus_and_dishes *" #> render_menus _ &
         "type=submit" #> SHtml.submit("Continue", doSubmit))
   }
 
@@ -537,4 +539,65 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
         "payment" -> Text(payment_details))
     ) openOr NodeSeq.Empty
   }
+}
+
+object FakingIt {
+  def fakeTabs = {
+    <div class="wrap">
+
+
+      <ul class="tabs">
+        <li><a href="#">Tab 1</a></li>
+        <li><a href="#">Tab 2</a></li>
+        <li><a href="#">Tab 3</a></li>
+      </ul>
+
+      <div class="pane">
+        <p>#1</p>
+
+    <ul class="tabs">
+      <li><a href="#">Tab 1</a></li>
+      <li><a href="#">Tab 2</a></li>
+      <li><a href="#">Tab 3</a></li>
+    </ul>
+
+
+    <div class="pane">First tab content.</div>
+    <div class="pane">Second tab content</div>
+    <div class="pane">Third tab content</div>
+      </div>
+
+      <div class="pane">
+        <p>#2</p>
+
+    <ul class="tabs">
+      <li><a href="#">Tab 1</a></li>
+      <li><a href="#">Tab 2</a></li>
+      <li><a href="#">Tab 3</a></li>
+    </ul>
+
+
+    <div class="pane">First tab content.</div>
+    <div class="pane">Second tab content</div>
+    <div class="pane">Third tab content</div>
+      </div>
+
+      <div class="pane">
+        <p>#3	</p>
+
+    <ul class="tabs">
+      <li><a href="#">Tab 1</a></li>
+      <li><a href="#">Tab 2</a></li>
+      <li><a href="#">Tab 3</a></li>
+    </ul>
+
+
+    <div class="pane">First tab content.</div>
+    <div class="pane">Second tab content</div>
+    <div class="pane">Third tab content</div>
+      </div>
+
+    </div>
+
+    }
 }
