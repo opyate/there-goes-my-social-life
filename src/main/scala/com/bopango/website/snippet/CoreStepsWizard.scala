@@ -500,15 +500,9 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
       </table>
     }
 
-    TemplateFinder.findAnyTemplate(List("coresteps", "pay")).map(xhtml =>
-      bind("form", xhtml,
-        "restaurant" -> Text(restaurant),
-        "booking" -> Text(booking_details),
-        "order" -> Text(order_details),
-        "payment" -> SHtml.text(payment_details, payment_details = _),
-        "summary" -> render_summary _,
-        "submit" -> SHtml.submit("Continue", doSubmit))
-    ) openOr NodeSeq.Empty
+    template("coresteps", "pay",
+        "id=summary" #> render_summary _ &
+        "type=submit" #> SHtml.submit("Continue", doSubmit))
   }
 
   def confirmation = {
@@ -531,13 +525,8 @@ class CoreStepsWizard extends StatefulSnippet with Loggable {
     }
 
 
-    TemplateFinder.findAnyTemplate(List("coresteps", "confirmation")).map(xhtml =>
-      bind("form", xhtml,
-        "restaurant" -> Text(restaurant),
-        "booking" -> Text(booking_details),
-        "order" -> Text(order_details),
-        "payment" -> Text(payment_details))
-    ) openOr NodeSeq.Empty
+    template("coresteps", "confirmation",
+      "a=b" #> <span></span>)
   }
 }
 
