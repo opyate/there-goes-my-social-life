@@ -1,0 +1,8 @@
+-- v0.1.11, upped the sizes of the fields below, but Lift
+-- won't migrate the tables automatically, hence this script.
+
+ALTER TABLE venueaddress MODIFY address1 VARCHAR(128);
+ALTER TABLE venueaddress MODIFY address2 VARCHAR(128);
+ALTER TABLE venueaddress MODIFY city VARCHAR(64);
+ALTER TABLE venueaddress MODIFY county VARCHAR(64);
+ALTER TABLE venueaddress MODIFY manager_name VARCHAR(64);
