@@ -47,19 +47,19 @@ object VenueAddress extends VenueAddress with LongKeyedMetaMapper[VenueAddress]
 class VenueAddress extends LongKeyedMapper[VenueAddress] with CreatedUpdated with IdPK {
   def getSingleton = VenueAddress
 
-  object address1 extends MappedString(this, 32) {
+  object address1 extends MappedString(this, 128) {
     override def dbIndexed_? = true
   }
 
-  object address2 extends MappedString(this, 32) {
+  object address2 extends MappedString(this, 128) {
     override def dbIndexed_? = true
   }
 
-  object city extends MappedString(this, 32) {
+  object city extends MappedString(this, 64) {
     override def dbIndexed_? = true
   }
 
-  object county extends MappedString(this, 32) {
+  object county extends MappedString(this, 64) {
     override def dbIndexed_? = true
   }
 
@@ -87,7 +87,7 @@ class VenueAddress extends LongKeyedMapper[VenueAddress] with CreatedUpdated wit
     override def textareaCols = 50
   }
 
-  object manager_name extends MappedString(this, 32)
+  object manager_name extends MappedString(this, 64)
 
   object external_id extends MappedString(this, 32)
 
