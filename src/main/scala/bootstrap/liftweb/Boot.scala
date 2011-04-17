@@ -18,6 +18,7 @@ import javax.mail.internet.MimeMessage
 import javax.mail.Transport
 import java.util.Locale
 import com.bopango.website.lib.{BoffinAPI, VenueLocatorAPI, WsEndpoint}
+import com.bopango.website.snippet._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -80,12 +81,15 @@ class Boot extends Loggable {
     // is this ever called?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
-    val entries = List(
+    def sitemap = SiteMap(
       // home
       Menu.i("Home") / "index" >> LocGroup("public"),
 
       // search
       Menu.i("Search") / "search" >> LocGroup("public"),
+
+      // venue
+      VenuePage.menu,
 
       // book
       Menu.i("Book") / "book" >> RequireLogin >> LocGroup("public"),
@@ -127,14 +131,19 @@ class Boot extends Loggable {
       //Omniauth site menu items
       Menu(Loc("AuthCallback", List("omniauth","callback"), "AuthCallback", Hidden)),
       Menu(Loc("AuthSignin", List("omniauth", "signin"), "AuthSignin", Hidden))
-    ) :::
+    )// + User.sitemap
     // the User management menu items
-    User.sitemap
+
     //::: NoSQLServer.menus
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    LiftRules.setSiteMap(SiteMap(entries:_*))
+    //LiftRules.setSiteMap(SiteMap(entries:_*))
+
+
+    // set the sitemap.  Note if you don't want access control for
+    // each page, just comment this line out.
+    LiftRules.setSiteMapFunc(() => sitemap)
 
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =

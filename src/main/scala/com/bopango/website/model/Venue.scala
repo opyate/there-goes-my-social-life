@@ -57,6 +57,10 @@ class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK with On
 
   object checklist_animals extends MappedBoolean(this)
 
+  def attributes: List[String] = {
+    List("veg", "families", "dogs")
+  }
+
   object chain extends LongMappedMapper(this, Chain) {
     override def dbColumnName = "chain_id"
 
