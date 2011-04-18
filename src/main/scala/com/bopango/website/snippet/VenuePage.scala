@@ -1,14 +1,14 @@
 package com.bopango.website.snippet
 
 import net.liftweb._
-import common.Full
+import common.{Empty, Full}
 import util._
 import Helpers._
 import http._
 import sitemap._
 
 import scala.xml.Text
-import com.bopango.website.model.Venue
+import com.bopango.website.model.{VenueAddress, Venue}
 
 /**
  * Displays a venue and its details
@@ -19,6 +19,16 @@ import com.bopango.website.model.Venue
 // capture the page parameter information
 case class ParamInfo(theParam: String)
 
+object VenuePage {
+  // Create a menu for /venue/{x}
+  val menu = Menu.param[ParamInfo]("VenuePage", "Venue Details",
+                                   s => Full(ParamInfo(s)),
+                                   pi => pi.theParam) / "venue"
+  lazy val loc = menu.toLoc
+
+  //def render = "*" #> loc.currentValue.map(_.theParam)
+}
+
 // a snippet that takes the page parameter information
 class VenuePage(pi: ParamInfo)  {
   def render = {
@@ -26,26 +36,18 @@ class VenuePage(pi: ParamInfo)  {
     Venue.find(pi.theParam) match {
       case Full(item) => {
         "#venue_name *" #> item.name &
-        //"#venue_address" #> item.
+        "#venue_address *" #> item.latestAddressAsHtml &
         "#venue_description *" #> item.description &
-        "#venue_image_div" #> <img width="100" height="100" src="http://cms.parkplazabelfast.com/cmsImages/restaurant_picture.jpg"/> &
-        "#venue_checklist *" #> item.attributes.map(attr => {"li *" #> attr}) &
-        "name=venue_book [href]" #> "http://example.org" &
-        "name=venue_menu [href]" #> "http://example.org"
+        "#venue_image_div *" #> <img width="200" height="200" src="http://cms.parkplazabelfast.com/cmsImages/restaurant_picture.jpg"/> &
+        "#venue_checklist *" #> item.attributes.map(attr => {"li *" #> attr.attribute}) &
+        "name=venue_book [href]" #> "/book?restaurant_id=%s".format(pi.theParam) &
+        "name=venue_promos [href]" #> "#" &
+        "name=venue_directions [href]" #> "#" &
+        "name=venue_menu [href]" #> "#"
       }
       case _ => "*" #> "Venue not found"
     }
 
 
   }
-}
-
-object VenuePage {
-  // Create a menu for /venue/{x}
-  val menu = Menu.param[ParamInfo]("VenuePage", "VenuePage",
-                                   s => Full(ParamInfo(s)),
-                                   pi => pi.theParam) / "venue"
-  lazy val loc = menu.toLoc
-
-  //def render = "*" #> loc.currentValue.map(_.theParam)
 }

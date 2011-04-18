@@ -6,17 +6,32 @@
   <body class="lift:content_id=main">
     <div id="main" class="lift:surround?with=default;at=content">
         <div class="lift:VenuePage">
-            <h1 id="venue_name">Venue name here</h1>
-            <div id="venue_address">Venue address here</div>
-            <div id="venue_image_div">Venue image here</div>
-            <div id="venue_description">Venue description here</div>
-            <ul id="venue_checklist">
-                <li>Checklist item here</li>
-            </ul>
+            <div class="span-24 last">
+                <div class="span-6 prepend-1 append-1">
+                    <h1 id="venue_name">Venue name here</h1>
+                    <div id="venue_address" class="last">Venue address here</div>
 
-            <div id="venue_links">
-                <a name="venue_book">Book this venue</a><br/>
-                <a name="venue_menu">See the menu</a>
+                    <hr class="space"/>
+                    
+                    <div id="venue_image_div" class="last">Venue image here</div>
+                </div>
+
+                <div class="span-6 prepend-1 append-1" id="venue_description">Venue description here</div>
+
+                <div class="span-6 prepend-1 append-1 last" id="venue_links">
+                    <a name="venue_book">Book this venue</a><br/>
+                    <a name="venue_menu">See the menu</a><br/>
+                    <a name="venue_promos">Find promos</a><br/>
+                    <a name="venue_directions">Find directions</a>
+                </div>
+            </div>
+
+            <hr class="space"/>
+
+            <div class="span-22 prepend-1 append-1 last">
+                <ul id="venue_checklist">
+                    <li>Checklist item here</li>
+                </ul>
             </div>
         </div>
     </div>

@@ -12,7 +12,7 @@ import Loc._
 import mapper._
 import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine,
 Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review,
-Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group}
+Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group, VenueAttribute}
 import net.liftweb.widgets.logchanger._
 import javax.mail.internet.MimeMessage
 import javax.mail.Transport
@@ -69,7 +69,7 @@ class Boot extends Loggable {
     // any ORM you want
     Schemifier.schemify(true, Schemifier.infoF _, User, UserAddress, VenueAddress, Chain,
       Cuisine, Dish, BopangoMenu, MenuSection, Order, Payment, Reservation, Review,
-      Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group)
+      Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group, VenueAttribute)
 
     // where to search snippet
     LiftRules.addToPackages("com.bopango.website")
@@ -81,7 +81,7 @@ class Boot extends Loggable {
     // is this ever called?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
-    def sitemap = SiteMap(
+    val entries = List(
       // home
       Menu.i("Home") / "index" >> LocGroup("public"),
 
@@ -126,24 +126,24 @@ class Boot extends Loggable {
       Menu("Review") / "admin" / "review" >> LocGroup("admin") submenus(Review.menus : _*),
       Menu("Deal") / "admin" / "deal" >> LocGroup("admin") submenus(Deal.menus : _*),
 
-      Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),  
+      Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),
 
       //Omniauth site menu items
       Menu(Loc("AuthCallback", List("omniauth","callback"), "AuthCallback", Hidden)),
       Menu(Loc("AuthSignin", List("omniauth", "signin"), "AuthSignin", Hidden))
-    )// + User.sitemap
+    ) :::
     // the User management menu items
+    User.sitemap
 
     //::: NoSQLServer.menus
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    //LiftRules.setSiteMap(SiteMap(entries:_*))
-
+//    LiftRules.setSiteMap(SiteMap(entries:_*))
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    LiftRules.setSiteMapFunc(() => sitemap)
+    LiftRules.setSiteMapFunc(() => SiteMap(entries:_*))
 
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =

@@ -45,3 +45,12 @@ class DishAttribute extends Mapper[DishAttribute] {
   object dish extends LongMappedMapper(this, Dish)
   object attribute extends LongMappedMapper(this, Attribute)
 }
+
+// this bridge table does not need CRUDification.
+object VenueAttribute extends VenueAttribute with MetaMapper[VenueAttribute]
+
+class VenueAttribute extends Mapper[VenueAttribute] {
+  def getSingleton = VenueAttribute
+  object venue extends LongMappedMapper(this, Venue)
+  object attribute extends LongMappedMapper(this, Attribute)
+}
