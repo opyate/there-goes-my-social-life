@@ -258,7 +258,7 @@ BoffinFrontend.createSidebarEntry = function(marker, name, address, distance, de
 }
 
 BoffinFrontend.getRestaurantForm = function(id) {
-    return '<form method="get" action="book"><input type="hidden" name="restaurant_id" value="'+id+'"/><input type="submit" value="Go"/></form>'
+    return '<a href="/venue/'+id+'">Select this one</a>'
 }
 
 BoffinFrontend.placeMarker = function(point, id, name, address, description, lat, lng, distance) {

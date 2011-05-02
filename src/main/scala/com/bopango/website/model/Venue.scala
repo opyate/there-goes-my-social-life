@@ -3,7 +3,7 @@ package com.bopango.website.model
 import net.liftweb.mapper._
 import xml.NodeSeq
 import net.liftweb.sitemap.Loc.LocGroup
-import net.liftweb.common.Full
+import net.liftweb.common.{Box, Empty, Full}
 
 /**
  * Venue where a user can eat.
@@ -31,7 +31,7 @@ object Venue extends Venue with LongKeyedMetaMapper[Venue]
 /**
  * An O-R mapped wiki entry
  */
-class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK with OneToMany[Long, Venue] {
+class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with ManyToMany with IdPK with OneToMany[Long, Venue] {
   def getSingleton = Venue
 
   object name extends MappedString(this, 32) {
@@ -56,6 +56,46 @@ class Venue extends LongKeyedMapper[Venue] with CreatedUpdated with IdPK with On
   object checklist_groups extends MappedBoolean(this)
 
   object checklist_animals extends MappedBoolean(this)
+
+  object attributes extends MappedManyToMany(DishAttribute, DishAttribute.dish, DishAttribute.attribute, Attribute)
+
+  def latestAddress: Box[VenueAddress] = {
+    this.addresses.toList match {
+      case Nil => Empty
+      case x :: xs => Full(x)
+    }
+  }
+
+
+// TODO replace with something like ProtoUser.shortName
+  def latestAddressAsHtml: NodeSeq = {
+    latestAddress match {
+      case Full(address: VenueAddress) => {
+        address.address1.asHtml ++
+        (address.address2.isEmpty match {
+          case false => <br/> ++ address.address2.asHtml
+          case true => Nil
+        }) ++
+        (address.county.isEmpty match {
+          case false => <br/> ++ address.county.asHtml
+          case true => Nil
+        }) ++
+        (address.postcode.isEmpty match {
+          case false => <br/> ++ address.postcode.asHtml
+          case true => Nil
+        })
+      }
+      case _ => Nil
+    }
+  }
+
+//  // TODO instead of the above, do something like the below instead.
+//  def shortName: String = (getFirstName, getLastName) match {
+//    case (f, l) if f.length > 1 && l.length > 1 => f+" "+l
+//    case (f, _) if f.length > 1 => f
+//    case (_, l) if l.length > 1 => l
+//    case _ => getEmail
+//  }
 
   object chain extends LongMappedMapper(this, Chain) {
     override def dbColumnName = "chain_id"

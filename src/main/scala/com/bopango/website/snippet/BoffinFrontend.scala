@@ -52,12 +52,19 @@ class BoffinFrontend extends Loggable {
   }
 
   private def _render(searchTerm: String): NodeSeq = {
-    <lift:children>
+    <div id="boffin_map">
       {head}
-      {SHtml.ajaxText(searchTerm, (s) => {Call("BoffinFrontend.search", s)})}
-      <div id="map_canvas" style="width: 460px; height: 345px"></div>
+
+      <form method="post" action="/search">
+          <label for="search" class="bop-hide">Search term:</label>
+          {SHtml.ajaxText(searchTerm, (s) => {Call("BoffinFrontend.search", s)}, "id" -> "search", "name" -> "search", "class" -> "searchbox", "role" -> "search", "autocomplete" -> "off")}
+          <input type="submit" class='searchsubmit' value=""/>
+      </form>
+
+
+      <div id="map_canvas"></div>
       {Script(OnLoad(JsRaw("BoffinFrontend.init(); ")) & OnLoad(Call("BoffinFrontend.search", searchTerm)))}
-    </lift:children>
+    </div>
   }
 
 }

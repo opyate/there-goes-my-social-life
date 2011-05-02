@@ -60,7 +60,7 @@ class BopangoWebsiteProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
 
   val logback = "ch.qos.logback" % "logback-classic" % "0.9.28" % "compile->default"
-  //override def scanDirectories = Nil
+  override def scanDirectories = Nil
 
 //  override def jettyEnvXml = Some(
 //		(sourcePath / "main" / "resources" / "META-INF" / "jetty-env.xml").asFile

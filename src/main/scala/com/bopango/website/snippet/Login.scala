@@ -16,16 +16,28 @@ class TopMenu {
   def render(in: NodeSeq): NodeSeq = {
     OmniauthUtil.logged_in match {
       case true => {
-        <span id="topmenu"><a href="#">Help</a> | <span>Logged in as <span style="font-weight:bolder"><lift:OmniauthUtil.as/></span></span> | <a href="/user_mgt/logout">Logout</a></span>
+        <ul>
+          <li><a href="#">Help</a></li>
+          <li><a href="/user_mgt/logout">Logout</a></li>
+        </ul>
       }
       case false => {
-        <span id="topmenu">
-          <a href="/user_mgt/sign_up">Sign up</a>
-        |
-          <a href="#">Help</a>
-        |
-          <a href="/user_mgt/login">Log in</a>
-        </span>
+        <ul>
+          <li><a href="/user_mgt/sign_up">Sign up</a></li>
+          <li><a href="#">Help</a></li>
+          <li><a href="/user_mgt/login">Log in</a></li>
+        </ul>
+      }
+    }
+  }
+
+  def status(in: NodeSeq): NodeSeq = {
+    OmniauthUtil.logged_in match {
+      case true => {
+        <div id="status">Logged in as <lift:OmniauthUtil.as/></div>
+      }
+      case false => {
+        <span style="display:none;"></span>
       }
     }
   }

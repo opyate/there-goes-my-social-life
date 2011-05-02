@@ -1,12 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>
-      Admin: <lift:menu.title />
-    </title>
+    <title class="lift:Menu.title">Bopango Admin: </title>
+
     <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
-    <lift:CSS.blueprint/>
-    <lift:CSS.fancyType/>
+    <style class="lift:CSS.blueprint"></style>
+    <style class="lift:CSS.fancyType"></style>
     <script src="/classpath/jquery.js" type="text/javascript"></script>
 
   </head>
@@ -18,13 +16,11 @@
         </div>
     <!-- menu -->
       <div class="span-4">
-          <lift:menu.builder group="admin" linkToSelf="true"
-            li_item:id="current" />
+          <div class="lift:Menu.builder?expandAll=true&linkToSelf=true&group=admin">sitemap</div>
       </div>
 
     <!-- content -->
       <div class="span-20 last">
-
         <lift:snippet type="msgs">
             <lift:error_msg></lift:error_msg>
             <lift:error_class>error</lift:error_class>
@@ -35,7 +31,9 @@
         </lift:snippet>
           
         <!-- content goes here -->
-        <lift:bind name="content" />
+        <div id="content" class="span-24 last">
+            The main content will get bound here.
+        </div>
 
       </div>
     </div>

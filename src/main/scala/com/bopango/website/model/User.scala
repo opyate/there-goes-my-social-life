@@ -6,9 +6,9 @@ import _root_.net.liftweb.util.BindHelpers._
 import _root_.net.liftweb.common._
 import _root_.net.liftweb.http.js.JsCmds._
 import xml.Text
-import net.liftweb.sitemap.Loc.{LocParam, If, Template}
 import net.liftweb.http.{SessionVar, S}
 import com.bopango.website.view.Omniauth
+import net.liftweb.sitemap.Loc.{LocGroup, LocParam, If, Template}
 
 /**
  * The singleton that has methods for accessing the database
@@ -27,17 +27,48 @@ object User extends User with MetaMegaProtoUser[User] {
   def findByFbId(fbid: String):Box[User] = findByFbId(fbid.toLong)
 
   override def loginXhtml = {
-    <div id="loginpage">
-      <div class="span-18">
-        {super.loginXhtml}
+    (<div id="content">
+      <div class="rcontent">
+        <div class="userforms">
+          <form method="post" action={S.uri}>
+            <h2>{S.??("log.in")}</h2>
+            <table>
+          <tr><td>{userNameFieldString}</td><td><user:email /></td></tr>
+          <tr><td>{S.??("password")}</td><td><user:password /></td></tr>
+          <tr><td><a href={lostPasswordPath.mkString("/", "/", "")}
+                >{S.??("recover.password")}</a></td><td><user:submit /></td></tr></table>
+          </form>
+        </div>
+        <div style="margin-top: 30px;">
+          <h2>Or, log in with Facebook...</h2>
+          <a href='/auth/facebook/signin'>
+            <img src="/images/signin/fb-login-button.png" alt="Login with Facebook"/>
+          </a>
+        </div>
       </div>
-      <div class="span-4 last">
-        <a href='/auth/facebook/signin'>
-          <img src="/images/signin/fb-login-button.png" alt="Login with Facebook"/>
-        </a>
-      </div>
-    </div>
+    </div>)
   }
+  
+  override def signupXhtml(user: TheUserType) = {
+    (<div id="content">
+      <div class="rcontent">
+        <div class="userforms">
+          <form method="post" action={S.uri}>
+            <h2>{ S.??("sign.up") }</h2>
+            <table>
+          {localForm(user, false, signupFields)}
+          <tr><td>&nbsp;</td><td><user:submit/></td></tr>
+                                        </table></form></div>
+      <div style="margin-top: 30px;">
+          <h2>Already on Facebook?</h2>
+          <a href='/auth/facebook/signin'>
+            <img src="/images/signin/fb-login-button.png" alt="Login with Facebook"/>
+          </a>
+        </div>
+    </div></div>)
+  }
+
+
 
   /**
    * custom method which doesn't trash the session.
@@ -53,6 +84,16 @@ object User extends User with MetaMegaProtoUser[User] {
     loginRedirect(Full(Helpers.urlDecode(ret)))
     super.login
   }
+
+  override def loginMenuLocParams: List[LocParam[Unit]] =
+    LocGroup("public") :: super.loginMenuLocParams
+
+  override def logoutMenuLocParams: List[LocParam[Unit]] =
+    LocGroup("public") :: super.logoutMenuLocParams
+
+  override def createUserMenuLocParams: List[LocParam[Unit]] =
+    LocGroup("public") :: super.createUserMenuLocParams
+
 }
 
 

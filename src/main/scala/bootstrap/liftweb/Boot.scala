@@ -6,23 +6,28 @@ import Helpers._
 
 import common._
 import http._
+import auth.{Role, AuthRole, HttpBasicAuthentication}
 import provider.{HTTPCookie, HTTPRequest}
 import sitemap._
 import Loc._
 import mapper._
 import com.bopango.website.model.{User, UserAddress, VenueAddress, Chain, Cuisine,
 Dish, Menu => BopangoMenu, MenuSection, Order, Payment, Reservation, Review,
-Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group}
+Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group, VenueAttribute}
 import net.liftweb.widgets.logchanger._
 import javax.mail.internet.MimeMessage
 import javax.mail.Transport
 import java.util.Locale
 import com.bopango.website.lib.{BoffinAPI, VenueLocatorAPI, WsEndpoint}
+import com.bopango.website.snippet._
 
 /**
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
+
+object userRoles extends RequestVar[List[Role]](Nil)
+
 class Boot extends Loggable {
   def boot {
 
@@ -68,7 +73,7 @@ class Boot extends Loggable {
     // any ORM you want
     Schemifier.schemify(true, Schemifier.infoF _, User, UserAddress, VenueAddress, Chain,
       Cuisine, Dish, BopangoMenu, MenuSection, Order, Payment, Reservation, Review,
-      Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group)
+      Venue, Price, Deal, DishProperties, DishAttribute, Attribute, DishExtra, Group, VenueAttribute)
 
     // where to search snippet
     LiftRules.addToPackages("com.bopango.website")
@@ -80,15 +85,31 @@ class Boot extends Loggable {
     // is this ever called?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
+    // admins
+    // TODO make this more robust
+//    LiftRules.authentication = HttpBasicAuthentication("BopangoAdminRealm"){
+//      case (un, pwd, req) =>
+//        if(un == "bunny" && pwd == "lovescarrots") {
+//          userRoles(AuthRole("admin")); true
+//        } else false
+//    }
+
     val entries = List(
       // home
-      Menu.i("Home") / "index" >> LocGroup("public"),
+      Menu.i("Home") / "index" >> LocGroup("public") >> Hidden,
+
+      // sttaic pages
+      Menu.i("Static") / "static" / **,
 
       // search
-      Menu.i("Search") / "search" >> LocGroup("public"),
+      // the search box will always be prominent, so hide it.
+      Menu.i("Search") / "search" >> LocGroup("public") >> Hidden, 
+
+      // venue
+      VenuePage.menu,
 
       // book
-      Menu.i("Book") / "book" >> RequireLogin >> LocGroup("public"),
+      Menu.i("Book") / "book" >> RequireLogin >> LocGroup("public") >> Hidden,
 
       // the sandbox for testing
       Menu.i("Sanbox") / "sandbox" >> LocGroup("public") >> Hidden,
@@ -102,7 +123,7 @@ class Boot extends Loggable {
       //Menu(Loc("Pay Up", List("coresteps", "pay"), "Pay Up", IfLoggedIn)),
 
       // administration
-      Menu("Admin") / "admin" / "index" >> LocGroup("admin"),
+      Menu("Admin") / "admin" / "index" >> LocGroup("admin") >> HttpAuthProtected(req => Full(AuthRole("admin"))),
       Menu("Group") / "admin" / "group" >> LocGroup("admin") submenus(Group.menus : _*),
       Menu("Chain") / "admin" / "chain" >> LocGroup("admin") submenus(Chain.menus : _*),
       Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*),
@@ -122,19 +143,24 @@ class Boot extends Loggable {
       Menu("Review") / "admin" / "review" >> LocGroup("admin") submenus(Review.menus : _*),
       Menu("Deal") / "admin" / "deal" >> LocGroup("admin") submenus(Deal.menus : _*),
 
-      Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),  
+      Menu("User Address") / "admin" / "user_address" >> LocGroup("admin") submenus(UserAddress.menus : _*),
 
       //Omniauth site menu items
       Menu(Loc("AuthCallback", List("omniauth","callback"), "AuthCallback", Hidden)),
       Menu(Loc("AuthSignin", List("omniauth", "signin"), "AuthSignin", Hidden))
     ) :::
     // the User management menu items
-    User.sitemap
+    User.menus
+
     //::: NoSQLServer.menus
 
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
-    LiftRules.setSiteMap(SiteMap(entries:_*))
+//    LiftRules.setSiteMap(SiteMap(entries:_*))
+
+    // set the sitemap.  Note if you don't want access control for
+    // each page, just comment this line out.
+    LiftRules.setSiteMapFunc(() => SiteMap(entries:_*))
 
     //Show the spinny image when an Ajax call starts
     LiftRules.ajaxStart =
@@ -195,16 +221,22 @@ class Boot extends Loggable {
 
     // setup the 404 handler
     LiftRules.uriNotFound.prepend(NamedPF("404handler"){
-      case (req,failure) => NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
+      case (req,failure) => NotFoundAsTemplate(ParsePath(List("static", "404"),"html",false,false))
     })
 
     // Use HTML5 for rendering
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))
 
+    // iPhone detection (e.g. even "opera on iphone")
+    UserAgentCalculator.iPhoneCalcFunction.default.set(Full(myIsIPhone _))
+
     // done
     logger.info("Loaded properties for mode [%s]".format(Props.mode.toString))
   }
+
+  def myIsIPhone(user_agent: Box[String]) : Boolean = user_agent map {
+           _.contains("iPhone") } openOr false
 
   def localeCalculator(request : Box[HTTPRequest]): Locale =
       request.flatMap(r => {
