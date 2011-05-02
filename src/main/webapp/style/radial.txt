@@ -1,0 +1,23 @@
+body {
+    color: #222;
+    margin:0;padding:0;border:0;
+
+    font-family: 'Museo300', 'Century Gothic', 'Futura Medium', 'Apple Gothic', Helvetica, Arial, sans-serif;
+
+    /* radial center stuff below */
+    /* fallback */
+    background-color: #884499; /*background-image: url(images/radial_bg.png);*/
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    /* Firefox 3.6+ */
+    background: -moz-radial-gradient(circle, #bb88c8, #884499);
+
+    /* Safari 4-5, Chrome 1-9 */
+    /* Can't specify a percentage size? Laaaaaame. */
+    background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 460, from(#bb88c8), to(#884499));
+
+    /* Safari 5.1+, Chrome 10+ */
+    background: -webkit-radial-gradient(circle, #bb88c8, #884499);
+
+    /* Opera cannot do radial gradients yet */

@@ -1,5 +1,6 @@
 <form class="lift:form.post">
-    <div class=" prepend-1 span-11 append-1">
+
+    <div>
         <h2>Menu</h2>
 
         <div id="menus_and_dishes">
@@ -7,21 +8,21 @@
         </div>
     </div>
 
-    <div class=" prepend-2 span-8 last append-1">
+    <div>
         <h2>Guest selection</h2>
 
         <div id="guest_selections">
             Guest selections rendered here.
         </div>
-        <h2>
-            <span style="float:left;">Total</span>
+        <div id="order_total">
+            <span style="float:left;">
+                <h2>Total</h2>
+            </span>
             <span style="float:right;" id="all_guests_total">0.00</span>
-        </h2>
+        </div>
     </div>
 
-    <hr class="space"/>
-
-    <div class=" prepend-1 span-22 last append-1">
+    <div id="order_submit">
         <div align="right">
             <input type="submit"/>
         </div>

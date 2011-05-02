@@ -6,6 +6,7 @@ import Helpers._
 
 import common._
 import http._
+import auth.{Role, AuthRole, HttpBasicAuthentication}
 import provider.{HTTPCookie, HTTPRequest}
 import sitemap._
 import Loc._
@@ -24,6 +25,9 @@ import com.bopango.website.snippet._
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
+
+object userRoles extends RequestVar[List[Role]](Nil)
+
 class Boot extends Loggable {
   def boot {
 
@@ -81,18 +85,31 @@ class Boot extends Loggable {
     // is this ever called?
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
+    // admins
+    // TODO make this more robust
+//    LiftRules.authentication = HttpBasicAuthentication("BopangoAdminRealm"){
+//      case (un, pwd, req) =>
+//        if(un == "bunny" && pwd == "lovescarrots") {
+//          userRoles(AuthRole("admin")); true
+//        } else false
+//    }
+
     val entries = List(
       // home
-      Menu.i("Home") / "index" >> LocGroup("public"),
+      Menu.i("Home") / "index" >> LocGroup("public") >> Hidden,
+
+      // sttaic pages
+      Menu.i("Static") / "static" / **,
 
       // search
-      Menu.i("Search") / "search" >> LocGroup("public"),
+      // the search box will always be prominent, so hide it.
+      Menu.i("Search") / "search" >> LocGroup("public") >> Hidden, 
 
       // venue
       VenuePage.menu,
 
       // book
-      Menu.i("Book") / "book" >> RequireLogin >> LocGroup("public"),
+      Menu.i("Book") / "book" >> RequireLogin >> LocGroup("public") >> Hidden,
 
       // the sandbox for testing
       Menu.i("Sanbox") / "sandbox" >> LocGroup("public") >> Hidden,
@@ -106,7 +123,7 @@ class Boot extends Loggable {
       //Menu(Loc("Pay Up", List("coresteps", "pay"), "Pay Up", IfLoggedIn)),
 
       // administration
-      Menu("Admin") / "admin" / "index" >> LocGroup("admin"),
+      Menu("Admin") / "admin" / "index" >> LocGroup("admin") >> HttpAuthProtected(req => Full(AuthRole("admin"))),
       Menu("Group") / "admin" / "group" >> LocGroup("admin") submenus(Group.menus : _*),
       Menu("Chain") / "admin" / "chain" >> LocGroup("admin") submenus(Chain.menus : _*),
       Menu("Venue") / "admin" / "venue" >> LocGroup("admin") submenus(Venue.menus : _*),
@@ -133,7 +150,7 @@ class Boot extends Loggable {
       Menu(Loc("AuthSignin", List("omniauth", "signin"), "AuthSignin", Hidden))
     ) :::
     // the User management menu items
-    User.sitemap
+    User.menus
 
     //::: NoSQLServer.menus
 
@@ -204,16 +221,22 @@ class Boot extends Loggable {
 
     // setup the 404 handler
     LiftRules.uriNotFound.prepend(NamedPF("404handler"){
-      case (req,failure) => NotFoundAsTemplate(ParsePath(List("404"),"html",false,false))
+      case (req,failure) => NotFoundAsTemplate(ParsePath(List("static", "404"),"html",false,false))
     })
 
     // Use HTML5 for rendering
     LiftRules.htmlProperties.default.set((r: Req) =>
       new Html5Properties(r.userAgent))
 
+    // iPhone detection (e.g. even "opera on iphone")
+    UserAgentCalculator.iPhoneCalcFunction.default.set(Full(myIsIPhone _))
+
     // done
     logger.info("Loaded properties for mode [%s]".format(Props.mode.toString))
   }
+
+  def myIsIPhone(user_agent: Box[String]) : Boolean = user_agent map {
+           _.contains("iPhone") } openOr false
 
   def localeCalculator(request : Box[HTTPRequest]): Locale =
       request.flatMap(r => {

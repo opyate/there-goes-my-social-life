@@ -37,7 +37,7 @@ class VenuePage(pi: ParamInfo)  {
       case Full(item) => {
         "#venue_name *" #> item.name &
         "#venue_address *" #> item.latestAddressAsHtml &
-        "#venue_description *" #> item.description &
+        "#venue_description *" #> item.description.is &
         "#venue_image_div *" #> <img width="200" height="200" src="http://cms.parkplazabelfast.com/cmsImages/restaurant_picture.jpg"/> &
         "#venue_checklist *" #> item.attributes.map(attr => {"li *" #> attr.attribute}) &
         "name=venue_book [href]" #> "/book?restaurant_id=%s".format(pi.theParam) &

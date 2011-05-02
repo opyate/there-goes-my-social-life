@@ -1,73 +1,40 @@
+<form class="lift:form.post">
 
-        <form class="lift:form.post">
+    <h2>Booking details</h2>
 
+    <div>
+        <h3>Select a date</h3>
+        <input name="date"/>
+    </div>
 
+    <div>
+        <h3>Select a time slot</h3>
+        <input name="time"/>
+    </div>
 
-        <div class="prepend-1 span-11 colborder">
-            <div class="greybob">
-                Select a date
-                <br/>
-                <input name="date"/>
+    <div>
+        <h3>How much time do you have for lunch?</h3>
+        <input name="how_much_time_in_minutes"/>
+    </div>
 
-            </div>
+    <div>
+        <h3>How many guests will be attending?</h3>
+
+        <!-- this div is needed for the 'buttonset' jQuery function -->
+        <div id="howmanyguests">
+            Number of guests selection rendered here
         </div>
+    </div>
 
-        <div class=" span-10 last">
-            <div class="greybob">
-                Select a time slot
-                <br/>
-                <br/>
+    <div id="booking-submit">
+        <input type="submit"/>
+    </div>
 
-                <input name="time"/>
-
-            </div>
-        </div>
-
-        <hr class="space"/>
-
-        <div class="prepend-1 span-22 last append-1">
-
-            <div class="greybob">
-                How much time do you have for lunch?
-                <br/>
-                <br/>
-                <input name="how_much_time_in_minutes"/>
-
-
-            </div>
-        </div>
-
-        <hr class="space"/>
-
-        <div class=" prepend-1 span-22 last append-1">
-            <div class="greybob">
-                How many guests will be attending?
-                <br/>
-                <br/>
-
-                <!-- this div is needed for the 'buttonset' jQuery function -->
-                <div id="howmanyguests">
-                        Number of guests selection rendered here
-                </div>
-
-            </div>
-        </div>
-
-        <hr class="space"/>
-
-        <div class=" prepend-1 span-22 last append-1">
-            <div align="right">
-
-                <input type="submit"/>
-
-            </div>
-        </div>
-
-<script type="text/javascript">
-    /* <![CDATA[ */
-    $(function() {
-        $("#howmanyguests").buttonset();
-    });
-    /* ]]> */
-</script>
-    </form>
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        $(function() {
+            $("#howmanyguests").buttonset();
+        });
+        /* ]]> */
+    </script>
+</form>

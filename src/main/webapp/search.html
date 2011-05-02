@@ -3,53 +3,26 @@
   <head>
     <title>Search Results</title>
   </head>
-  <body class="lift:content_id=main">
-    <div id="main" class="lift:surround?with=default;at=content">
-      <div class="prepend-1 span-8 colborder">
+  <body class="lift:content_id=content">
 
-        <div id="boffin_results">
-            Select a restaurant from the map...
+    <div id="content" class="lift:surround?with=default;at=content">
+        <div class="rcontent">
+
+            <h2>Search results</h2>
+
+            <div id="boffin_wrapper">
+                <div id="boffin_results">
+                    Select a restaurant from the map...
+                </div>
+
+                <div id="map" class="lift:BoffinFrontend">
+                    Google Map will appear here
+                </div>
+            </div>
+
+            <div id="boffin_meta"></div>
         </div>
 
-    </div>
-    <div class="span-12 prepend-1 append-1 last lift:BoffinFrontend">
-        Google Map will appear here
-    </div>
-
-
-    <hr class="space"/>
-    <hr/>
-    <hr class="space"/>
-
-    <div class="prepend-1 span-12 colborder">
-        <div id="tabs_container">
-            <ul id="tabs">
-                <li class="active"><a href="#tab1">Key info</a></li>
-                <li><a href="#tab2">Menus</a></li>
-                <li><a href="#tab3">Reviews</a></li>
-            </ul>
-        </div>
-        <div id="tabs_content_container">
-            <div id="tab1" class="tab_content" style="display: block;">
-                Opening times:
-                Mon-Thu &amp; Sun 12PM - 3PM<br/>
-                Payment methods: BOP it &trade;
-            </div>
-            <div id="tab2" class="tab_content">
-                Menus
-            </div>
-            <div id="tab3" class="tab_content">
-                Reviews
-            </div>
-        </div>
-
-    </div>
-
-    <div class="span-9 last">
-        <div id="boffin_meta"></div>
-    </div>
-
-    <hr class="space"/>
    </div>
   </body>
 </html>
