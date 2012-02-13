@@ -18,11 +18,25 @@
             <form method="post" action="/search">
                 <label for="search" class="bop-hide">Search term:</label>
                 <input id="search" type="text" name="search" class="searchbox" value="Post code, cuisine, venue, etc..." role="search" autocomplete="off"/>
-                <input type="submit" class='searchsubmit' value=""/>
+                <input type="submit" id="submitbutton" class="searchsubmit" value=""/>
             </form>
         </div>
 
+        <div class="lift:browserDetection.iphone">
+            <script type="text/javascript">
+                /* <![CDATA[ */
+
+                // submit button
+                $(document).ready(function() {
+                    $('input[id=submitbutton]').val("Search");
+                });
+                /* ]]> */
+            </script>
+        </div>
+
     </div>
+
+
 </body>
 </html>
 
