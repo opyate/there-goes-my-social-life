@@ -11,7 +11,7 @@ A4A673
 CCC046
 
 */
-
+/*@media screen and (min-device-width: 481px){*/
 html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img,
 ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd,
@@ -66,7 +66,7 @@ Used inside other DIVs and ensures that content adheres to a narrow column down 
     margin: 0 auto;
     position: relative;
     display: block;
-    clear: both !important;
+    clear: both;
 
 }
 
@@ -76,7 +76,7 @@ Used inside other DIVs and ensures that content adheres to a narrow column down 
     border-bottom: 30px #884499 solid;
     /*clear: both;*/
     /*display:block;*/
-    background-color: #fff !important;
+    background-color: #fff;
     height: 200px;
     padding: 0;
 }
@@ -177,7 +177,7 @@ nav#loginmenu ul li a{
     margin-top: 30px;
     
     display: block;
-    clear: both !important;
+    clear: both;
 }
 
 #about {
@@ -212,11 +212,7 @@ nav#loginmenu ul li a{
 .searchbox {
     height:30px;
     font-size: 100%;
-    
-    /*padding: 10px 0 15px 30px;*/
-    /*outline: none !important;*/
-    /*outline-offset: 0 !important;*/
-    /*background-color:transparent;*/
+
     color: #CC4678;
     
     width: 300px;
@@ -239,7 +235,6 @@ nav#loginmenu ul li a{
     width: 40px;
 
     background: #FFD7E6 url("/images/search/m30.png") no-repeat 5px 0px ;
-    /*background-image: url("data:image/gif;base64,R0lGODlhIQAeALMAAJFQoZNTpJpcqqFlsLF7v51grZZWpoxJnLWAwrB5vqVqtKhvt7J8wKJmsax0ugAAACH5BAAAAAAALAAAAAAhAB4AAATFEMlJq72U4M27/xMjjmRpnmiqrmzrvmwizzRdGABgFHXv+w7DYUg0OH7InvCwuw0NyWiiMOTNqAfrz8HteoPMxFdo/JrPXEDWTAWg3151gX1ww+Fkc/7+xs67fnxdCw4LhIRLTUt2X4eGj5CRS0R1T5GXmJE3OTsLRAGZoaKGk6Cjp5EBnwqRrKwLrq6XsbCqQwKysAq7vL2+v7u2uMDExb4Cw8bKy70NCs7Pzw3T09G+ztXQ2NTc3d7f4OHi4+Tl5ufnAxEAOw==") 0 0 no-repeat;*/
     cursor:pointer;
 
     -webkit-border-bottom-right-radius:10px;
@@ -387,16 +382,13 @@ a:active {color:#A3A673;}
 \*------------------------------------*/
 @media screen and (max-device-width: 480px){
 /*--- iPhone only CSS here ---*/
-    /* RESET */
-    html, body, div, span, applet, object, iframe,
-    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-    a, abbr, acronym, address, big, cite, code,
-    del, dfn, em, font, img, ins, kbd, q, s, samp,
-    small, strike, strong, sub, sup, tt, var,
-    b, u, i, center,
-    dl, dt, dd, ol, ul, li,
-    fieldset, form, label, legend,
-    table, caption, tbody, tfoot, thead, tr, th, td {
+    /* RESET  from http://jazonpress.com/smartphone/144 */
+    html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6,
+    p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img,
+    ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd,
+    ol, ul, li, fieldset, form, label, legend, table, caption,
+    tbody, tfoot, thead, tr, th, td, article, aside, figure, footer, header, hgroup,
+    menu, nav, section, menu, time, mark, audio, video {
         margin: 0;
         padding: 0;
         border: 0;
@@ -405,6 +397,7 @@ a:active {color:#A3A673;}
         vertical-align: baseline;
         background: transparent;
     }
+    
     body {
         line-height: 1;
         -webkit-text-size-adjust:none;
@@ -437,6 +430,36 @@ a:active {color:#A3A673;}
         border-spacing: 0;
     }
 
+    /* RESET END */
+
+    /* iPhone tricks
+    http://csswizardry.com/2010/01/iphone-css-tips-for-building-iphone-websites/
+    */
+    nav, nav li {
+        float: none !important;
+        clear: both !important;
+
+        display: block;
+        padding: 0;
+        text-align: left !important;
+        width: 100%;
+    }
+
+    nav {
+        border: 1px solid #ccc;
+        padding: 5px;
+        -webkit-border-radius: 5px;
+    }
+
+    nav li {
+        margin: 0 !important;
+    }
+
+    nav li a {
+        display: block;
+    }
+
+    /* iPhone tricks END */
 
     .rcontent {
         clear:both !important;
@@ -458,11 +481,10 @@ a:active {color:#A3A673;}
 
     h1 a {
         background: url(/style/images/logo.20110425.i.png) no-repeat 0 0;
-        width: 388px;
-        height: 153px;
+        width: 310px;
+        height: 118px;
         display: block;
         text-indent: -99999px;
-        float: left;
     }
 
     img {
@@ -475,120 +497,92 @@ a:active {color:#A3A673;}
     }
 
     .searchbox {
-        height:30px;
-        font-size: 100%;
-
-        /*padding: 10px 0 15px 30px;*/
-        /*outline: none !important;*/
-        /*outline-offset: 0 !important;*/
-        /*background-color:transparent;*/
         color: #CC4678;
-
-        width: 300px;
-
-
-        -webkit-border-bottom-left-radius:10px;
-        -webkit-border-top-left-radius:10px;
-        -moz-border-radius-bottomleft:10px;
-        -moz-border-radius-topleft:10px;
-
-        margin: 4px 0 0 90px;
-        padding: 0 0 0 5px;
-
-        float:left;
         background-color:#FFD7E6;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        margin: 0;
+        padding: 0;
     }
 
     .searchsubmit {
         height: 30px;
-        width: 40px;
+        width: 80px;
 
-        background: #FFD7E6 url("/images/search/m30.png") no-repeat 5px 0px ;
-        /*background-image: url("data:image/gif;base64,R0lGODlhIQAeALMAAJFQoZNTpJpcqqFlsLF7v51grZZWpoxJnLWAwrB5vqVqtKhvt7J8wKJmsax0ugAAACH5BAAAAAAALAAAAAAhAB4AAATFEMlJq72U4M27/xMjjmRpnmiqrmzrvmwizzRdGABgFHXv+w7DYUg0OH7InvCwuw0NyWiiMOTNqAfrz8HteoPMxFdo/JrPXEDWTAWg3151gX1ww+Fkc/7+xs67fnxdCw4LhIRLTUt2X4eGj5CRS0R1T5GXmJE3OTsLRAGZoaKGk6Cjp5EBnwqRrKwLrq6XsbCqQwKysAq7vL2+v7u2uMDExb4Cw8bKy70NCs7Pzw3T09G+ztXQ2NTc3d7f4OHi4+Tl5ufnAxEAOw==") 0 0 no-repeat;*/
+        background-color: #FFD7E6;
+        background-image: none !important;
         cursor:pointer;
 
-        -webkit-border-bottom-right-radius:10px;
-        -webkit-border-top-right-radius:10px;
-        -moz-border-radius-bottomright:10px;
-        -moz-border-radius-topright:10px;
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
 
-        margin: 0 0 0 0;
-        padding: 0 0 0 0;
+        margin:0;
+        padding:0;
 
         outline: none;
         border: 0;
 
     }
 
-    /*input{max-width:96%;}*/
+    #header {
+        width: 100%;
+        border:0;
+        clear: both;
+        display:block;
+        background-color: #fff;
+        padding: 0;
+    }
 
-    /*#logo {*/
-        /*width: 100%;*/
-        /*float: none;*/
+    .content {
+        width: 100%;
+        margin: 0;
+    }
 
-        /*border: 1px white solid;*/
-        /*background-color:white;*/
-        /*-webkit-border-radius:10px;*/
-        /*-moz-border-radius:10px;*/
+    #content {
+        min-height: 100%;
+        width: 100%;
+        margin: 0;
+        
+        display: block;
+        clear: both;
 
-        /*margin: 8px 3px 0px 3px;*/
-        /*padding: 10px;*/
+    }
 
-    /*}*/
-
-    /*#logo img {*/
-        /*padding-left: 10px;*/
-        /*padding-top: 10px;*/
-    /*}*/
-
-    /*#footer {*/
-        /*color: white;*/
-        /*width: 100%;*/
-        /*float: none;*/
-
-        /*margin: 8px 3px 0px 3px;*/
-        /*padding: 10px;*/
-    /*}*/
-
-    /*#footer a {*/
-        /*text-decoration: none;*/
-    /*}*/
-
-    /*.searchwrapper {*/
+    nav#loginmenu {
+        overflow: hidden;
+        float: right;
+        margin: 0;
+    }
 
 
+    nav#loginmenu ul li a{
+        font-size: 100%;
+        padding: 1em;
+    }
 
 
-        /*border: 1px white solid;*/
-        /*background-color:white;*/
-        /*-webkit-border-radius:10px;*/
-        /*-moz-border-radius:10px;*/
+    #loginmenu {
+        display:block;
+        clear: both;
+    }
+    #loginmenu a {
+        color: #CC4678;
+        /*background-color:#FFD7E6;*/
+        /*border: 5px #FFD7E6 solid;*/
+        -webkit-border-radius:10px;
+        -moz-border-radius:10px;
 
+        text-decoration:none;
+        font-weight: bold;
+        font-size: 100%;
 
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+    #loginmenu a:hover {
+        color: #FFD7E6;
+        -webkit-border-radius:2px;
+        -moz-border-radius:2px;
 
-        /*margin-top: 20px !important;*/
-        /*padding-top: 10px !important;*/
-        /*padding-bottom: 10px !important;*/
-    /*}*/
-
-    /*.searchbox {*/
-        /*width: 80%;*/
-        /*outline: none !important;*/
-        /*outline-offset: 0 !important;*/
-        /*background-color:transparent !important;*/
-        /*color: #7a7a7a;*/
-    /*}*/
-
-    /*.searchsubmit {*/
-        /*width:20px;*/
-        /*height:20px;*/
-        /*border:none;*/
-
-
-
-
-        /*background:url("/images/search/m.png") 0 0 no-repeat;*/
-        /*cursor:pointer;*/
-        /*float: right;*/
-    /*}*/
+        text-decoration:none;
+    }
 }
